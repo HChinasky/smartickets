@@ -27,11 +27,7 @@
             </div>
             <div class="additional-services__block">
               <div class="person-full-name">
-                <input
-                    class="full-name__input"
-                    type="text"
-                    v-model="lastname"
-                >
+                <span class="fullname">{{ firstname }} {{ lastname }}</span>
               </div>
               <div class="person-birthday">
                 {{birthDate}}
@@ -59,11 +55,7 @@
             </div>
             <div class="additional-services__block">
               <div class="person-full-name">
-                <input
-                    class="full-name__input"
-                    type="text"
-                    v-model="lastname"
-                >
+                <span class="fullname">{{ firstname }} {{ lastname }}</span>
               </div>
               <div class="person-birthday">
                 {{birthDate}}
@@ -130,7 +122,6 @@
                     v-model="phone"
                     @blur="$v.phone.$touch()"
                     @keydown.space.prevent
-                    alwaysShowMask="true"
                     mask="+380(99)999-99-99"
                 />
                 <template v-if="$v.phone.$error">
@@ -173,11 +164,11 @@
             <div class="payment_sum">
               <p class="total-sum">Загальна вартість: <span>1341 грн</span></p>
               <p class="smart-tickets-tax">Оформлення SmartTicket <span>0.06 грн</span></p>
-              <button disabled class="btn btn--black">
+              <button
+                  @click="getBookTicket"
+                  :disabled="!getPersonPhone || !getPersonEmail || $v.repeatEmail.$error"
+                  class="btn btn--black">
                 Перейти до оплати
-              </button>
-              <button @click="getBookTicket" class="btn btn--black">
-                Бронировать
               </button>
             </div>
           </div>
@@ -228,11 +219,11 @@
       },
       repeatEmail: {
         required,
-        sameAsPassword: sameAs("email")
+        sameAsPassword: sameAs("email"),
       },
       phone: {
         required,
-        minLength: minLength(3)
+        minLength: minLength(17)
       }
     },
     computed: {
@@ -272,6 +263,15 @@
           }
         },
       },
+      firstname: {
+        get() {
+          if (this.getFirstName) {
+            return this.getFirstName;
+          } else {
+            return null;
+          }
+        },
+      },
       email: {
         get() {
           if (this.getPersonEmail) {
@@ -304,9 +304,14 @@
         "setPersonPhone"
       ]),
       async getBookTicket() {
+        if(this.getPersonEmail) {
+          return false;
+        }
+        if(this.getPersonPhone) {
+          return false;
+        }
         await this.bookingTicketAircraft()
           .then(() => {
-
           })
           .catch((error) => {
             console.log(error);
@@ -436,7 +441,7 @@
               background-position: right 5px top;
               background-size: 30px;
               
-              input {
+              .fullname {
                 border: none;
                 text-align: center;
                 outline: none;
