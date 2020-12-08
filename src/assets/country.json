@@ -1,0 +1,1291 @@
+[
+  {
+    "codeNumber": "4",
+    "code": "AF",
+    "alpha3": "AFG",
+    "label": "АФГАНІСТАН",
+    "nameEng": "Afghanistan"
+  },
+  {
+    "codeNumber": "8",
+    "code": "AL",
+    "alpha3": "ALB",
+    "label": "АЛБАНІЯ",
+    "nameEng": "Albania"
+  },
+  {
+    "codeNumber": "12",
+    "code": "DZ",
+    "alpha3": "DZA",
+    "label": "АЛЖИР",
+    "nameEng": "Algeria"
+  },
+  {
+    "codeNumber": "20",
+    "code": "AD",
+    "alpha3": "AND",
+    "label": "АНДОРРА",
+    "nameEng": "Andorra"
+  },
+  {
+    "codeNumber": "24",
+    "code": "AO",
+    "alpha3": "AGO",
+    "label": "АНГОЛА",
+    "nameEng": "Angola"
+  },
+  {
+    "codeNumber": "28",
+    "code": "AG",
+    "alpha3": "ATG",
+    "label": "АНТИГУА І БАРБУДА",
+    "nameEng": "Antigua and Barbuda"
+  },
+  {
+    "codeNumber": "31",
+    "code": "AZ",
+    "alpha3": "AZE",
+    "label": "АЗЕРБАЙДЖАН",
+    "nameEng": "Azerbaijan"
+  },
+  {
+    "codeNumber": "32",
+    "code": "AR",
+    "alpha3": "ARG",
+    "label": "АРГЕНТИНА",
+    "nameEng": "Argentina"
+  },
+  {
+    "codeNumber": "36",
+    "code": "AU",
+    "alpha3": "AUS",
+    "label": "АВСТРАЛІЯ",
+    "nameEng": "Australia"
+  },
+  {
+    "codeNumber": "40",
+    "code": "AT",
+    "alpha3": "AUT",
+    "label": "АВСТРІЯ",
+    "nameEng": "Austria"
+  },
+  {
+    "codeNumber": "44",
+    "code": "BS",
+    "alpha3": "BHS",
+    "label": "БАГАМСЬКІ ОСТРОВИ",
+    "nameEng": "Bahamas"
+  },
+  {
+    "codeNumber": "48",
+    "code": "BH",
+    "alpha3": "BHR",
+    "label": "БАХРЕЙН",
+    "nameEng": "Bahrain"
+  },
+  {
+    "codeNumber": "50",
+    "code": "BD",
+    "alpha3": "BGD",
+    "label": "БАНГЛАДЕШ",
+    "nameEng": "Bangladesh"
+  },
+  {
+    "codeNumber": "51",
+    "code": "AM",
+    "alpha3": "ARM",
+    "label": "ВІРМЕНІЯ",
+    "nameEng": "Armenia"
+  },
+  {
+    "codeNumber": "52",
+    "code": "BB",
+    "alpha3": "BRB",
+    "label": "БАРБАДОС",
+    "nameEng": "Barbados"
+  },
+  {
+    "codeNumber": "56",
+    "code": "BE",
+    "alpha3": "BEL",
+    "label": "БЕЛЬГІЯ",
+    "nameEng": "Belgium"
+  },
+  {
+    "codeNumber": "64",
+    "code": "BT",
+    "alpha3": "BTN",
+    "label": "БУТАН",
+    "nameEng": "Bhutan"
+  },
+  {
+    "codeNumber": "68",
+    "code": "BO",
+    "alpha3": "BOL",
+    "label": "БОЛІВІЯ",
+    "nameEng": "Bolivia, Plurinational State of"
+  },
+  {
+    "codeNumber": "70",
+    "code": "BA",
+    "alpha3": "BIH",
+    "label": "БОСНІЯ І ГЕРЦЕГОВИНА",
+    "nameEng": "Bosnia and Herzegovina"
+  },
+  {
+    "codeNumber": "72",
+    "code": "BW",
+    "alpha3": "BWA",
+    "label": "БОТСВАНА",
+    "nameEng": "Botswana"
+  },
+  {
+    "codeNumber": "76",
+    "code": "BR",
+    "alpha3": "BRA",
+    "label": "БРАЗИЛІЯ",
+    "nameEng": "Brazil"
+  },
+  {
+    "codeNumber": "84",
+    "code": "BZ",
+    "alpha3": "BLZ",
+    "label": "БЕЛІЗ",
+    "nameLong": "БЕЛІЗ",
+    "nameEng": "Belize"
+  },
+  {
+    "codeNumber": "90",
+    "code": "SB",
+    "alpha3": "SLB",
+    "label": "СОЛОМОНОВІ ОСТРОВИ",
+    "nameLong": "СОЛОМОНОВІ ОСТРОВИ",
+    "nameEng": "Solomon Islands"
+  },
+  {
+    "codeNumber": "96",
+    "code": "BN",
+    "alpha3": "BRN",
+    "label": "БРУНЕЙ",
+    "nameEng": "Brunei Darussalam"
+  },
+  {
+    "codeNumber": "100",
+    "code": "BG",
+    "alpha3": "BGR",
+    "label": "БОЛГАРІЯ",
+    "nameEng": "Bulgaria"
+  },
+  {
+    "codeNumber": "104",
+    "code": "MM",
+    "alpha3": "MMR",
+    "label": "М'ЯНМА",
+    "nameEng": "Myanmar"
+  },
+  {
+    "codeNumber": "108",
+    "code": "BI",
+    "alpha3": "BDI",
+    "label": "БУРУНДІ",
+    "nameEng": "Burundi"
+  },
+  {
+    "codeNumber": "112",
+    "code": "BY",
+    "alpha3": "BLR",
+    "label": "БІЛОРУСЬ",
+    "nameEng": "Belarus"
+  },
+  {
+    "codeNumber": "116",
+    "code": "KH",
+    "alpha3": "KHM",
+    "label": "КАМБОДЖА",
+    "nameEng": "Cambodia"
+  },
+  {
+    "codeNumber": "120",
+    "code": "CM",
+    "alpha3": "CMR",
+    "label": "КАМЕРУН",
+    "nameEng": "Cameroon"
+  },
+  {
+    "codeNumber": "124",
+    "code": "CA",
+    "alpha3": "CAN",
+    "label": "КАНАДА",
+    "nameEng": "Canada"
+  },
+  {
+    "codeNumber": "132",
+    "code": "CV",
+    "alpha3": "CPV",
+    "label": "КАБО-ВЕРДЕ",
+    "nameEng": "Cabo Verde"
+  },
+  {
+    "codeNumber": "140",
+    "code": "CF",
+    "alpha3": "CAF",
+    "label": "ЦАР",
+    "nameEng": "Central African Republic"
+  },
+  {
+    "codeNumber": "144",
+    "code": "LK",
+    "alpha3": "LKA",
+    "label": "ШРИ-ЛАНКА",
+    "nameEng": "Sri Lanka"
+  },
+  {
+    "codeNumber": "148",
+    "code": "TD",
+    "alpha3": "TCD",
+    "label": "ЧАД",
+    "nameEng": "Chad"
+  },
+  {
+    "codeNumber": "152",
+    "code": "CL",
+    "alpha3": "CHL",
+    "label": "ЧИЛІ",
+    "nameEng": "Chile"
+  },
+  {
+    "codeNumber": "156",
+    "code": "CN",
+    "alpha3": "CHN",
+    "label": "КИТАЙ",
+    "nameEng": "China"
+  },
+  {
+    "codeNumber": "170",
+    "code": "CO",
+    "alpha3": "COL",
+    "label": "КОЛУМБІЯ",
+    "nameEng": "Colombia"
+  },
+  {
+    "codeNumber": "174",
+    "code": "KM",
+    "alpha3": "COM",
+    "label": "КОМОРИ",
+    "nameLong": "Союз Коморських Островів",
+    "nameEng": "Comoros"
+  },
+  {
+    "codeNumber": "178",
+    "code": "CG",
+    "alpha3": "COG",
+    "label": "КОНГО",
+    "nameEng": "Congo"
+  },
+  {
+    "codeNumber": "188",
+    "code": "CR",
+    "alpha3": "CRI",
+    "label": "КОСТА-РИКА",
+    "nameEng": "Costa Rica"
+  },
+  {
+    "codeNumber": "191",
+    "code": "HR",
+    "alpha3": "HRV",
+    "label": "ХОРВАТІЯ",
+    "nameEng": "Croatia"
+  },
+  {
+    "codeNumber": "192",
+    "code": "CU",
+    "alpha3": "CUB",
+    "label": "КУБА",
+    "nameEng": "Cuba"
+  },
+  {
+    "codeNumber": "196",
+    "code": "CY",
+    "alpha3": "CYP",
+    "label": "КІПР",
+    "nameEng": "Cyprus"
+  },
+  {
+    "codeNumber": "203",
+    "code": "CZ",
+    "alpha3": "CZE",
+    "label": "ЧЕХІЯ",
+    "nameEng": "Czech Republic"
+  },
+  {
+    "codeNumber": "204",
+    "code": "BJ",
+    "alpha3": "BEN",
+    "label": "БЕНІН",
+    "nameEng": "Benin"
+  },
+  {
+    "codeNumber": "208",
+    "code": "DK",
+    "alpha3": "DNK",
+    "label": "ДАНІЯ",
+    "nameEng": "Denmark"
+  },
+  {
+    "codeNumber": "214",
+    "code": "DO",
+    "alpha3": "DOM",
+    "label": "ДОМІНІКАНСЬКА РЕСПУБЛІКА",
+    "nameEng": "Dominican Republic"
+  },
+  {
+    "codeNumber": "218",
+    "code": "EC",
+    "alpha3": "ECU",
+    "label": "ЕКВАДОР",
+    "nameEng": "Ecuador"
+  },
+  {
+    "codeNumber": "222",
+    "code": "SV",
+    "alpha3": "SLV",
+    "label": "САЛЬВАДОР",
+    "nameEng": "El Salvador"
+  },
+  {
+    "codeNumber": "226",
+    "code": "GQ",
+    "alpha3": "GNQ",
+    "label": "ЕКВАТОРІАЛЬНА ГВІНЕЯ",
+    "nameEng": "Equatorial Guinea"
+  },
+  {
+    "codeNumber": "231",
+    "code": "ET",
+    "alpha3": "ETH",
+    "label": "ЕФІОПІЯ",
+    "nameEng": "Ethiopia"
+  },
+  {
+    "codeNumber": "232",
+    "code": "ER",
+    "alpha3": "ERI",
+    "label": "ЕРИТРЕЯ",
+    "nameEng": "Eritrea"
+  },
+  {
+    "codeNumber": "233",
+    "code": "EE",
+    "alpha3": "EST",
+    "label": "ЕСТОНІЯ",
+    "nameEng": "Estonia"
+  },
+  {
+    "codeNumber": "242",
+    "code": "FJ",
+    "alpha3": "FJI",
+    "label": "ФІДЖІ",
+    "nameEng": "Fiji"
+  },
+  {
+    "codeNumber": "246",
+    "code": "FI",
+    "alpha3": "FIN",
+    "label": "ФІНЛЯНДІЯ",
+    "nameEng": "Finland"
+  },
+  {
+    "codeNumber": "250",
+    "code": "FR",
+    "alpha3": "FRA",
+    "label": "ФРАНЦІЯ",
+    "nameEng": "France"
+  },
+  {
+    "codeNumber": "262",
+    "code": "DJ",
+    "alpha3": "DJI",
+    "label": "ДЖИБУТІ",
+    "nameLong": "Республіка Джибуті",
+    "nameEng": "Djibouti"
+  },
+  {
+    "codeNumber": "266",
+    "code": "GA",
+    "alpha3": "GAB",
+    "label": "ГАБОН",
+    "nameEng": "Gabon"
+  },
+  {
+    "codeNumber": "268",
+    "code": "GE",
+    "alpha3": "GEO",
+    "label": "ГРУЗІЯ",
+    "nameEng": "Georgia"
+  },
+  {
+    "codeNumber": "270",
+    "code": "GM",
+    "alpha3": "GMB",
+    "label": "ГАМБІЯ",
+    "nameEng": "Gambia"
+  },
+  {
+    "codeNumber": "275",
+    "code": "PS",
+    "alpha3": "PSE",
+    "label": "ПАЛЕСТИНА",
+    "nameEng": "State of Palestine"
+  },
+  {
+    "codeNumber": "276",
+    "code": "DE",
+    "alpha3": "DEU",
+    "label": "НІМЕЧЧИНА",
+    "nameEng": "Germany"
+  },
+  {
+    "codeNumber": "288",
+    "code": "GH",
+    "alpha3": "GHA",
+    "label": "ГАНА",
+    "nameEng": "Ghana"
+  },
+  {
+    "codeNumber": "300",
+    "code": "GR",
+    "alpha3": "GRC",
+    "label": "ГРЕЦІЯ",
+    "nameEng": "Greece"
+  },
+  {
+    "codeNumber": "308",
+    "code": "GD",
+    "alpha3": "GRD",
+    "label": "ГРЕНАДА",
+    "nameLong": "Гренада",
+    "nameEng": "Grenada"
+  },
+  {
+    "codeNumber": "324",
+    "code": "GN",
+    "alpha3": "GIN",
+    "label": "ГВІНЕЯ",
+    "nameEng": "Guinea"
+  },
+  {
+    "codeNumber": "332",
+    "code": "HT",
+    "alpha3": "HTI",
+    "label": "ГАЇТІ",
+    "nameEng": "Haiti"
+  },
+  {
+    "codeNumber": "340",
+    "code": "HN",
+    "alpha3": "HND",
+    "label": "ГОНДУРАС",
+    "nameEng": "Honduras"
+  },
+  {
+    "codeNumber": "348",
+    "code": "HU",
+    "alpha3": "HUN",
+    "label": "УГОРЩИНА",
+    "nameEng": "Hungary"
+  },
+  {
+    "codeNumber": "352",
+    "code": "IS",
+    "alpha3": "ISL",
+    "label": "ІСЛАНДІЯ",
+    "nameEng": "Iceland"
+  },
+  {
+    "codeNumber": "356",
+    "code": "IN",
+    "alpha3": "IND",
+    "label": "ІНДІЯ",
+    "nameEng": "India"
+  },
+  {
+    "codeNumber": "360",
+    "code": "ID",
+    "alpha3": "IDN",
+    "label": "ІНДОНЕЗІЯ",
+    "nameEng": "Indonesia"
+  },
+  {
+    "codeNumber": "364",
+    "code": "IR",
+    "alpha3": "IRN",
+    "label": "ІРАН",
+    "nameEng": "Iran, Islamic Republic of"
+  },
+  {
+    "codeNumber": "368",
+    "code": "IQ",
+    "alpha3": "IRQ",
+    "label": "ІРАК",
+    "nameEng": "Iraq"
+  },
+  {
+    "codeNumber": "372",
+    "code": "IE",
+    "alpha3": "IRL",
+    "label": "ІРЛАНДІЯ",
+    "nameEng": "Ireland"
+  },
+  {
+    "codeNumber": "376",
+    "code": "IL",
+    "alpha3": "ISR",
+    "label": "ІЗРАЇЛЬ",
+    "nameEng": "Israel"
+  },
+  {
+    "codeNumber": "380",
+    "code": "IT",
+    "alpha3": "ITA",
+    "label": "ІТАЛІЯ",
+    "nameEng": "Italy"
+  },
+  {
+    "codeNumber": "384",
+    "code": "CI",
+    "alpha3": "CIV",
+    "label": "КОТ-Д'ІВУАР",
+    "nameEng": "Cote  d'Ivoire"
+  },
+  {
+    "codeNumber": "388",
+    "code": "JM",
+    "alpha3": "JAM",
+    "label": "ЯМАЙКА",
+    "nameEng": "Jamaica"
+  },
+  {
+    "codeNumber": "392",
+    "code": "JP",
+    "alpha3": "JPN",
+    "label": "ЯПОНІЯ",
+    "nameEng": "Japan"
+  },
+  {
+    "codeNumber": "398",
+    "code": "KZ",
+    "alpha3": "KAZ",
+    "label": "КАЗАХСТАН",
+    "nameEng": "Kazakhstan"
+  },
+  {
+    "codeNumber": "400",
+    "code": "JO",
+    "alpha3": "JOR",
+    "label": "ЙОРДАНІЯ",
+    "nameEng": "Jordan"
+  },
+  {
+    "codeNumber": "404",
+    "code": "KE",
+    "alpha3": "KEN",
+    "label": "КЕНІЯ",
+    "nameEng": "Kenya"
+  },
+  {
+    "codeNumber": "408",
+    "code": "KP",
+    "alpha3": "PRK",
+    "label": "ПІВНІЧНА КОРЕЯ",
+    "nameEng": "Korea, Democratic Peoples Republic"
+  },
+  {
+    "codeNumber": "410",
+    "code": "KR",
+    "alpha3": "KOR",
+    "label": "ПІВДЕННА КОРЕЯ",
+    "nameLong": "Республіка Корея",
+    "nameEng": "Korea, Republic of"
+  },
+  {
+    "codeNumber": "414",
+    "code": "KW",
+    "alpha3": "KWT",
+    "label": "КУВЕЙТ",
+    "nameEng": "Kuwait"
+  },
+  {
+    "codeNumber": "417",
+    "code": "KG",
+    "alpha3": "KGZ",
+    "label": "КИРГИЗСТАН",
+    "nameEng": "Kyrgyzstan"
+  },
+  {
+    "codeNumber": "418",
+    "code": "LA",
+    "alpha3": "LAO",
+    "label": "ЛАОС",
+    "nameEng": "Lao Peoples Democratic Republic"
+  },
+  {
+    "codeNumber": "422",
+    "code": "LB",
+    "alpha3": "LBN",
+    "label": "ЛІВАН",
+    "nameEng": "Lebanon"
+  },
+  {
+    "codeNumber": "426",
+    "code": "LS",
+    "alpha3": "LSO",
+    "label": "ЛЕСОТО",
+    "nameEng": "Lesotho"
+  },
+  {
+    "codeNumber": "428",
+    "code": "LV",
+    "alpha3": "LVA",
+    "label": "ЛАТВІЯ",
+    "nameEng": "Latvia"
+  },
+  {
+    "codeNumber": "430",
+    "code": "LR",
+    "alpha3": "LBR",
+    "label": "ЛІБЕРІЯ",
+    "nameEng": "Liberia"
+  },
+  {
+    "codeNumber": "434",
+    "code": "LY",
+    "alpha3": "LBY",
+    "label": "ЛІВІЯ",
+    "nameEng": "Libya"
+  },
+  {
+    "codeNumber": "438",
+    "code": "LI",
+    "alpha3": "LIE",
+    "label": "ЛІХТЕНШТЕЙН",
+    "nameEng": "Liechtenstein"
+  },
+  {
+    "codeNumber": "440",
+    "code": "LT",
+    "alpha3": "LTU",
+    "label": "ЛИТВА",
+    "nameEng": "Lithuania"
+  },
+  {
+    "codeNumber": "442",
+    "code": "LU",
+    "alpha3": "LUX",
+    "label": "ЛЮКСЕМБУРГ",
+    "nameEng": "Luxembourg"
+  },
+  {
+    "codeNumber": "450",
+    "code": "MG",
+    "alpha3": "MDG",
+    "label": "МАДАГАСКАР",
+    "nameEng": "Madagascar"
+  },
+  {
+    "codeNumber": "454",
+    "code": "MW",
+    "alpha3": "MWI",
+    "label": "МАЛАВІ",
+    "nameEng": "Malawi"
+  },
+  {
+    "codeNumber": "458",
+    "code": "MY",
+    "alpha3": "MYS",
+    "label": "МАЛАЙЗІЯ",
+    "nameEng": "Malaysia"
+  },
+  {
+    "codeNumber": "462",
+    "code": "MV",
+    "alpha3": "MDV",
+    "label": "МАЛЬДІВИ",
+    "nameEng": "Maldives"
+  },
+  {
+    "codeNumber": "466",
+    "code": "ML",
+    "alpha3": "MLI",
+    "label": "МАЛІ",
+    "nameEng": "Mali"
+  },
+  {
+    "codeNumber": "470",
+    "code": "MT",
+    "alpha3": "MLT",
+    "label": "МАЛЬТА",
+    "nameEng": "Malta"
+  },
+  {
+    "codeNumber": "478",
+    "code": "MR",
+    "alpha3": "MRT",
+    "label": "МАВРИТАНІЯ",
+    "nameEng": "Mauritania"
+  },
+  {
+    "codeNumber": "480",
+    "code": "MU",
+    "alpha3": "MUS",
+    "label": "МАВРИКІЙ",
+    "nameEng": "Mauritius"
+  },
+  {
+    "codeNumber": "484",
+    "code": "MX",
+    "alpha3": "MEX",
+    "label": "МЕКСИКА",
+    "nameEng": "Mexico"
+  },
+  {
+    "codeNumber": "492",
+    "code": "MC",
+    "alpha3": "MCO",
+    "label": "МОНАКО",
+    "nameEng": "Monaco"
+  },
+  {
+    "codeNumber": "496",
+    "code": "MN",
+    "alpha3": "MNG",
+    "label": "МОНГОЛІЯ",
+    "nameEng": "Mongolia"
+  },
+  {
+    "codeNumber": "498",
+    "code": "MD",
+    "alpha3": "MDA",
+    "label": "МОЛДОВА, РЕСПУБЛІКА",
+    "nameEng": "Moldova, Republic of"
+  },
+  {
+    "codeNumber": "499",
+    "code": "ME",
+    "alpha3": "MNE",
+    "label": "ЧОРНОГОРІЯ",
+    "nameEng": "Montenegro"
+  },
+  {
+    "codeNumber": "504",
+    "code": "MA",
+    "alpha3": "MAR",
+    "label": "МАРОККО",
+    "nameEng": "Morocco"
+  },
+  {
+    "codeNumber": "508",
+    "code": "MZ",
+    "alpha3": "MOZ",
+    "label": "МОЗАМБІК",
+    "nameEng": "Mozambique"
+  },
+  {
+    "codeNumber": "512",
+    "code": "OM",
+    "alpha3": "OMN",
+    "label": "ОМАН",
+    "nameEng": "Oman"
+  },
+  {
+    "codeNumber": "516",
+    "code": "NA",
+    "alpha3": "NAM",
+    "label": "НАМІБІЯ",
+    "nameEng": "Namibia"
+  },
+  {
+    "codeNumber": "520",
+    "code": "NR",
+    "alpha3": "NRU",
+    "label": "НАУРУ",
+    "nameEng": "Nauru"
+  },
+  {
+    "codeNumber": "524",
+    "code": "NP",
+    "alpha3": "NPL",
+    "label": "НЕПАЛ",
+    "nameEng": "Nepаl"
+  },
+  {
+    "codeNumber": "528",
+    "code": "NL",
+    "alpha3": "NLD",
+    "label": "НІДЕРЛАНДИ",
+    "nameEng": "Netherlands"
+  },
+  {
+    "codeNumber": "548",
+    "code": "VU",
+    "alpha3": "VUT",
+    "label": "ВАНУАТУ",
+    "nameEng": "Vanuatu"
+  },
+  {
+    "codeNumber": "554",
+    "code": "NZ",
+    "alpha3": "NZL",
+    "label": "НОВА ЗЕЛАНДІЯ",
+    "nameEng": "New Zealand"
+  },
+  {
+    "codeNumber": "558",
+    "code": "NI",
+    "alpha3": "NIC",
+    "label": "НІКАРАГУА",
+    "nameEng": "Nicaragua"
+  },
+  {
+    "codeNumber": "562",
+    "code": "NE",
+    "alpha3": "NER",
+    "label": "НІГЕР",
+    "nameEng": "Niger"
+  },
+  {
+    "codeNumber": "566",
+    "code": "NG",
+    "alpha3": "NGA",
+    "label": "НІГЕРІЯ",
+    "nameEng": "Nigeria"
+  },
+  {
+    "codeNumber": "578",
+    "code": "NO",
+    "alpha3": "NOR",
+    "label": "НОРВЕГІЯ",
+    "nameEng": "Norway"
+  },
+  {
+    "codeNumber": "585",
+    "code": "PW",
+    "alpha3": "PLW",
+    "label": "ПАЛАУ",
+    "nameEng": "Palau"
+  },
+  {
+    "codeNumber": "586",
+    "code": "PK",
+    "alpha3": "PAK",
+    "label": "ПАКИСТАН",
+    "nameEng": "Pakistan"
+  },
+  {
+    "codeNumber": "591",
+    "code": "PA",
+    "alpha3": "PAN",
+    "label": "ПАНАМА",
+    "nameEng": "Panama"
+  },
+  {
+    "codeNumber": "598",
+    "code": "PG",
+    "alpha3": "PNG",
+    "label": "ПАПУА-НОВА ГВІНЕЯ",
+    "nameEng": "Papua New Guinea"
+  },
+  {
+    "codeNumber": "600",
+    "code": "PY",
+    "alpha3": "PRY",
+    "label": "ПАРАГВАЙ",
+    "nameEng": "Paraguay"
+  },
+  {
+    "codeNumber": "604",
+    "code": "PE",
+    "alpha3": "PER",
+    "label": "ПЕРУ",
+    "nameEng": "Peru"
+  },
+  {
+    "codeNumber": "608",
+    "code": "PH",
+    "alpha3": "PHL",
+    "label": "ФІЛІППІНИ",
+    "nameEng": "Philippines"
+  },
+  {
+    "codeNumber": "616",
+    "code": "PL",
+    "alpha3": "POL",
+    "label": "ПОЛЬЩА",
+    "nameEng": "Poland"
+  },
+  {
+    "codeNumber": "620",
+    "code": "PT",
+    "alpha3": "PRT",
+    "label": "ПОРТУГАЛІЯ",
+    "nameEng": "Portugal"
+  },
+  {
+    "codeNumber": "624",
+    "code": "GW",
+    "alpha3": "GNB",
+    "label": "ГВІНЕЯ-БІСАУ",
+    "nameEng": "Guinea-Bissau"
+  },
+  {
+    "codeNumber": "626",
+    "code": "TL",
+    "alpha3": "TLS",
+    "label": "ТИМОР-ЛЕШТІ",
+    "nameEng": "Timor-Leste"
+  },
+  {
+    "codeNumber": "630",
+    "code": "PR",
+    "alpha3": "PRI",
+    "label": "ПУЕРТО-РИКО",
+    "nameEng": "Puerto Rico"
+  },
+  {
+    "codeNumber": "634",
+    "code": "QA",
+    "alpha3": "QAT",
+    "label": "КАТАР",
+    "nameEng": "Qatar"
+  },
+  {
+    "codeNumber": "642",
+    "code": "RO",
+    "alpha3": "ROU",
+    "label": "РУМУНІЯ",
+    "nameLong": "РУМУНІЯ",
+    "nameEng": "Romania"
+  },
+  {
+    "codeNumber": "643",
+    "code": "RU",
+    "alpha3": "RUS",
+    "label": "РОСІЙСЬКА ФЕДЕРАЦІЯ",
+    "nameEng": "Russian Federation"
+  },
+  {
+    "codeNumber": "646",
+    "code": "RW",
+    "alpha3": "RWA",
+    "label": "РУАНДА",
+    "nameEng": "Rwanda"
+  },
+  {
+    "codeNumber": "674",
+    "code": "SM",
+    "alpha3": "SMR",
+    "label": "САН-МАРИНО",
+    "nameEng": "San Marino"
+  },
+  {
+    "codeNumber": "682",
+    "code": "SA",
+    "alpha3": "SAU",
+    "label": "САУДІВСЬКА АРАВІЯ",
+    "nameEng": "Saudi Arabia"
+  },
+  {
+    "codeNumber": "686",
+    "code": "SN",
+    "alpha3": "SEN",
+    "label": "СЕНЕГАЛ",
+    "nameEng": "Senegal"
+  },
+  {
+    "codeNumber": "688",
+    "code": "RS",
+    "alpha3": "SRB",
+    "label": "СЕРБІЯ",
+    "nameEng": "Serbia"
+  },
+  {
+    "codeNumber": "690",
+    "code": "SC",
+    "alpha3": "SYC",
+    "label": "СЕЙШЕЛЬСЬКІ ОСТРОВИ",
+    "nameEng": "Seychelles"
+  },
+  {
+    "codeNumber": "694",
+    "code": "SL",
+    "alpha3": "SLE",
+    "label": "СЬЄРРА-ЛЕОНЕ",
+    "nameEng": "Sierra Leone"
+  },
+  {
+    "codeNumber": "702",
+    "code": "SG",
+    "alpha3": "SGP",
+    "label": "СИНГАПУР",
+    "nameEng": "Singapore"
+  },
+  {
+    "codeNumber": "703",
+    "code": "SK",
+    "alpha3": "SVK",
+    "label": "СЛОВАЧЧИНА",
+    "nameEng": "Slovakia"
+  },
+  {
+    "codeNumber": "704",
+    "code": "VN",
+    "alpha3": "VNM",
+    "label": "В'ЄТНАМ",
+    "nameEng": "Viet Nam"
+  },
+  {
+    "codeNumber": "705",
+    "code": "SI",
+    "alpha3": "SVN",
+    "label": "СЛОВЕНІЯ",
+    "nameEng": "Slovenia"
+  },
+  {
+    "codeNumber": "706",
+    "code": "SO",
+    "alpha3": "SOM",
+    "label": "СОМАЛІ",
+    "nameEng": "Somalia"
+  },
+  {
+    "codeNumber": "710",
+    "code": "ZA",
+    "alpha3": "ZAF",
+    "label": "ПІВДЕННА АФРИКА",
+    "nameEng": "South Africa"
+  },
+  {
+    "codeNumber": "716",
+    "code": "ZW",
+    "alpha3": "ZWE",
+    "label": "ЗІМБАБВЕ",
+    "nameEng": "Zimbabwe"
+  },
+  {
+    "codeNumber": "724",
+    "code": "ES",
+    "alpha3": "ESP",
+    "label": "ІСПАНІЯ",
+    "nameEng": "Spain"
+  },
+  {
+    "codeNumber": "729",
+    "code": "SD",
+    "alpha3": "SDN",
+    "label": "СУДАН",
+    "nameEng": "Sudan"
+  },
+  {
+    "codeNumber": "740",
+    "code": "SR",
+    "alpha3": "SUR",
+    "label": "СУРИНАМ",
+    "nameEng": "Suriname"
+  },
+  {
+    "codeNumber": "748",
+    "code": "SZ",
+    "alpha3": "SWZ",
+    "label": "СВАЗІЛЕНД",
+    "nameEng": "Swaziland"
+  },
+  {
+    "codeNumber": "752",
+    "code": "SE",
+    "alpha3": "SWE",
+    "label": "ШВЕЦІЯ",
+    "nameEng": "Sweden"
+  },
+  {
+    "codeNumber": "756",
+    "code": "CH",
+    "alpha3": "CHE",
+    "label": "ШВЕЙЦАРІЯ",
+    "nameEng": "Switzerland"
+  },
+  {
+    "codeNumber": "760",
+    "code": "SY",
+    "alpha3": "SYR",
+    "label": "СИРІЯ",
+    "nameEng": "Syrian Arab Republic"
+  },
+  {
+    "codeNumber": "762",
+    "code": "TJ",
+    "alpha3": "TJK",
+    "label": "ТАДЖИКИСТАН",
+    "nameEng": "Tajikistan"
+  },
+  {
+    "codeNumber": "764",
+    "code": "TH",
+    "alpha3": "THA",
+    "label": "ТАЇЛАНД",
+    "nameEng": "Thailand"
+  },
+  {
+    "codeNumber": "768",
+    "code": "TG",
+    "alpha3": "TGO",
+    "label": "ТОГО",
+    "nameEng": "Togo"
+  },
+  {
+    "codeNumber": "776",
+    "code": "TO",
+    "alpha3": "TON",
+    "label": "ТОНГА",
+    "nameEng": "Tonga"
+  },
+  {
+    "codeNumber": "780",
+    "code": "TT",
+    "alpha3": "TTO",
+    "label": "ТРИНІДАД І ТОБАГО",
+    "nameEng": "Trinidad and Tobago"
+  },
+  {
+    "codeNumber": "784",
+    "code": "AE",
+    "alpha3": "ARE",
+    "label": "ОБ'ЄДНАНІ АРАБСЬКІ ЕМІРАТИ",
+    "nameEng": "United Arab Emirates"
+  },
+  {
+    "codeNumber": "788",
+    "code": "TN",
+    "alpha3": "TUN",
+    "label": "ТУНІС",
+    "nameEng": "Tunisia"
+  },
+  {
+    "codeNumber": "792",
+    "code": "TR",
+    "alpha3": "TUR",
+    "label": "ТУРЕЧЧИНА",
+    "nameEng": "Turkey"
+  },
+  {
+    "codeNumber": "795",
+    "code": "TM",
+    "alpha3": "TKM",
+    "label": "ТУРКМЕНИСТАН",
+    "nameEng": "Turkmenistan"
+  },
+  {
+    "codeNumber": "796",
+    "code": "TC",
+    "alpha3": "TCA",
+    "label": "ОСТРОВИ ТЕРКС І КАЙКОС",
+    "nameEng": "Turks and Caicos Islands"
+  },
+  {
+    "codeNumber": "800",
+    "code": "UG",
+    "alpha3": "UGA",
+    "label": "УГАНДА",
+    "nameEng": "Uganda"
+  },
+  {
+    "codeNumber": "804",
+    "code": "UA",
+    "alpha3": "UKR",
+    "label": "УКРАЇНА",
+    "nameLong": "УКРАЇНА",
+    "nameEng": "Ukraine"
+  },
+  {
+    "codeNumber": "807",
+    "code": "MK",
+    "alpha3": "MKD",
+    "label": "РЕСПУБЛІКА МАКЕДОНІЯ",
+    "nameEng": "Macedonia (The former Yugoslav Republic of)"
+  },
+  {
+    "codeNumber": "818",
+    "code": "EG",
+    "alpha3": "EGY",
+    "label": "ЄГИПЕТ",
+    "nameEng": "Egypt"
+  },
+  {
+    "codeNumber": "826",
+    "code": "GB",
+    "alpha3": "GBR",
+    "label": "ВЕЛИКА БРИТАНІЯ",
+    "nameEng": "United Kingdom"
+  },
+  {
+    "codeNumber": "834",
+    "code": "TZ",
+    "alpha3": "TZA",
+    "label": "ТАНЗАНІЯ",
+    "nameEng": "Tanzania"
+  },
+  {
+    "codeNumber": "840",
+    "code": "US",
+    "alpha3": "USA",
+    "label": "США",
+    "nameEng": "United States"
+  },
+  {
+    "codeNumber": "854",
+    "code": "BF",
+    "alpha3": "BFA",
+    "label": "БУРКІНА-ФАСО",
+    "nameEng": "Burkina Faso"
+  },
+  {
+    "codeNumber": "858",
+    "code": "UY",
+    "alpha3": "URY",
+    "label": "УРУГВАЙ",
+    "nameEng": "Uruguay"
+  },
+  {
+    "codeNumber": "860",
+    "code": "UZ",
+    "alpha3": "UZB",
+    "label": "УЗБЕКИСТАН",
+    "nameEng": "Uzbekistan"
+  },
+  {
+    "codeNumber": "862",
+    "code": "VE",
+    "alpha3": "VEN",
+    "label": "ВЕНЕСУЕЛА",
+    "nameEng": "Venezuela (Bolivarian Republic of)"
+  },
+  {
+    "codeNumber": "882",
+    "code": "WS",
+    "alpha3": "WSM",
+    "label": "САМОА",
+    "nameEng": "Samoa"
+  },
+  {
+    "codeNumber": "887",
+    "code": "YE",
+    "alpha3": "YEM",
+    "label": "ЄМЕН",
+    "nameEng": "Yemen"
+  },
+  {
+    "codeNumber": "894",
+    "code": "ZM",
+    "alpha3": "ZMB",
+    "label": "ЗАМБІЯ",
+    "nameEng": "Zambia"
+  }
+]

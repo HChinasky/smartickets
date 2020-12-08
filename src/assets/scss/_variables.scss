@@ -1,0 +1,18 @@
+$FONT_COLOR: #2a2a2a;
+$SECOND_FONT_COLOR: #66B2FF;
+$DANGER_COLOR: #f44336;
+$LINK_COLOR: #1b73cd;
+$LABEL_COLOR: #6E6E6E;
+$BUTTON_HOVER: #5B5AFE;
+$BORDER_BOTTOM_LINK_COLOR: #3398FF;
+
+$breakpoints: (
+                ('xs', 460px),
+                ('s', 648px),
+                ('sm', 768px),
+                ('m', 992px),
+                ('md', 1024px),
+                ('l', 1195px),
+                ('lg', 1366px),
+                ('xl', 1400px),
+) !default;
