@@ -144,6 +144,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      "fetchStations",
       "fetchTrains",
       "regClient",
       "updateClientInfo",
@@ -252,7 +253,23 @@ export default {
     */
 
     this.updateClientInfo();
-
+    this.regClient()
+      .then(() => {
+        if (this.getStations.length == 0) {
+          this.fetchStations()
+            .then(() => {})
+            .catch((error) => {
+              this.$toasted.global.my_app_error({
+                message: error.message,
+              });
+            });
+        }
+      })
+      .catch((error) => {
+        this.$toasted.global.my_app_error({
+          message: error.message,
+        });
+      });
 
     if (this.getMetroStations.length == 0) {
       this.fetchMetroStations()
