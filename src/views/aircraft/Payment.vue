@@ -30,7 +30,7 @@
                 <span class="fullname">{{ firstname }} {{ lastname }}</span>
               </div>
               <div class="person-birthday">
-                {{birthDate}}
+                {{ ticketDepartmentDate }}
               </div>
               <div class="additional-services__select">
                 <v-select
@@ -58,7 +58,7 @@
                 <span class="fullname">{{ firstname }} {{ lastname }}</span>
               </div>
               <div class="person-birthday">
-                {{birthDate}}
+                {{ ticketArrivalDate }}
               </div>
               <div class="additional-services__select">
                 <v-select
@@ -243,7 +243,9 @@
         "getCityNameById",
         "getBirthDay",
         "getBirthMonth",
-        "getBirthYear"
+        "getBirthYear",
+        "getCityArrivalDate",
+        "getCityDepartmentDate"
       ]),
       cityDepartment() {
         return this.getCityNameById(this.getDepartmentCity);
@@ -251,8 +253,11 @@
       cityArrival() {
         return this.getCityNameById(this.getArrivalCity);
       },
-      birthDate() {
-        return moment(this.getBirthMonth+'-'+this.getBirthDay+'-'+this.getBirthYear).format("DD MMMM YYYY");
+      ticketDepartmentDate() {
+        return moment(this.getCityDepartmentDate).format("DD MMMM YYYY");
+      },
+      ticketArrivalDate() {
+        return moment(this.getCityArrivalDate).format("DD MMMM YYYY");
       },
       lastname: {
         get() {
