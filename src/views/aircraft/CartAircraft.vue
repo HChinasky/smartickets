@@ -34,7 +34,7 @@
             :to="{ name: 'payment' }"
             tag="button"
             class="cart-submit btn btn--black"
-            
+            :disabled="!validation"
         >
           {{ $t("next") }}
         </router-link>
@@ -52,24 +52,73 @@
     components: {
       adultCart
     },
+    data() {
+      return {
+        testValid: true
+      }
+    },
     computed: {
       ...mapGetters([
         "getAdult",
         "getTeenagers",
         "getKids",
-        "getTicketPrice"
+        "getTicketPrice",
+        
+        "getLastName",
+        "getFirstName",
+        "getPassportCode",
+        "getGender",
+        "getBirthDay",
+        "getBirthMonth",
+        "getBirthYear",
+        "getPassportDay",
+        "getPassportMonth",
+        "getPassportYear",
+        "getCountry"
       ]),
       getPersons() {
         return this.getAdult;
       },
       getPrice() {
         return this.getTicketPrice
+      },
+      validation() {
+        if(!this.getLastName) {
+          return false;
+        }
+        if(!this.getFirstName) {
+          return false;
+        }
+        if(!this.getPassportCode) {
+          return false;
+        }
+        if(!this.getGender) {
+          return false;
+        }
+        if(!this.getBirthDay) {
+          return false;
+        }
+        if(!this.getBirthMonth) {
+          return false;
+        }
+        if(!this.getBirthYear) {
+          return false;
+        }
+        if(!this.getPassportDay) {
+          return false;
+        }
+        if(!this.getPassportMonth) {
+          return false;
+        }
+        if(!this.getPassportYear) {
+          return false;
+        }
+        if(!this.getCountry) {
+          return false;
+        }
+        return true;
       }
     },
-    methods: {
-
-
-    }
   }
 </script>
 
@@ -143,6 +192,9 @@
           text-decoration: none;
           @include respond-until(sm) {
             margin-top: 25px;
+          }
+          &:disabled {
+            color: #fff;
           }
         }
       }
