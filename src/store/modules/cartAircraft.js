@@ -1,11 +1,18 @@
 import api from "../../api/api";
 import moment from "moment";
+import { getField, updateField } from 'vuex-map-fields';
 
 const state = {
   resultId: null,
   searchId: null,
   ticketPrice: null,
-  passengers: [],
+  passengers: [
+    {
+      firstName: '',
+      lastName: '',
+      street: '',
+    },
+  ],
   lastName: null,
   firstName: null,
   passportCode: null,
@@ -25,6 +32,7 @@ const state = {
 };
 
 const getters = {
+  getField,
   getResultId: (state) => state.resultId,
   getSearchId: (state) => state.searchId,
   getTicketPrice: (state) => state.ticketPrice,
@@ -132,6 +140,14 @@ const actions = {
   },
 };
 const mutations = {
+  updateField,
+  addAddressRow(state) {
+    state.passengers.push({
+      zip: '',
+      town: '',
+      street: '',
+    });
+  },
   updateResultId(state, resultId) {
     state.resultId = resultId;
   },
