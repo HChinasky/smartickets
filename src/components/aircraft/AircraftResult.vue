@@ -113,12 +113,12 @@
     },
     data() {
       return {
-        activeToDate: '',
-        activeFromDate: '',
-        departmentDate: '',
-        arrivalDate: '',
-        baggageTypeIconTo: null,
-        baggageTypeIconFrom: null,
+        activeToDate: "",
+        activeFromDate: "",
+        departmentDate: "",
+        arrivalDate: "",
+        baggageTypeIconTo: "",
+        baggageTypeIconFrom: "",
         swiperOptionDepartment: {
           slidesPerView: 6,
           spaceBetween: 15,
@@ -270,6 +270,7 @@
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
+
       cloneDate() {
         if(!this.departmentDate || !this.arrivalDate) {
           this.departmentDate = this.getCityDepartmentDate;
@@ -291,6 +292,9 @@
         } else {
           this.baggageTypeIconTo = iconArr;
         }
+        if(this.arrivalTicket.length === 0) {
+          this.baggageTypeIconTo = {}
+        }
       },
       formattedDate(date) {
         if (this.$route.meta.clientArea)
@@ -302,8 +306,6 @@
         return moment(date).format("HH:mm");
       },
       updateActiveDate(directive, index) {
-        console.log(directive);
-        console.log(directive);
         this[directive] = index;
       },
     },
