@@ -1,5 +1,6 @@
 <template>
   <div class="persons-info">
+    <pre>{{personExportData}}</pre>
     <div class="person-info__age">
       <p>Дорослий {{passengerIndex}}</p>
     </div>
@@ -31,18 +32,18 @@
           <input
               class="ticket-list__input"
               type="text"
-              v-model="firstname"
-              @blur="$v.firstname.$touch()"
+              v-model="personExportData.firstname"
+              @blur="$v.personExportData.firstname.$touch()"
               @keydown.space.prevent
           />
-          <template v-if="$v.firstname.$error">
-            <p v-if="!$v.firstname.required" class="errorMessage">
+          <template v-if="$v.personExportData.firstname.$error">
+            <p v-if="!$v.personExportData.firstname.required" class="errorMessage">
               {{ $t("firstNameEmpty") }}
             </p>
-            <p v-if="!$v.firstname.alpha" class="errorMessage">
+            <p v-if="!$v.personExportData.firstname.alpha" class="errorMessage">
               {{ $t("firstnameLatinAlpha") }}
             </p>
-            <p v-if="!$v.firstname.minLength" class="errorMessage">
+            <p v-if="!$v.personExportData.firstname.minLength" class="errorMessage">
               {{ $t('firstnameMinLength') }}
             </p>
           </template>
@@ -205,12 +206,14 @@
       }
     },
     validations: {
-      lastname: {
-        required,
-        minLength: minLength(3),
-        alpha
+      personExportData: {
+        firstname: {
+          required,
+          minLength: minLength(3),
+          alpha
+        },
       },
-      firstname: {
+      lastname: {
         required,
         minLength: minLength(3),
         alpha
@@ -263,6 +266,37 @@
       options() {
         return countries
       },
+      savePersonData() {
+        let personData = [{}],
+          i          = 0;
+        for(i;i<this.passengerIndex;i++) {
+          personData[i] = {
+            "type": "ADT",
+            firstname: {
+              get() {
+                console.log("get")
+                if (this.getFirstName) {
+                  return this.getFirstName;
+                } else {
+                  return null;
+                }
+              },
+              set(value) {
+                console.log("set")
+                this.setFirstName(value);
+              },
+            },
+            "lastname": this.person.name,
+            "birthday": this.person.birthDay.day + '-' + this.person.birthDay.month + '-' + this.person.birthDay.year,
+            "gender": this.person.activeGender,
+            "citizenship": "UA",
+            "docnum": this.person.passport.number,
+            "doc-expire": this.person.passport.day + "-" + this.person.passport.month + "-" + this.person.passport.year
+          }
+        }
+        [...this.personExportData] = personData;
+        return null;
+      },
       lastname: {
         get() {
           if (this.getLastName) {
@@ -275,18 +309,7 @@
           this.setLastName(value);
         },
       },
-      firstname: {
-        get() {
-          if (this.getFirstName) {
-            return this.getFirstName;
-          } else {
-            return null;
-          }
-        },
-        set(value) {
-          this.setFirstName(value);
-        },
-      },
+
       passportCode: {
         get() {
           if (this.getPassportCode) {
@@ -389,6 +412,7 @@
     },
     methods: {
       ...mapActions([
+        "setPassengers",
         "setLastName",
         "setFirstName",
         "setPassportCode",
@@ -429,23 +453,6 @@
         }
         return days;
       },
-      savePersonData() {
-        let personData = {},
-            i          = 0;
-        for(i;i<this.passengerIndex;i++) {
-          personData[i] = {
-            "type": "ADT",
-            "firstname": this.person.surname,
-            "lastname": this.person.name,
-            "birthday": this.person.birthDay.day + '-' + this.person.birthDay.month + '-' + this.person.birthDay.year,
-            "gender": this.person.activeGender,
-            "citizenship": "UA",
-            "docnum": this.person.passport.number,
-            "doc-expire": this.person.passport.day + "-" + this.person.passport.month + "-" + this.person.passport.year
-          }
-        }
-        this.personExportData = personData;
-      }
     },
     watch: {
       person: {

@@ -45,17 +45,12 @@
 
 <script>
   import { mapGetters } from "vuex";
-  import adultCart from '../../components/aircraft/adultCart';
+  import adultCart from '../../components/aircraft/passengerCart';
   
   export default {
     name: "CartAircraft",
     components: {
       adultCart
-    },
-    data() {
-      return {
-        testValid: true
-      }
     },
     computed: {
       ...mapGetters([

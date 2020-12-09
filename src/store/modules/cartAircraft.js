@@ -5,6 +5,7 @@ const state = {
   resultId: null,
   searchId: null,
   ticketPrice: null,
+  passengers: [],
   lastName: null,
   firstName: null,
   passportCode: null,
@@ -28,7 +29,7 @@ const getters = {
   getSearchId: (state) => state.searchId,
   getTicketPrice: (state) => state.ticketPrice,
   getLastName: (state) => state.lastName,
-  getFirstName: (state) => state.firstName,
+  getFirstName: (state, i) => state[i].passengers.firstname,
   getPassportCode: (state) => state.passportCode,
   getGender: (state) => state.gender,
 
@@ -125,6 +126,10 @@ const actions = {
   setPersonPhone({ commit }, phone) {
     commit("updatePersonPhone", phone);
   },
+
+  setPassengers({ commit }, passengers) {
+    commit("updatePassengers", passengers);
+  },
 };
 const mutations = {
   updateResultId(state, resultId) {
@@ -140,7 +145,7 @@ const mutations = {
     state.lastName = lastName;
   },
   updateFirstName(state, firstName) {
-    state.firstName = firstName;
+    state.passengers = firstName;
   },
   updatePassportCode(state, passportCode) {
     state.passportCode = passportCode;
@@ -175,6 +180,9 @@ const mutations = {
   },
   updatePersonPhone(state, phone) {
     state.personPhone = phone;
+  },
+  setPassengers(state, passengers) {
+    state.passengers = passengers;
   },
 };
 
