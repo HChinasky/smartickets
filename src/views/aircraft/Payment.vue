@@ -39,21 +39,6 @@
               <div class="person-birthday">
                 {{ ticketDepartmentDate }}
               </div>
-              <div class="additional-services__select">
-                <v-select
-                    class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-                    :options="additionalServices"
-                    v-model="activeAdditionalServices"
-                    placeholder="Доп. послуги"
-                    :clearable="false"
-                >
-                  <template v-slot:option="option">
-                    <span class="d-flex justify-center" style="width: 100%;">
-                      {{ option.label }}
-                    </span>
-                  </template>
-                </v-select>
-              </div>
             </div>
           </div>
           <div class="ticket__block ticket-arrival" v-if="getCityArrivalDate">
@@ -66,21 +51,6 @@
               </div>
               <div class="person-birthday">
                 {{ ticketArrivalDate }}
-              </div>
-              <div class="additional-services__select">
-                <v-select
-                    class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-                    :options="additionalServices"
-                    v-model="activeAdditionalServices"
-                    placeholder="Доп. послуги"
-                    :clearable="false"
-                >
-                  <template v-slot:option="option">
-                <span class="d-flex justify-center" style="width: 100%;">
-                  {{ option.label }}
-                </span>
-                  </template>
-                </v-select>
               </div>
             </div>
           </div>
