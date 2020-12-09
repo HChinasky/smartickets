@@ -52,6 +52,7 @@ const actions = {
     const params = {
       result_id: rootState.cartAircraft.resultId,
       searchId: rootState.cartAircraft.searchId,
+      payment_sid: localStorage.getItem("payment_sid"),
 
       passenger: {
         firstname: rootState.cartAircraft.firstName,

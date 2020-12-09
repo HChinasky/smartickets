@@ -256,6 +256,7 @@ export default {
         "lng_id": i18n.locale == "uk" ? "UA" : "EN",
         "result_id": params.result_id,
         "search_id": params.searchId,
+        "payment_sid": params.payment_sid,
         "passengers": [
           {
             "type": "ADT",

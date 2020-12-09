@@ -1,5 +1,12 @@
 <template>
   <section class="payment-ticket">
+    <loading
+        :active.sync="isLoading"
+        :can-cancel="false"
+        :loader="loader"
+        :color="color"
+        :is-full-page="fullPage"
+    ></loading>
     <div class="container">
       <div class="step-back__block">
         <a v-back class="back-to-site__link">
@@ -162,7 +169,7 @@
               </button>
             </div>
             <div class="payment_sum">
-              <p class="total-sum">Загальна вартість: <span>1341 грн</span></p>
+              <p class="total-sum">Загальна вартість: <span>{{ getTicketPrice }} грн</span></p>
               <p class="smart-tickets-tax">Оформлення SmartTicket <span>0.06 грн</span></p>
               <button
                   @click="getBookTicket"
@@ -175,6 +182,9 @@
         </div>
       </div>
     </div>
+    <form ref="formRef" action method="POST" id="paymentForm">
+      <input type="hidden" ref="inputRef" value name="payment_no" />
+    </form>
   </section>
 </template>
 
@@ -188,17 +198,22 @@
     minLength
   } from "vuelidate/lib/validators";
   import InputMask from 'vue-input-mask';
+  import Loading from "vue-loading-overlay";
 
   export default {
     name: "Payment",
     components: {
       InputMask,
+      Loading
       
     },
     data() {
-      return {toTicket: {
-          baggageType: 'baggageTypeIconTo',
-        },
+      return {
+        isLoading: false,
+        fullPage: true,
+        loader: "spinner",
+        color: "#1b73cd",
+        
         activePayment: "",
         paymentTypes: [{id: 1, name: "liqpay"}, {id: 2, name: "fondy"}],
         agreementRules: false,
@@ -245,7 +260,8 @@
         "getBirthMonth",
         "getBirthYear",
         "getCityArrivalDate",
-        "getCityDepartmentDate"
+        "getCityDepartmentDate",
+        "getTicketPrice"
       ]),
       cityDepartment() {
         return this.getCityNameById(this.getDepartmentCity);
@@ -304,17 +320,13 @@
     },
     methods: {
       ...mapActions([
+        "startPayment",
         "bookingTicketAircraft",
         "setPersonEmail",
         "setPersonPhone"
       ]),
       async getBookTicket() {
-        if(this.getPersonEmail) {
-          return false;
-        }
-        if(this.getPersonPhone) {
-          return false;
-        }
+        console.log(true)
         await this.bookingTicketAircraft()
           .then(() => {
           })
@@ -331,6 +343,25 @@
               });
             }
           });
+        
+          await this.startPayment()
+            .then((response) => {
+              var el = document.createElement("p");
+              el.innerHTML = response;
+              console.log(response)
+              var form = el.querySelector("#returnForm");
+              var payment_no = form.querySelector('input[name="payment_no"]').value;
+              this.$refs.inputRef.value = payment_no;
+              this.$refs.formRef.action = form.action;
+              this.$refs.formRef.submit();
+              //this.isLoading = false;
+            })
+            .catch((error) => {
+              this.isLoading = false;
+              this.$toasted.global.my_app_error({
+                message: error.message,
+              });
+            });
       }
     }
   }

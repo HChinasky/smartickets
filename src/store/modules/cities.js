@@ -46,9 +46,9 @@ const actions = {
         code: city.code,
       }));
       commit("setCities", cities);
+      commit("setPaymentId", response.data.payment_sid);
     }
   },
-
 
   setDepartmentCity({ commit }, data) {
     commit("updateDepartmentCity", data);
@@ -76,6 +76,11 @@ const actions = {
 };
 
 const mutations = {
+  setPaymentId(state, payment_sid) {
+    state.payment_sid = payment_sid;
+    localStorage.setItem("payment_sid", payment_sid); //FIXME
+  },
+
   setCities: (state, cities) => {
     state.cities = cities;
   },
