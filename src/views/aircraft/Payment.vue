@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <div class="ticket__block ticket-arrival">
+          <div class="ticket__block ticket-arrival" v-if="getCityArrivalDate">
             <div class="tickets__title">
               <h3 class="from">{{ $t('back') }}: <span>{{cityArrival}} - {{cityDepartment}}</span></h3>
             </div>
@@ -426,7 +426,7 @@
         }
         
         .ticket__block {
-          &:last-child {
+          &.ticket-arrival {
             margin-top: 80px;
           }
         }
