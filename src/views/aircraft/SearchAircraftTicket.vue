@@ -226,6 +226,7 @@
     methods: {
       ...mapActions([
         "fetchCity",
+        "regClient",
         "fetchAircrafts",
         "setDepartmentCity",
         "setArrivalCity",
@@ -345,6 +346,17 @@
       this.$store.dispatch('fetchCity');
       this.$store.dispatch('fetchAirports');
     },
+    created() {
+      this.regClient()
+        .then(() => {
+
+        })
+        .catch((error) => {
+          this.$toasted.global.my_app_error({
+            message: error.message,
+          });
+        });
+    }
   };
 </script>
 
