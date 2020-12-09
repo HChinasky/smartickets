@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import { mapActions } from "vuex";
   export default {
     name: "TypeTicket",
     data() {
@@ -83,6 +84,10 @@
       }
     },
     methods: {
+      ...mapActions([
+        "regClient",
+        "updateClientInfo"
+      ]),
       chooseTrips(id, link) {
         this.link.indexOf(link) === -1 ? this.$set(this.link, id, link) : this.$set(this.link, id, null);
       }
@@ -97,6 +102,18 @@
         });
         return activeLink;
       }
+    },
+    created() {
+      this.updateClientInfo();
+      this.regClient()
+        .then(() => {
+
+        })
+        .catch((error) => {
+          this.$toasted.global.my_app_error({
+            message: error.message,
+          });
+        });
     }
   }
 </script>

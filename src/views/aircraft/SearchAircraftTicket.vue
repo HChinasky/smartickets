@@ -234,7 +234,9 @@
         "setDepartmentCityCode",
         "setAdult",
         "setTeenagers",
-        "setKids"
+        "setKids",
+        "regClient",
+        "updateClientInfo"
       ]),
       nameKeydown: function(e) {
         if (/^\W$/.test(e.key)) {
@@ -347,6 +349,7 @@
       this.$store.dispatch('fetchAirports');
     },
     created() {
+      this.updateClientInfo();
       this.regClient()
         .then(() => {
 
