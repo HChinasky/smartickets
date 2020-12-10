@@ -5,10 +5,10 @@
         <div class="header__brand site-brand">
           <router-link to="/">
             <div class="site-brand__logo">
-              <svg viewBox="0 0 108 52">
+              <svg viewBox="0 0 323 92">
                 <use
                     :xlink:href="
-                    require('@/assets/img/sprite.svg') + '#icon-logo'
+                    require('@/assets/img/sprite.svg') + '#icon-logo-new'
                   "
                 />
               </svg>
