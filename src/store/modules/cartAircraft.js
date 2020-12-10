@@ -71,27 +71,32 @@ const getters = {
 const actions = {
   async bookingTicketAircraft({ rootState }) {
     //const { token } = rootState.auth
+    var passenger = [];
+    rootState.cartAircraft.passengers.forEach((element, index) => {
+      passenger[index] = {
+        "type": element.type,
+        "firstname": element.firstName,
+        "lastname": element.lastName,
+        "birthday": moment(element.birthMonth+'-'+element.birthDay+'-'+element.birthYear).format("DD-MM-YYYY"),
+        "gender": element.genders,
+        "citizenship": element.country.code,
+        "docnum": element.passportCode,
+        "doc-expire": moment(element.passportMonth+'-'+element.passportDay+'-'+element.passportYear).format("DD-MM-YYYY")
+      }
+    })
     const params = {
       result_id: rootState.cartAircraft.resultId,
       searchId: rootState.cartAircraft.searchId,
       payment_sid: localStorage.getItem("payment_sid"),
 
-      passenger: {
-        firstname: rootState.cartAircraft.firstName,
-        lastname: rootState.cartAircraft.lastName,
-        birthday: moment(rootState.cartAircraft.birthMonth+'-'+rootState.cartAircraft.birthDay+'-'+rootState.cartAircraft.birthYear).format("DD-MM-YYYY"),
-        gender: rootState.cartAircraft.gender,
-        citizenship: rootState.cartAircraft.country.code,
-        docnum: rootState.cartAircraft.personEmail,
-        docExpire: moment(rootState.cartAircraft.passportMonth+'-'+rootState.cartAircraft.passportDay+'-'+rootState.cartAircraft.passportYear).format("DD-MM-YYYY"),
-      },
+      passenger: passenger,
       email: rootState.cartAircraft.personEmail,
       phone: rootState.cartAircraft.personPhone
     };
 
 
-    const response = await api.bookingTicketAircraft(params);
-    console.log(response);
+    await api.bookingTicketAircraft(params);
+    console.log(params.passenger);
 
   },
   setResultId({ commit }, data) {
@@ -226,3 +231,25 @@ export default {
   actions,
   mutations,
 };
+// {
+//   "type": "SkyUp",
+//   "lng_id": "UA",
+//   "result_id": "84e080ff595ce05bacee296c7e180720",
+//   "search_id": "47791",
+//   "payment_sid": "pefexbcqqlvghwqmfvooikyjdwyak",
+//   "passengers": [
+//   {
+//     "type": "ADT",
+//     "firstname": "John",
+//     "lastname": "Doe",
+//     "birthday": "1982-01-01",
+//     "gender": "M",
+//     "citizenship": "UA",
+//     "docnum": "FF000000",
+//     "doc-expire": "2030-01-01"
+//   }
+// ],
+//   "email": "test.solveast@gmail.com",
+//   "phone": "0950000000",
+//   "agent_email": "test.solveast@gmail.com"
+// }

@@ -41,7 +41,6 @@
 
 <script>
   import { mapGetters } from "vuex";
-  import { mapMultiRowFields } from 'vuex-map-fields';
   import adultCart from '../../components/aircraft/passengerCart';
   
   export default {
@@ -50,7 +49,6 @@
       adultCart
     },
     computed: {
-      ...mapMultiRowFields(['passengers']),
       ...mapGetters([
         "getTicketPrice",
         "getField",

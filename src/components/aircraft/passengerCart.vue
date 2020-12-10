@@ -4,7 +4,13 @@
          v-for="(passenger, index) in passengers"
          :key="index">
             <div class="person-info__age">
-        <p>Дорослий {{index}}</p>
+        <p>
+          {{
+            passenger.type === "ADT" ? "Дорослий" :
+            passenger.type === "CHD" ? "Дитина" :
+            "Немовля"
+          }} {{index + 1}}
+        </p>
       </div>
       <div class="person-info__card">
         <div class="form-list">
@@ -256,7 +262,9 @@
         }
       }
     }
-    
+    &:not(:first-child) {
+      margin-top: 60px;
+    }
     .person-info__card {
       @include make-col(6, $grid-columns, 0);
       @include respond-until(sm) {

@@ -32,9 +32,13 @@
             <div class="tickets__title">
               <h3 class="to">{{ $t('departureDateShort') }}: <span> {{cityDepartment}} - {{cityArrival}}</span></h3>
             </div>
-            <div class="additional-services__block">
+            <div
+                class="additional-services__block"
+                v-for="(passenger, index) in passengers"
+                :key="index"
+            >
               <div class="person-full-name">
-                <span class="fullname">{{ firstname }} {{ lastname }}</span>
+                <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
               </div>
               <div class="person-birthday">
                 {{ ticketDepartmentDate }}
@@ -139,7 +143,7 @@
               </button>
             </div>
             <div class="payment_sum">
-              <p class="total-sum">Загальна вартість: <span>{{ getTicketPrice }} грн</span></p>
+              <p class="total-sum">Загальна вартість: <span>{{ getPrice }} грн</span></p>
               <p class="smart-tickets-tax">Оформлення SmartTicket <span>0.06 грн</span></p>
               <button
                   @click="getBookTicket"
@@ -160,6 +164,7 @@
 
 <script>
   import { mapActions, mapGetters } from "vuex";
+  import {mapMultiRowFields} from 'vuex-map-fields';
   import moment from "moment";
   import {
     required,
@@ -212,27 +217,21 @@
       }
     },
     computed: {
+      ...mapMultiRowFields(["passengers"]),
       ...mapGetters([
-        "getLastName",
-        "getFirstName",
-        "getBirthDay",
-        "getBirthMonth",
-        "getBirthYear",
-        "getPersonEmail",
-        "getPersonPhone",
-        "getPersonPhone",
-        "getPersonPhone",
+        "getField",
         "getDepartmentCity",
         "getCityNameById",
         "getArrivalCity",
-        "getCityNameById",
-        "getBirthDay",
-        "getBirthMonth",
-        "getBirthYear",
-        "getCityArrivalDate",
         "getCityDepartmentDate",
-        "getTicketPrice"
+        "getCityArrivalDate",
+        "getTicketPrice",
+        "getPersonPhone",
+        "getPersonEmail",
       ]),
+      getPrice() {
+        return this.getTicketPrice.toFixed(2);
+      },
       cityDepartment() {
         return this.getCityNameById(this.getDepartmentCity);
       },
@@ -244,24 +243,6 @@
       },
       ticketArrivalDate() {
         return moment(this.getCityArrivalDate).format("DD MMMM YYYY");
-      },
-      lastname: {
-        get() {
-          if (this.getLastName) {
-            return this.getLastName;
-          } else {
-            return null;
-          }
-        },
-      },
-      firstname: {
-        get() {
-          if (this.getFirstName) {
-            return this.getFirstName;
-          } else {
-            return null;
-          }
-        },
       },
       email: {
         get() {
@@ -296,7 +277,6 @@
         "setPersonPhone"
       ]),
       async getBookTicket() {
-        console.log(true)
         await this.bookingTicketAircraft()
           .then(() => {
           })
@@ -314,24 +294,6 @@
             }
           });
         
-          await this.startPayment()
-            .then((response) => {
-              var el = document.createElement("p");
-              el.innerHTML = response;
-              console.log(response)
-              var form = el.querySelector("#returnForm");
-              var payment_no = form.querySelector('input[name="payment_no"]').value;
-              this.$refs.inputRef.value = payment_no;
-              this.$refs.formRef.action = form.action;
-              this.$refs.formRef.submit();
-              //this.isLoading = false;
-            })
-            .catch((error) => {
-              this.isLoading = false;
-              this.$toasted.global.my_app_error({
-                message: error.message,
-              });
-            });
       }
     }
   }

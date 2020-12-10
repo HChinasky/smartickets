@@ -257,18 +257,7 @@ export default {
         "result_id": params.result_id,
         "search_id": params.searchId,
         "payment_sid": params.payment_sid,
-        "passengers": [
-          {
-            "type": "ADT",
-            "firstname": params.passenger.firstname,
-            "lastname": params.passenger.lastname,
-            "birthday": params.passenger.birthday,
-            "gender": params.passenger.gender,
-            "citizenship": params.passenger.citizenship,
-            "docnum": params.passenger.docnum,
-            "doc-expire": params.passenger.docExpire,
-          }
-        ],
+        "passengers": params.passenger,
         "email": params.email,
         "phone": params.phone,
         "agent_email": "test.solveast@gmail.com"
