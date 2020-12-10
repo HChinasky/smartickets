@@ -20,11 +20,7 @@
         </a>
       </div>
       <h1>Хто летить?</h1>
-      <adultCart
-          v-for="index in getPersons"
-          :key="index"
-          :passenger-index="index"
-      />
+      <adultCart />
       <div class="d-flex">
         <div class="total-amount">
           <span class="label">Вартість:</span>
@@ -45,6 +41,7 @@
 
 <script>
   import { mapGetters } from "vuex";
+  import { mapMultiRowFields } from 'vuex-map-fields';
   import adultCart from '../../components/aircraft/passengerCart';
   
   export default {
@@ -53,65 +50,24 @@
       adultCart
     },
     computed: {
+      ...mapMultiRowFields(['passengers']),
       ...mapGetters([
-        "getAdult",
-        "getTeenagers",
-        "getKids",
-        "getTicketPrice",
-        
-        "getLastName",
-        "getFirstName",
-        "getPassportCode",
-        "getGender",
-        "getBirthDay",
-        "getBirthMonth",
-        "getBirthYear",
-        "getPassportDay",
-        "getPassportMonth",
-        "getPassportYear",
-        "getCountry"
+        "getField",
       ]),
-      getPersons() {
-        return this.getAdult;
-      },
       getPrice() {
         return this.getTicketPrice
       },
       validation() {
-        if(!this.getLastName) {
-          return false;
-        }
-        if(!this.getFirstName) {
-          return false;
-        }
-        if(!this.getPassportCode) {
-          return false;
-        }
-        if(!this.getGender) {
-          return false;
-        }
-        if(!this.getBirthDay) {
-          return false;
-        }
-        if(!this.getBirthMonth) {
-          return false;
-        }
-        if(!this.getBirthYear) {
-          return false;
-        }
-        if(!this.getPassportDay) {
-          return false;
-        }
-        if(!this.getPassportMonth) {
-          return false;
-        }
-        if(!this.getPassportYear) {
-          return false;
-        }
-        if(!this.getCountry) {
-          return false;
-        }
-        return true;
+        var checkEmptyFields = true;
+        this.getField('passengers').forEach(element => {
+          if(!element.firstName) {
+            checkEmptyFields = false
+          }
+          if(!element.lastName) {
+            checkEmptyFields = false
+          }
+        });
+        return checkEmptyFields;
       }
     },
   }
