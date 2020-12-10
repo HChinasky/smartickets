@@ -98,7 +98,7 @@
             <div class="count-passengers">
               <div class="form-group">
                 <label>{{ $t('adult') }}</label>
-                <span class="increase_btn" @click="increase('adultAge')">
+                <span class="increase_btn" @click="increase('ADT');">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -108,8 +108,11 @@
                     />
                   </svg>
                 </span>
-                <input class="passenger adults" v-model.number="adultAge" @keydown="nameKeydown($event)" type="number">
-                <span :class="{ disableDecr: adultAge === 1 }" class="decrease_btn" @click="decrease('adultAge', 1)">
+                <p class="passengers adult">{{getCountAdult}}</p>
+                <span
+                    :class="{ disableDecr: getCountAdult === 1 }"
+                    class="decrease_btn"
+                    @click="decrease()">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -122,7 +125,7 @@
               </div>
               <div class="form-group">
                 <label>{{ $t('teenagers') }}</label>
-                <span class="increase_btn"  @click="increase('teenagersAge')">
+                <span class="increase_btn"  @click="increase('CHD')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -132,8 +135,11 @@
                     />
                   </svg>
                 </span>
-                <input class="passenger teenagers" v-model.number="teenagersAge" type="number">
-                <span :class="{ disableDecr: teenagersAge === 0 }" class="decrease_btn" @click="decrease('teenagersAge', 0)">
+                <p class="passengers teenager">{{getCountTeenager}}</p>
+                <span
+                    :class="{ disableDecr: getCountTeenager === 0 }"
+                    class="decrease_btn"
+                    @click="decrease()">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -146,7 +152,7 @@
               </div>
               <div class="form-group">
                 <label>{{ $t('kids') }}</label>
-                <span class="increase_btn" @click="increase('kidsAge')">
+                <span class="increase_btn" @click="increase('INF');">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -156,8 +162,11 @@
                     />
                   </svg>
                 </span>
-                <input class="passenger kids" v-model.number="kidsAge" type="number">
-                <span :class="{ disableDecr: kidsAge === 0 }" class="decrease_btn" @click="decrease('kidsAge', 0)">
+                <p class="passengers teenager">{{getCountChildren}}</p>
+                <span
+                    :class="{ disableDecr: getCountChildren === 0 }"
+                    class="decrease_btn"
+                    @click="decrease()">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -190,11 +199,12 @@
 </template>
 
 <script>
+  import { mapMultiRowFields } from 'vuex-map-fields';
   import SelectDepartmentAircraft from "../../components/aircraft/SelectDepartmentAircraft"
   import SelectArrivalAircraft from "../../components/aircraft/SelectArrivalAircraft";
   import DatepickerDeparture from "../../components/DatepickerDeparture";
   import DatepickerArrival from "../../components/DatepickerArrival";
-  import { mapGetters, mapActions } from "vuex";
+  import { mapGetters, mapActions, mapMutations } from "vuex";
 
   export default {
     name: "SearchAircraftTicket",
@@ -204,26 +214,39 @@
       DatepickerDeparture,
       DatepickerArrival
     },
-    computed: {
-      ...mapGetters([
-        "getArrivalCity",
-        "getDepartmentCity",
-        "getDepartmentCityCode",
-        "getArrivalCityCode",
-        "getCityDepartmentDate",
-        "allAircrafts"
-      ]),
-    },
     data() {
       return {
-        adultAge: 1,
         teenagersAge: 0,
         kidsAge: 0,
         departmentFlight: [],
         arrivalFlight: []
       }
     },
+    computed: {
+      ...mapMultiRowFields(['passenger']),
+      ...mapGetters([
+        "getArrivalCity",
+        "getDepartmentCity",
+        "getDepartmentCityCode",
+        "getArrivalCityCode",
+        "getCityDepartmentDate",
+        "allAircrafts",
+        "getAdult",
+        "getCountAdultByType",
+        "getPassengersByType"
+      ]),
+      getCountAdult() {
+        return this.getPassengersByType('ADT')
+      },
+      getCountTeenager() {
+        return this.getPassengersByType('CHD')
+      },
+      getCountChildren() {
+        return this.getPassengersByType('INF')
+      },
+    },
     methods: {
+      ...mapMutations(["addPassengerRow", "removePassengerRow"]),
       ...mapActions([
         "fetchCity",
         "regClient",
@@ -238,18 +261,11 @@
         "regClient",
         "updateClientInfo"
       ]),
-      nameKeydown: function(e) {
-        if (/^\W$/.test(e.key)) {
-          e.preventDefault();
-        }
+      increase: function(typePassenger){
+        this.$store.commit("addPassengerRow", typePassenger);
       },
-      increase: function(property){
-        this[property]++;
-      },
-      decrease: function(property, startNumber){
-        if(this[property] > startNumber) {
-          this[property]--;
-        }
+      decrease: function(){
+        this.$store.commit("removePassengerRow");
       },
       async getData() {
         
@@ -281,7 +297,6 @@
           return false;
         }
         
-        this.setAdult(this.adultAge);
         this.setTeenagers(this.teenagersAge);
         this.setKids(this.kidsAge);
 
@@ -310,7 +325,7 @@
           });
 
         let departmentFlight    = [],
-          arrivalFlight    = [];
+            arrivalFlight    = [];
 
         if (this.allAircrafts) {
           for (var i = 0; i < this.allAircrafts.flights.length; i++) {
@@ -324,8 +339,8 @@
                 arrivalFlight.push(this.allAircrafts.flights[i].routes[k]);
                 arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount;
                 arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount;
-                departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
-                departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
+                arrivalFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
+                arrivalFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
               }
             }
           }
@@ -472,7 +487,7 @@
               .form-group {
                 display: flex;
                 flex-direction: column;
-                max-width: 150px;
+                width: 150px;
                 position: relative;
                 @include respond-until(l) {
                   width: 120px;
@@ -506,7 +521,7 @@
                     height: 45px;
                   }
                 }
-                input.passenger {
+                .passengers {
                   border: none;
                   border-bottom: 2px solid #000;
                   outline: none;
@@ -515,6 +530,9 @@
                   font-size: 36px;
                   font-weight: 500;
                   text-align: center;
+                  margin-bottom: 0;
+                  line-height: 1.7;
+                  cursor: default;
                   &[type=number] {
                     -moz-appearance: textfield;
                   }
@@ -524,8 +542,26 @@
                     margin: 0;
                   }
                 }
+                input.passenger {
+                   border: none;
+                   border-bottom: 2px solid #000;
+                   outline: none;
+                   height: 60px;
+                   margin-top: 10px;
+                   font-size: 36px;
+                   font-weight: 500;
+                   text-align: center;
+                   &[type=number] {
+                     -moz-appearance: textfield;
+                   }
+                   &::-webkit-outer-spin-button,
+                   &::-webkit-inner-spin-button {
+                     -webkit-appearance: none;
+                     margin: 0;
+                   }
+                 }
                 &:first-child {
-                  input {
+                  .passengers {
                     background-image: url("../../assets/img/svg/adult-ticket.svg");
                     background-repeat: no-repeat;
                     background-size: 20px;
@@ -551,6 +587,7 @@
                 .decrease_btn, .decrease_btn {
                   position: absolute;
                   right: 0;
+                  cursor: pointer;
                   &.disableDecr {
                     opacity: .5;
                   }

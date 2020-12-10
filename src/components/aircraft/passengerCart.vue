@@ -1,6 +1,5 @@
 <template>
   <div class="persons-info">
-    <pre>{{personExportData}}</pre>
     <div class="person-info__age">
       <p>Дорослий {{passengerIndex}}</p>
     </div>

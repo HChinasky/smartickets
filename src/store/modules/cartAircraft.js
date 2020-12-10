@@ -8,9 +8,17 @@ const state = {
   ticketPrice: null,
   passengers: [
     {
+      type: "ADT",
       firstName: '',
       lastName: '',
-      street: '',
+      birthDay: '',
+      birthMonth: '',
+      birthYear: '',
+      country: '',
+      passportCode: '',
+      passportDay: '',
+      passportMonth: '',
+      passportYear: '',
     },
   ],
   lastName: null,
@@ -53,6 +61,10 @@ const getters = {
 
   getPersonEmail: (state) => state.personEmail,
   getPersonPhone: (state) => state.personPhone,
+
+  getPassengersByType: (state) => (type) => {
+    return state.passengers.filter((passengers) => passengers.type.indexOf(type) !== -1).length;
+  },
 };
 
 const actions = {
@@ -134,19 +146,26 @@ const actions = {
   setPersonPhone({ commit }, phone) {
     commit("updatePersonPhone", phone);
   },
-
-  setPassengers({ commit }, passengers) {
-    commit("updatePassengers", passengers);
-  },
 };
 const mutations = {
   updateField,
-  addAddressRow(state) {
+  addPassengerRow(state, typePassenger) {
     state.passengers.push({
-      zip: '',
-      town: '',
-      street: '',
+      "type": typePassenger,
+      firstName: '',
+      lastName: '',
+      birthDay: '',
+      birthMonth: '',
+      birthYear: '',
+      country: '',
+      passportCode: '',
+      passportDay: '',
+      passportMonth: '',
+      passportYear: '',
     });
+  },
+  removePassengerRow(state) {
+    state.passengers.pop();
   },
   updateResultId(state, resultId) {
     state.resultId = resultId;
@@ -196,9 +215,6 @@ const mutations = {
   },
   updatePersonPhone(state, phone) {
     state.personPhone = phone;
-  },
-  setPassengers(state, passengers) {
-    state.passengers = passengers;
   },
 };
 

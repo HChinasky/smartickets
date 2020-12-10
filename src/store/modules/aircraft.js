@@ -11,9 +11,9 @@ export const dataStore = {
 const state = {
   aircrafts: [],
   aircraft: {},
-  adult: null,
-  teenagers: null,
-  kids: null
+  adult: 1,
+  teenagers: 0,
+  kids: 0
 };
 
 
@@ -50,8 +50,16 @@ const actions = {
     }
   },
 
-  setAdult({ commit }, data) {
-    commit("updateAdult", data);
+  setAdult({ commit }, adult) {
+    commit("updateAdult", adult);
+  },
+
+  setIncrementAdult({ commit }, adult) {
+    commit("updateIncrementAdult", adult);
+  },
+
+  setDecrementAdult({ commit }) {
+    commit("updateDecrementAdult");
   },
 
   setTeenagers({ commit }, data) {
@@ -67,11 +75,14 @@ const mutations = {
   updateAircrafts(state, aircrafts) {
     state.aircrafts = aircrafts;
   },
-  updateAircraft(state, aircraft) {
-    state.aircraft = aircraft;
-  },
   updateAdult(state, adult) {
     state.adult = adult;
+  },
+  updateIncrementAdult(state) {
+    state.adult++;
+  },
+  updateDecrementAdult(state) {
+    state.adult--;
   },
   updateTeenagers(state, teenager) {
     state.teenagers = teenager;
