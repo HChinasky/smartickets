@@ -112,7 +112,7 @@
                 <span
                     :class="{ disableDecr: getCountAdult === 1 }"
                     class="decrease_btn"
-                    @click="decrease()">
+                    @click="decrease('ADT')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -139,7 +139,7 @@
                 <span
                     :class="{ disableDecr: getCountTeenager === 0 }"
                     class="decrease_btn"
-                    @click="decrease()">
+                    @click="decrease('CHD')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -166,7 +166,7 @@
                 <span
                     :class="{ disableDecr: getCountChildren === 0 }"
                     class="decrease_btn"
-                    @click="decrease()">
+                    @click="decrease('INF')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -264,8 +264,8 @@
       increase: function(typePassenger){
         this.$store.commit("addPassengerRow", typePassenger);
       },
-      decrease: function(){
-        this.$store.commit("removePassengerRow");
+      decrease: function(type){
+        this.$store.commit("removePassengerRow", type);
       },
       async getData() {
         

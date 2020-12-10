@@ -99,8 +99,9 @@ const mutations = {
       passportYear: new Date().getFullYear(),
     });
   },
-  removePassengerRow(state) {
-    state.passengers.pop();
+  removePassengerRow(state, type) {
+    var removeIndex = state.passengers.map(function(item) { return item.type; }).indexOf(type);
+    state.passengers.splice(removeIndex, 1)
   },
   updateResultId(state, resultId) {
     state.resultId = resultId;
