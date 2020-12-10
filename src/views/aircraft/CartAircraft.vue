@@ -52,10 +52,11 @@
     computed: {
       ...mapMultiRowFields(['passengers']),
       ...mapGetters([
+        "getTicketPrice",
         "getField",
       ]),
       getPrice() {
-        return this.getTicketPrice
+        return this.getTicketPrice.toFixed(2);
       },
       validation() {
         var checkEmptyFields = true;
@@ -114,7 +115,7 @@
           align-items: center;
         }
         .total-amount {
-          width: 275px;
+          width: 300px;
           margin-top: 50px;
           @include respond-until(sm) {
             margin-top: 30px;
@@ -134,7 +135,7 @@
           }
         }
         .cart-submit {
-          width: 275px;
+          width: 300px;
           height: 65px;
           margin-top: 40px;
           display: flex;
