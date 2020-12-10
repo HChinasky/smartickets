@@ -293,7 +293,24 @@
               });
             }
           });
-        
+        await this.startPayment()
+          .then((response) => {
+            var el = document.createElement("p");
+            el.innerHTML = response;
+            console.log(response)
+            var form = el.querySelector("#returnForm");
+            var payment_no = form.querySelector('input[name="payment_no"]').value;
+            this.$refs.inputRef.value = payment_no;
+            this.$refs.formRef.action = form.action;
+            this.$refs.formRef.submit();
+            //this.isLoading = false;
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.$toasted.global.my_app_error({
+              message: error.message,
+            });
+          });
       }
     }
   }

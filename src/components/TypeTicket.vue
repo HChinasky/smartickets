@@ -52,16 +52,6 @@
         tripTypes: {
           0: {
             id: 1,
-            name: 'Приміський поїзд',
-            link: 'SearchSuburbanTrain',
-            icon: {
-              id: 'icon-suburban-train',
-              width: 360,
-              height: 58
-            }
-          },
-          1: {
-            id: 2,
             name: 'Поїзд',
             link: 'SearchForm',
             icon: {
@@ -70,8 +60,8 @@
               height: 56
             }
           },
-          2: {
-            id: 3,
+          1: {
+            id: 2,
             name: 'svg',
             link: 'SearchAircraftTicket',
             icon: {
@@ -149,7 +139,7 @@
       }
       .type-trips__cards {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         margin-top: 50px;
         @include respond-until(xs) {
           flex-wrap: wrap;
