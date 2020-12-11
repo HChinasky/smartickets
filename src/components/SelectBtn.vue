@@ -1,16 +1,9 @@
 <template>
   <span>
     <button
-        v-if="getDate"
         :class="{active : objKey == activeKey}"
         @click="updateActiveDate('tomorrow', objKey);">
         {{ getNameDate(objKey) }}
-    </button>
-    <button
-        v-else
-        :class="{active : objKey == activeKey}"
-        @click="updateActiveIndex('tomorrow', objKey);">
-        {{ title }}
     </button>
     </span>
 </template>
@@ -27,7 +20,6 @@
       'activeKey': String,
       'title': String,
       'updateDate': String,
-      'getDate': String,
     },
     computed: {
       ...mapGetters([
