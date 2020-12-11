@@ -1,6 +1,7 @@
 import "moment/locale/uk";
 import moment from "moment";
 import api from "../../api/api";
+import i18n from "../../i18n";
 
 const state = {
   aircrafts: [],
@@ -27,11 +28,11 @@ const actions = {
     //   return state.cartAircraft.passengers((aircraft) => aircraft.number === number);
     // },
     const response = await api.fetchAircrafts(params);
-
-    if (response.data.code != 0) {
-      throw new Error(response.data.msg);
-    } else {
+    console.log(response.data.data.flights.length)
+    if (response.data.data.flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
+    } else {
+      throw new Error(i18n.t("noFlight"));
     }
   },
 };

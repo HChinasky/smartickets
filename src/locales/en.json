@@ -231,5 +231,6 @@
     "type": "Type",
     "numberSeats": "Number of seats",
     "ticketBuy": "Buy a ticket",
-    "pleaseEnterEmail": "Please enter your e-mail"
+    "pleaseEnterEmail": "Please enter your e-mail",
+    "noFlight": "Unfortunately, no flights were found on your request, the search parameters will be specified"
 }
