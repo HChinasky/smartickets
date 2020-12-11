@@ -77,7 +77,7 @@
           </div>
           <div class="choose-ticket">
             <template v-if="!getIcon">
-              <button class="btn btn--black" @click="baggageTypeArr();$modal.show('baggageType', {item: tickets[0].backward, baggageTypes: baggageType})">{{ $t('select') }}</button>
+              <button class="btn btn--black" @click="baggageTypeArr();">{{ $t('select') }}</button>
             </template>
             <template v-else>
               <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -154,6 +154,7 @@
             text: 'Скасування броні: <span>з доплатою</span>'
           }
         }
+        // FIXME
         for (var i = 0; i < this.allAircrafts.flights.length; i++) {
           for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
 
@@ -188,6 +189,9 @@
           }
         }
         this.baggageType = flights;
+        this.$modal.show('baggageType', {
+          item: this.tickets[0].backward, baggageTypes: this.baggageType
+        })
       },
       airports(code) {
         return this.getAirportsNameById(code).label + ' (' + this.getAirportsNameById(code).terminal + ')'
