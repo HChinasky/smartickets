@@ -33,8 +33,9 @@
           <div class="swiper-button-next" slot="button-next"></div>
         </div>
         <ticket-card
-            :get-icon="baggageTypeIconFrom"
+            :get-icon="baggageTypeIcon"
             :tickets="departmentTicket"
+            :backward="returnBackward"
         />
       </div>
       <div class="ticket__block ticket-arrival" v-if="arrivalTicket.length !== 0">
@@ -68,17 +69,19 @@
           <div class="swiper-button-next" slot="button-next"></div>
         </div>
           <ticket-card
-              :get-icon="baggageTypeIconTo"
+              :get-icon="baggageTypeIcon"
               :tickets="arrivalTicket"
+              :backward="returnBackward"
           />
       </div>
       
       <BaggageType
           @baggageTypeData="handlerIcon"
+          :backward="returnBackward"
       />
     </div>
     <div class="ts-form__submit">
-      <router-link tag="button" :disabled="!baggageTypeIconFrom || !baggageTypeIconTo" class="btn btn--black" :to="{name: 'CartAircraft'}">
+      <router-link tag="button" :disabled="!baggageTypeIcon" class="btn btn--black" :to="{name: 'CartAircraft'}">
         {{ $t('next') }}
       </router-link>
     </div>
@@ -114,11 +117,10 @@
     data() {
       return {
         activeToDate: "",
+        baggageTypeIcon: "",
         activeFromDate: "",
         departmentDate: "",
         arrivalDate: "",
-        baggageTypeIconTo: "",
-        baggageTypeIconFrom: "",
         swiperOptionDepartment: {
           slidesPerView: 6,
           spaceBetween: 15,
@@ -267,6 +269,12 @@
         "getCityDepartmentDate",
         "getCityArrivalDate"
       ]),
+      returnBackward() {
+        if(this.arrivalTicket.length !== 0) {
+          return true
+        }
+        return false
+      }
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
@@ -287,14 +295,7 @@
 
       },
       handlerIcon(iconArr) {
-        if(iconArr.modalId === 0) {
-          this.baggageTypeIconFrom = iconArr;
-        } else {
-          this.baggageTypeIconTo = iconArr;
-        }
-        if(this.arrivalTicket.length === 0) {
-          this.baggageTypeIconTo = {}
-        }
+        this.baggageTypeIcon = iconArr;
       },
       formattedDate(date) {
         if (this.$route.meta.clientArea)

@@ -54,7 +54,7 @@
         "getField",
       ]),
       getPrice() {
-        return this.getTicketPrice.toFixed(2);
+        return this.getTicketPrice;
       },
       validation() {
         var checkEmptyFields = true;
@@ -113,7 +113,7 @@
           align-items: center;
         }
         .total-amount {
-          width: 300px;
+          width: 310px;
           margin-top: 50px;
           @include respond-until(sm) {
             margin-top: 30px;
@@ -133,7 +133,7 @@
           }
         }
         .cart-submit {
-          width: 300px;
+          width: 310px;
           height: 65px;
           margin-top: 40px;
           display: flex;

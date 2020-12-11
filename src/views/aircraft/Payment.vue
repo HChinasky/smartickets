@@ -225,7 +225,7 @@
         "getPersonEmail"
       ]),
       getPrice() {
-        return this.getTicketPrice.toFixed(2);
+        return this.getTicketPrice;
       },
       cityDepartment() {
         return this.getCityNameById(this.getDepartmentCity);

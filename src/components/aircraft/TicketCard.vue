@@ -7,16 +7,16 @@
             <use :xlink:href="require('@/assets/img/sprite.svg') + '#icon-aircraft'" />
           </svg>
           <div class="aircraft__type">
-            <p class="number">{{ tickets[0].departureAirport }}</p>
-            <p class="type">{{ tickets[0].aircraftCode }}</p>
+            <p class="number">{{ tickets[2].departureAirport }}</p>
+            <p class="type">{{ tickets[2].aircraftCode }}</p>
           </div>
         </div>
         <div class="airport__info">
           <div class="from-city__info">
-            <p class="airport__iata">{{ tickets[0].departureAirport }}</p>
+            <p class="airport__iata">{{ tickets[2].departureAirport }}</p>
             <div class="airport__city">
-              <p class="region">{{ city(tickets[0].departureCity) }}</p>
-              <p class="city">{{ airports(tickets[0].departureAirport) }}</p>
+              <p class="region">{{ city(tickets[2].departureCity) }}</p>
+              <p class="city">{{ airports(tickets[2].departureAirport) }}</p>
             </div>
           </div>
           <div class="aircraft__info">
@@ -24,55 +24,56 @@
               <use :xlink:href="require('@/assets/img/sprite.svg') + '#icon-aircraft'" />
             </svg>
             <div class="aircraft__type">
-              <p class="number">{{ tickets[0].flightNumber }}</p>
-              <p class="type">{{ tickets[0].aircraftCode }}</p>
+              <p class="number">{{ tickets[2].flightNumber }}</p>
+              <p class="type">{{ tickets[2].aircraftCode }}</p>
             </div>
           </div>
           <div class="to-city__info">
-            <p class="airport__iata">{{ tickets[0].arrivalAirport }}</p>
+            <p class="airport__iata">{{ tickets[2].arrivalAirport }}</p>
             <div class="airport__city">
-              <p class="region">{{ city(tickets[0].arrivalCity) }}</p>
-              <p class="city">{{ airports(tickets[0].arrivalAirport) }}</p>
+              <p class="region">{{ city(tickets[2].arrivalCity) }}</p>
+              <p class="city">{{ airports(tickets[2].arrivalAirport) }}</p>
             </div>
           </div>
         </div>
         <div class="border-way"></div>
         <div class="trip-info_mobile">
           <p class="label">{{ $t('travelTime') }}:</p>
-          <span class="duration">{{ tickets[0].flightDuration }}</span>
+          <span class="duration">{{ tickets[2].flightDuration }}</span>
         </div>
         <div class="time-trip__info">
           <div class="departure-date__info">
             <p class="label">{{ $t('departure') }}</p>
             <div class="d-flex">
-              <span class="time">{{ formattedTime(tickets[0].departureTime) }}</span>
-              <span class="day-month">{{ formattedDate(tickets[0].departureTime) }}</span>
-              <span class="day">{{ formattedWeekDay(tickets[0].departureTime) }}</span>
+              <span class="time">{{ formattedTime(tickets[2].departureTime) }}</span>
+              <span class="day-month">{{ formattedDate(tickets[2].departureTime) }}</span>
+              <span class="day">{{ formattedWeekDay(tickets[2].departureTime) }}</span>
             </div>
           </div>
           <div class="trip-info">
             <p class="label">{{ $t('travelTime') }}</p>
             <div class="d-flex">
-              <span class="duration">{{ formattedTravelTime(tickets[0].flightDuration) }}</span>
+              <span class="duration">{{ formattedTravelTime(tickets[2].flightDuration) }}</span>
             </div>
           </div>
           <div class="arrival-date__info">
             <p class="label">{{ $t('arrival') }}</p>
             <div class="d-flex">
-              <span class="time">{{ formattedTime(tickets[0].arrivalTime) }}</span>
-              <span class="day-month">{{ formattedDate(tickets[0].arrivalTime) }}</span>
-              <span class="day">{{ formattedWeekDay(tickets[0].arrivalTime) }}</span>
+              <span class="time">{{ formattedTime(tickets[2].arrivalTime) }}</span>
+              <span class="day-month">{{ formattedDate(tickets[2].arrivalTime) }}</span>
+              <span class="day">{{ formattedWeekDay(tickets[2].arrivalTime) }}</span>
             </div>
           </div>
         </div>
         <div class="ticket__info">
           <div class="price-ticket">
-            <p v-if="!getIcon">від <span>{{ tickets[0].amount.UAH.toFixed(2) }}</span> грн</p>
-            <p v-else><span>{{ getIcon.price.toFixed(2) }}</span> грн</p>
-            <p class="ticket-label_mobile">{{ tickets[0].fareName }}</p>
+            <pre style="display: none">{{tickets[2]}}</pre>
+            <p v-if="!getIcon">від <span>{{ getPriceForOneTicket(this.tickets[2].amount) }}</span> грн</p>
+            <p v-else><span>{{ getPriceForOneTicket(getIcon.price) }}</span> грн</p>
+            <p class="ticket-label_mobile">{{ tickets[2].fareName }}</p>
           </div>
           <div class="type-ticket">
-            <p v-if="!getIcon">{{ tickets[0].fareName }}</p>
+            <p v-if="!getIcon">{{ tickets[2].fareName }}</p>
             <p v-else>{{ getIcon.title }}</p>
           </div>
           <div class="choose-ticket">
@@ -100,7 +101,7 @@
   
   export default {
     name: "TicketCard",
-    props: ["tickets", "getIcon"],
+    props: ["tickets", "getIcon", "backward"],
     data() {
       return {
         baggageType: Object,
@@ -114,6 +115,12 @@
       ]),
     },
     methods: {
+      getPriceForOneTicket(price) {
+        if(this.backward) {
+          return (price / 2).toFixed(2)
+        }
+        return this.tickets[0].amount;
+      },
       baggageTypeArr() {
         var flights = {};
         var allowedListBasic = {
@@ -171,7 +178,7 @@
                   allowedListFlex : '',
                 icon: {
                   title: this.allAircrafts.flights[i].routes[k].fareName,
-                  price: this.allAircrafts.flights[i].amount.UAH,
+                  price: this.allAircrafts.flights[i].amount.UAH.toFixed(2),
                   resultId: this.allAircrafts.flights[i].routes[k].resultId,
                   searchId: this.allAircrafts.flights[i].routes[k].searchId,
                   width: this.allAircrafts.flights[i].routes[k].fareName == 'Basic' ? '74' :
@@ -190,7 +197,7 @@
         }
         this.baggageType = flights;
         this.$modal.show('baggageType', {
-          item: this.tickets[0].backward, baggageTypes: this.baggageType
+          item: this.tickets[2].backward, baggageTypes: this.baggageType
         })
       },
       airports(code) {

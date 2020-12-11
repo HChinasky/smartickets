@@ -17,7 +17,7 @@
             <div class="card__content">
               <div class="card__name">
                 <div class="card__title">{{ baggageType.title }}</div>
-                <div class="card__price">{{ baggageType.price }}</div>
+                <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} грн</div>
               </div>
               <div class="card__info">
                 <div class="card__icon">
@@ -57,7 +57,7 @@
         <div class="card__content">
           <div class="card__name">
             <div class="card__title">{{ baggageType.icon.title }}</div>
-            <div class="card__price">{{ baggageType.icon.price.toFixed(2) }} грн</div>
+              <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} грн</div>
           </div>
           <div class="card__info">
             <div class="card__icon">
@@ -95,9 +95,7 @@
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   export default {
     name: "BaggageType",
-    props: {
-      "testProps": Array
-    },
+    props:["backward"],
     components: {
       Swiper,
       SwiperSlide,
@@ -126,6 +124,12 @@
         "setTicketPrice",
         "setPersons"
       ]),
+      getPriceForOneTicket(price) {
+        if(this.backward) {
+          return (price / 2).toFixed(2)
+        }
+        return price;
+      },
       clickBtn: function (iconArr) {
         iconArr['modalId'] = this.modalId;
         this.$emit('baggageTypeData', iconArr);
