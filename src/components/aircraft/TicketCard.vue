@@ -511,7 +511,7 @@
         align-items: center;
       }
       .price-ticket {
-        width: 170px;
+        width: 250px;
         display: flex;
         align-items: center;
         @include respond-to(md) {
@@ -562,7 +562,7 @@
         }
       }
       .type-ticket {
-        width: 180px;
+        width: 100px;
         display: flex;
         align-items: center;
         @include respond-to(md) {
