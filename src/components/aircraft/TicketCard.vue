@@ -201,7 +201,10 @@
         })
       },
       airports(code) {
-        return this.getAirportsNameById(code).label + ' (' + this.getAirportsNameById(code).terminal + ')'
+        if (this.getAirportsNameById(code).terminal) {
+          return this.getAirportsNameById(code).label + ' (' + this.getAirportsNameById(code).terminal + ')'
+        }
+        return this.getAirportsNameById(code).label
       },
       city(code) {
         return this.getCityNameByCode(code);
