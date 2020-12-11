@@ -25,7 +25,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["fetchStations", "fetchMetroStations"]),
+    ...mapActions([
+      "fetchStations",
+      "fetchMetroStations",
+      "fetchCity",
+      "fetchAirports",
+    ]),
     setLocale() {
       if (this.$i18n.locale == "uk") {
         this.$i18n.locale = "en";
@@ -34,6 +39,8 @@ export default {
       }
       this.fetchStations();
       this.fetchMetroStations();
+      this.fetchCity();
+      this.fetchAirports();
     },
   },
 };

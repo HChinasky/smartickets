@@ -97,7 +97,7 @@
               
             <div class="count-passengers">
               <div class="form-group">
-                <label>{{ $t('adult') }}</label>
+                <label>{{ $t('adults') }}</label>
                 <span class="increase_btn" @click="increase('ADT');">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use

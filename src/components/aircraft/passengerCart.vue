@@ -6,16 +6,16 @@
             <div class="person-info__age">
         <p>
           {{
-            passenger.type === "ADT" ? "Дорослий" :
-            passenger.type === "CHD" ? "Дитина" :
-            "Немовля"
+            passenger.type === "ADT" ? $t('adult') :
+            passenger.type === "CHD" ? $t('teenager') :
+            $t('baby')
           }} {{index + 1}}
         </p>
       </div>
       <div class="person-info__card">
         <div class="form-list">
           <div class="form-list__group">
-            <label class="ticket-list__label">Призвіще (латинськими)</label>
+            <label class="ticket-list__label">{{ $t('lastname') }} ({{ $t('latin') }})</label>
             <input
                 class="ticket-list__input"
                 type="text"
@@ -36,7 +36,7 @@
             </template>
           </div>
           <div class="form-list__group">
-            <label class="ticket-list__label">Ім’я (латинськими)</label>
+            <label class="ticket-list__label">{{ $t('firstname') }} ({{ $t('latin') }})</label>
             <input
                 class="ticket-list__input"
                 type="text"
@@ -57,7 +57,7 @@
               {{ $t('firstnameMinLength') }}
             </p>
           </template>
-        <label class="ticket-list__label">Дата народження</label>
+        <label class="ticket-list__label">{{ $t('birhday') }}</label>
         <div class="form-date-birth">
           <div class="form-list__group ts-form__select">
             <v-select
@@ -87,81 +87,91 @@
           </div>
         </div>
           <div class="genders-link">
-            <span>Стать</span>
+            <span>{{ $t('gender') }}</span>
             <div class="d-flex">
               <div class="form-group">
                 <input type="radio" :id="[`male-${index}`]" v-model="passenger.genders" value="m">
-                <label :for="[`male-${index}`]" class="male">Чоловіча</label>
+                <label :for="[`male-${index}`]" class="male">{{ $t('male') }}</label>
               </div>
               <div class="form-group">
                 <input type="radio" :id="[`female-${index}`]" v-model="passenger.genders" value="f">
-                <label :for="[`female-${index}`]" class="female">Жіноча</label>
+                <label :for="[`female-${index}`]" class="female">{{ $t('female') }}</label>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="person-info__card">
-      <div class="form-list">
-        <div class="form-list__group">
-          <label class="ticket-list__label">Громадянство</label>
-          <v-select
-              class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-              :options="options"
-              v-model="passenger.country"
-              :clearable="false"
-          />
-        </div>
-        <div class="form-list__group">
-          <label class="ticket-list__label">Паспорт (номер)</label>
-          <input
-              class="ticket-list__input"
-              type="text"
-              v-model="passenger.passportCode"
-              @blur="$v.passengers.$each[index].passportCode.$touch()"
-              @keydown.space.prevent
-          />
-          <template v-if="$v.passengers.$each[index].passportCode.$error">
-            <p v-if="!$v.passengers.$each[index].passportCode.required" class="errorMessage">
-              {{ $t("passportNumber") }}
-            </p>
-          </template>
-        </div>
-        <label class="ticket-list__label">Термін дії паспорта</label>
-        <div class="form-date-birth">
-          <div class="form-list__group ts-form__select">
+        <div class="form-list">
+          <div class="form-list__group">
+            <label class="ticket-list__label">{{ $t('citizenship') }}</label>
             <v-select
                 class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-                :options="days(passenger.passportMonth, passenger.passportYear)"
-                v-model="passenger.passportDay"
+                :options="options"
+                v-model="passenger.country"
+                @blur="$v.passengers.$each[index].country.$touch()"
                 :clearable="false"
-                :filterable="true"
             />
+            <template v-if="$v.passengers.$each[index].country.$error">
+              <p v-if="!$v.passengers.$each[index].country.required" class="errorMessage">
+                {{ $t("firstNameEmpty") }}
+              </p>
+              <p v-if="!$v.passengers.$each[index].country.alpha" class="errorMessage">
+                {{ $t("firstnameLatinAlpha") }}
+              </p>
+              <p v-if="!$v.passengers.$each[index].country.minLength" class="errorMessage">
+                {{ $t('firstnameMinLength') }}
+              </p>
+            </template>
           </div>
-          <div class="form-list__group ts-form__select">
-            <v-select
-                class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-                :options="months()"
-                v-model="passenger.passportMonth"
-                :clearable="false"
-                :filterable="true"
+          <div class="form-list__group">
+            <label class="ticket-list__label">{{ $t('passportCode') }}</label>
+            <input
+                class="ticket-list__input"
+                type="text"
+                v-model="passenger.passportCode"
+                @blur="$v.passengers.$each[index].passportCode.$touch()"
+                @keydown.space.prevent
             />
+            <template v-if="$v.passengers.$each[index].passportCode.$error">
+              <p v-if="!$v.passengers.$each[index].passportCode.required" class="errorMessage">
+                {{ $t("passportNumber") }}
+              </p>
+            </template>
           </div>
-          <div class="form-list__group ts-form__select">
-            <v-select
-                class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-                :options="betweenYears()"
-                v-model="passenger.passportYear"
-                :clearable="false"
-                :filterable="true"
-            />
+          <label class="ticket-list__label">{{ $t('passportValidity') }}</label>
+          <div class="form-date-birth">
+            <div class="form-list__group ts-form__select">
+              <v-select
+                  class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                  :options="days(passenger.passportMonth, passenger.passportYear)"
+                  v-model="passenger.passportDay"
+                  :clearable="false"
+                  :filterable="true"
+              />
+            </div>
+            <div class="form-list__group ts-form__select">
+              <v-select
+                  class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                  :options="months()"
+                  v-model="passenger.passportMonth"
+                  :clearable="false"
+                  :filterable="true"
+              />
+            </div>
+            <div class="form-list__group ts-form__select">
+              <v-select
+                  class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                  :options="betweenYears()"
+                  v-model="passenger.passportYear"
+                  :clearable="false"
+                  :filterable="true"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    </div>
-    
-    
     </span>
 </template>
 
@@ -194,6 +204,10 @@
             alpha
           },
           passportCode: {
+            required,
+            minLength: minLength(8),
+          },
+          country: {
             required,
           },
         },

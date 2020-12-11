@@ -228,7 +228,7 @@ export default {
     );
   },
 
-  fetchCityAirports() {
+  fetchCity() {
     return apiClientTest.post(
       "reference/city",
       {

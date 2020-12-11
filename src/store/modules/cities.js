@@ -34,7 +34,7 @@ const getters = {
 
 const actions = {
   async fetchCity({ commit }) {
-    const response = await api.fetchCityAirports();
+    const response = await api.fetchCity();
 
     if (response.data.code != 0) {
       throw new Error(response.data.msg);
@@ -61,16 +61,6 @@ const actions = {
   },
   setArrivalCityCode({ commit }, data) {
     commit("updateArrivalCityCode", data);
-  },
-  setCityArrivalDate({ commit }, date) {
-    commit("updateArrivalDate", date);
-  },
-  setCityDepartmentDate({ commit }, date) {
-    commit("updateDepartmentDate", date);
-  },
-  clearSelectedCities({ commit }) {
-    commit("updateDepartmentCity", null);
-    commit("updateArrivalCity", null);
   },
 
 };

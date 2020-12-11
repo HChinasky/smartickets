@@ -23,7 +23,7 @@
                 stroke-width="2"
             />
           </svg>
-          До оформлення
+          {{ $t('beforeRegistration') }}
         </a>
       </div>
       <div class="row">
@@ -67,7 +67,7 @@
           <div class="payment-settings__block">
             <div class="form_part">
               <div class="form-input">
-                <label>E-mail (квитки буде надіслано на цей e-mail)</label>
+                <label>E-mail ({{ $t('ticketsBeSent') }})</label>
                 <input
                     class="ticket-list__input"
                     type="text"
@@ -85,7 +85,7 @@
                 </template>
               </div>
               <div class="form-input">
-                <label>E-mail ще раз</label>
+                <label>E-mail {{ $t('repeatIt') }}</label>
                 <input
                     id=""
                     class="ticket-list__input"
@@ -96,12 +96,12 @@
                 >
                 <template v-if="$v.repeatEmail.$error">
                   <p v-if="!$v.repeatEmail.sameAsPassword" class="errorMessage">
-                    Емейли повинні бути однаковими
+                    {{ $t('errorEmailRepeat') }}
                   </p>
                 </template>
               </div>
               <div class="form-input">
-                <label>Контактний телефон</label>
+                <label>{{ $t('phone') }}</label>
                 <input-mask
                     class="ticket-list__input"
                     v-model="phone"
@@ -111,39 +111,39 @@
                 />
                 <template v-if="$v.phone.$error">
                   <p v-if="!$v.phone.required" class="errorMessage">
-                    Будь ласка вкажіть телефон
+                    {{ $t('errorEmptyPhone') }}
                   </p>
                   <p v-if="!$v.phone.minLength" class="errorMessage">
-                    Номер телефону повинен мати не менш 9 символів
+                  {{ $t('errorShortPhone') }}
                   </p>
                 </template>
               </div>
               <div class="form-input">
-                <label>Промокод (якщо маєте)</label>
+                <label>{{ $t('promoCode') }}</label>
                 <input
                     class="ticket-list__input"
                     type="text"
                     v-model="promo"
                 >
-                <span class="apply-promo" @click="savePromo">Застосувати</span>
+                <span class="apply-promo" @click="savePromo">{{ $t('applyPromo') }}</span>
               </div>
             </div>
             <div class="agreement-rules">
               <button
                   :class="{active : agreementRules}"
                   @click="agreementRules = !agreementRules"
-                  class="type-trips__btn">Я ознайомлений з правилами детально
+                  class="type-trips__btn">{{ $t('agreeRules') }}
               </button>
             </div>
             <div class="payment_sum">
-              <p class="total-sum">Загальна вартість: <span>{{ getPrice }} грн</span></p>
-              <p class="smart-tickets-tax">Оформлення SmartTicket <span>0.06 грн</span></p>
+              <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+              <p class="smart-tickets-tax">{{ $t('smartTicketRegistration') }} <span>0.06 {{ $t('UAH') }}</span></p>
               <button
                   @click="getBookTicket"
                   :disabled="!getPersonPhone || !getPersonEmail || $v.repeatEmail.$error"
                   class="btn btn--black"
                   v-promise-btn>
-                Перейти до оплати
+                {{ $t('gotToPay') }}
               </button>
             </div>
           </div>

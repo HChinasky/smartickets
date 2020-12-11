@@ -16,7 +16,7 @@
             <p class="airport__iata">{{ tickets[2].departureAirport }}</p>
             <div class="airport__city">
               <p class="region">{{ city(tickets[2].departureCity) }}</p>
-              <p class="city">{{ airports(tickets[2].departureAirport) }}</p>
+              <p class="city">{{ limitStr(airports(tickets[2].departureAirport), 15) }}</p>
             </div>
           </div>
           <div class="aircraft__info">
@@ -32,7 +32,7 @@
             <p class="airport__iata">{{ tickets[2].arrivalAirport }}</p>
             <div class="airport__city">
               <p class="region">{{ city(tickets[2].arrivalCity) }}</p>
-              <p class="city">{{ airports(tickets[2].arrivalAirport) }}</p>
+              <p class="city">{{ limitStr(airports(tickets[2].arrivalAirport), 15) }}</p>
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@
             <p class="ticket-label_mobile">{{ tickets[2].fareName }}</p>
           </div>
           <div class="type-ticket">
-            <p v-if="!getIcon">{{ tickets[2].fareName }}</p>
+            <p v-if="!getIcon">basic</p>
             <p v-else>{{ getIcon.title }}</p>
           </div>
           <div class="choose-ticket">
@@ -115,6 +115,15 @@
       ]),
     },
     methods: {
+      limitStr(string, limit) {
+        let str = string;
+    
+        if (typeof str === 'string' && str.length > limit) {
+          str = str.slice(0, limit) + '...';
+        }
+        console.log(str)
+        return str;
+      },
       getPriceForOneTicket(price) {
         if(this.backward) {
           return (price / 2).toFixed(2)
@@ -126,39 +135,39 @@
         var allowedListBasic = {
           0: {
             tooltip: false,
-            text: 'Ручна поклажа <span>7 кг/люд.</span>'
+            text: this.$t('allowedList1')
           }
         }
         var allowedListStandard = {
           0: {
             tooltip: false,
-            text: 'Ручна поклажа <span>7 кг/люд.</span>'
+            text: this.$t('allowedList1')
           },
           1: {
             tooltip: false,
-            text: 'Багаж <span>25 кг/люд.</span>'
+            text: this.$t('allowedList2')
           },
           2: {
             tooltip: true,
-            text: 'Зміна дати вильоту: <span class="activeTooltip">з доплатою</span>'
+            text: this.$t('allowedList3')
           }
         }
         var allowedListFlex = {
           0: {
             tooltip: false,
-            text: 'Ручна поклажа <span>7 кг/люд.</span>'
+            text: this.$t('allowedList1')
           },
           1: {
             tooltip: false,
-            text: 'Багаж <span>25 кг/люд.</span>'
+            text: this.$t('allowedList2')
           },
           2: {
             tooltip: false,
-            text: 'Зміна дати вильоту: <span>з доплатою</span>'
+            text: this.$t('allowedList4')
           },
           3: {
             tooltip: true,
-            text: 'Скасування броні: <span>з доплатою</span>'
+            text: this.$t('allowedList5')
           }
         }
         // FIXME

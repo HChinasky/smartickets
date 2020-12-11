@@ -17,7 +17,7 @@
             <div class="card__content">
               <div class="card__name">
                 <div class="card__title">{{ baggageType.title }}</div>
-                <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} грн</div>
+                <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} {{ $t('UAH') }}</div>
               </div>
               <div class="card__info">
                 <div class="card__icon">
@@ -57,7 +57,7 @@
         <div class="card__content">
           <div class="card__name">
             <div class="card__title">{{ baggageType.icon.title }}</div>
-              <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} грн</div>
+              <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} {{ $t('UAH') }}</div>
           </div>
           <div class="card__info">
             <div class="card__icon">
@@ -72,7 +72,7 @@
                   <span
                       v-if="item.tooltip"
                       v-tooltip="{
-                      content: 'До вильоту - 1 407 грн<br>Після вильоту -  заборонено',
+                      content: $t('bookRemoveLabel'),
                       placement: 'bottom-center',
                       classes: ['info'],
                       trigger: 'hover focus click',

@@ -19,18 +19,19 @@
           {{ $t('backToChooseTypeTrips') }}
         </a>
       </div>
-      <h1>Хто летить?</h1>
-      <adultCart />
+      <h1>{{ $t('whoFlies') }}</h1>
+      <adultCart ref="mychild" />
       <div class="d-flex">
         <div class="total-amount">
-          <span class="label">Вартість:</span>
-          <span class="price">{{getPrice}} грн</span>
+          <span class="label">{{ $t('cost') }}:</span>
+          <span class="price">{{getPrice}} {{ $t('UAH') }}</span>
         </div>
+        <span @click="validationForm">checkValidate</span>
         <router-link
             :to="{ name: 'payment' }"
             tag="button"
             class="cart-submit btn btn--black"
-            :disabled="!validation"
+            
         >
           {{ $t("next") }}
         </router-link>
@@ -56,19 +57,12 @@
       getPrice() {
         return this.getTicketPrice;
       },
-      validation() {
-        var checkEmptyFields = true;
-        this.getField('passengers').forEach(element => {
-          if(!element.firstName) {
-            checkEmptyFields = false
-          }
-          if(!element.lastName) {
-            checkEmptyFields = false
-          }
-        });
-        return checkEmptyFields;
-      }
     },
+    methods: {
+      validationForm() {
+        console.log(this.$refs.mychild.$v)
+      },
+    }
   }
 </script>
 
