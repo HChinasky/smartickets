@@ -124,17 +124,6 @@
                 <span class="apply-promo">Застосувати</span>
               </div>
             </div>
-            <div class="payment-types">
-              <span class="label">Виберіть спосіб оплати</span>
-              <div class="payment__list">
-                <button
-                    v-for="pType in paymentTypes"
-                    :key="pType.id"
-                    :class="[{active : pType.id == activePayment}, 'type-trips__btn '+pType.name]"
-                    @click="activePayment=pType.id"
-                ></button>
-              </div>
-            </div>
             <div class="agreement-rules">
               <button
                   :class="{active : agreementRules}"
