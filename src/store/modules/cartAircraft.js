@@ -23,7 +23,8 @@ const state = {
     },
   ],
   personEmail: "",
-  personPhone: ""
+  personPhone: "",
+  promoCode: ""
 };
 
 const getters = {
@@ -60,7 +61,8 @@ const actions = {
 
       passenger: passenger,
       email: rootState.cartAircraft.personEmail,
-      phone: rootState.cartAircraft.personPhone
+      phone: rootState.cartAircraft.personPhone,
+      promo: rootState.cartAircraft.promoCode
     };
 
     await api.bookingTicketAircraft(params);
@@ -79,6 +81,12 @@ const actions = {
   },
   setPersonPhone({ commit }, phone) {
     commit("updatePersonPhone", phone);
+  },
+  setPromoCode({ commit }, promo) {
+    commit("updatePromoCode", promo);
+  },
+  clearPromoCode({ commit }) {
+    commit("updatePromoCode", null);
   },
 };
 const mutations = {
@@ -117,6 +125,9 @@ const mutations = {
   },
   updatePersonPhone(state, phone) {
     state.personPhone = phone;
+  },
+  updatePromoCode(state, promo) {
+    state.promoCode = promo;
   },
 };
 

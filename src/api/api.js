@@ -260,7 +260,8 @@ export default {
         "passengers": params.passenger,
         "email": params.email,
         "phone": params.phone,
-        "agent_email": "test.solveast@gmail.com"
+        "agent_email": "test.solveast@gmail.com",
+        "promocode": params.promo,
       }
     )
   }

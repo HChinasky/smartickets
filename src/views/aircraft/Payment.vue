@@ -121,7 +121,7 @@
                     type="text"
                     v-model="promo"
                 >
-                <span class="apply-promo">Застосувати</span>
+                <span class="apply-promo" @click="savePromo">Застосувати</span>
               </div>
             </div>
             <div class="agreement-rules">
@@ -218,6 +218,7 @@
         "getTicketPrice",
         "getPersonPhone",
         "getPersonEmail",
+        "getPersonEmail"
       ]),
       getPrice() {
         return this.getTicketPrice.toFixed(2);
@@ -264,11 +265,17 @@
         "startPayment",
         "bookingTicketAircraft",
         "setPersonEmail",
-        "setPersonPhone"
+        "setPersonPhone",
+        "setPromoCode",
+        "clearPromoCode"
       ]),
+      savePromo() {
+        this.setPromoCode(this.promo)
+      },
       async getBookTicket() {
         await this.bookingTicketAircraft()
           .then(() => {
+            this.clearPromoCode
           })
           .catch((error) => {
             console.log(error);
@@ -287,7 +294,6 @@
           .then((response) => {
             var el = document.createElement("p");
             el.innerHTML = response;
-            console.log(response)
             var form = el.querySelector("#returnForm");
             var payment_no = form.querySelector('input[name="payment_no"]').value;
             this.$refs.inputRef.value = payment_no;
