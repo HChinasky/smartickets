@@ -190,7 +190,7 @@
         color: "#1b73cd",
         
         activePayment: "",
-        paymentTypes: [{id: 1, name: "liqpay"}, {id: 2, name: "fondy"}],
+        paymentTypes: [{id: 2, name: "fondy"}],
         agreementRules: false,
         repeatEmail: '',
         promo: '',
@@ -644,9 +644,6 @@
                     }
                   }
                   
-                  &.liqpay {
-                    background-image: url("../../assets/img/svg/liqpay-icon.svg");
-                  }
                   
                   &.fondy {
                     background-image: url("../../assets/img/svg/fondy-icon.svg");
