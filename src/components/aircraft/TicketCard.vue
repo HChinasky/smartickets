@@ -67,8 +67,8 @@
         </div>
         <div class="ticket__info">
           <div class="price-ticket">
-            <p v-if="!getIcon">від <span>{{ tickets[0].amount.UAH }}</span> грн</p>
-            <p v-else><span>{{ getIcon.price }}</span> грн</p>
+            <p v-if="!getIcon">від <span>{{ tickets[0].amount.UAH.toFixed(2) }}</span> грн</p>
+            <p v-else><span>{{ getIcon.price.toFixed(2) }}</span> грн</p>
             <p class="ticket-label_mobile">{{ tickets[0].fareName }}</p>
           </div>
           <div class="type-ticket">

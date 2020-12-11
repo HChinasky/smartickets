@@ -57,7 +57,7 @@
         <div class="card__content">
           <div class="card__name">
             <div class="card__title">{{ baggageType.icon.title }}</div>
-            <div class="card__price">{{ baggageType.icon.price }} грн</div>
+            <div class="card__price">{{ baggageType.icon.price.toFixed(2) }} грн</div>
           </div>
           <div class="card__info">
             <div class="card__icon">
