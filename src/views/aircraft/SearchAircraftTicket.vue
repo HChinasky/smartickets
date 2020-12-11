@@ -231,7 +231,6 @@
         "getArrivalCityCode",
         "getCityDepartmentDate",
         "allAircrafts",
-        "getAdult",
         "getCountAdultByType",
         "getPassengersByType",
         "aircrafts"
@@ -256,9 +255,6 @@
         "setArrivalCity",
         "setArrivalCityCode",
         "setDepartmentCityCode",
-        "setAdult",
-        "setTeenagers",
-        "setKids",
         "regClient",
         "updateClientInfo"
       ]),

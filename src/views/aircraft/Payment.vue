@@ -49,9 +49,13 @@
             <div class="tickets__title">
               <h3 class="from">{{ $t('back') }}: <span>{{cityArrival}} - {{cityDepartment}}</span></h3>
             </div>
-            <div class="additional-services__block">
+            <div
+                class="additional-services__block"
+                v-for="(passenger, index) in passengers"
+                :key="index"
+            >
               <div class="person-full-name">
-                <span class="fullname">{{ firstname }} {{ lastname }}</span>
+                <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
               </div>
               <div class="person-birthday">
                 {{ ticketArrivalDate }}
