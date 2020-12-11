@@ -233,7 +233,8 @@
         "allAircrafts",
         "getAdult",
         "getCountAdultByType",
-        "getPassengersByType"
+        "getPassengersByType",
+        "aircrafts"
       ]),
       getCountAdult() {
         return this.getPassengersByType('ADT')
@@ -297,10 +298,6 @@
           return false;
         }
         
-        this.setTeenagers(this.teenagersAge);
-        this.setKids(this.kidsAge);
-
-        
         await this.fetchAircrafts()
           .then(() => {
             this.$router
@@ -326,7 +323,7 @@
 
         let departmentFlight    = [],
             arrivalFlight    = [];
-
+        
         if (this.allAircrafts) {
           for (var i = 0; i < this.allAircrafts.flights.length; i++) {
             for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
