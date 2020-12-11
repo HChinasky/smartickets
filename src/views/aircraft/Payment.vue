@@ -137,7 +137,8 @@
               <button
                   @click="getBookTicket"
                   :disabled="!getPersonPhone || !getPersonEmail || $v.repeatEmail.$error"
-                  class="btn btn--black">
+                  class="btn btn--black"
+                  v-promise-btn>
                 Перейти до оплати
               </button>
             </div>
