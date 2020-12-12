@@ -262,7 +262,10 @@
         this.$store.commit("addPassengerRow", typePassenger);
       },
       decrease: function(type){
-        this.$store.commit("removePassengerRow", type);
+        console.log(this.getPassengersByType(type))
+        if(this.getPassengersByType(type) !== 0) {
+          this.$store.commit("removePassengerRow", type);
+        }
       },
       async getData() {
         
