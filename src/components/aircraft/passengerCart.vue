@@ -321,8 +321,9 @@
         return xs;
       },
       days(month, year) {
-        year = year || month ? month : 2020;
-        month = year || month ? year : 1;
+        year = year && month ? year : 2020;
+        month = year && month ? month : 1;
+        console.log(month)
         const date = new Date(year, month - 1),
           days = [];
         while (date.getMonth() === month - 1) {

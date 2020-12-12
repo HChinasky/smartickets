@@ -20,7 +20,7 @@
         </a>
       </div>
       <h1>{{ $t('whoFlies') }}</h1>
-      <adultCart @input="handlerIcon" />
+      <passengerCart @input="handlerIcon" />
       <div class="d-flex">
         <div class="total-amount">
           <span class="label">{{ $t('cost') }}:</span>
@@ -40,12 +40,12 @@
 <script>
   import {mapMultiRowFields} from 'vuex-map-fields';
   import { mapGetters } from "vuex";
-  import adultCart from '../../components/aircraft/passengerCart';
+  import passengerCart from '../../components/aircraft/passengerCart';
   
   export default {
     name: "CartAircraft",
     components: {
-      adultCart
+      passengerCart
     },
     data() {
       return {
