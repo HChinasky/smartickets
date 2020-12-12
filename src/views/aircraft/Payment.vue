@@ -136,11 +136,12 @@
               </button>
               <input
                   type="checkbox"
-                  @blur="$v.agreeRules.$touch()"
+                  v-model="agreementRules"
+                  @blur="$v.agreementRules.$touch()"
                   class="hidden-checkbox"
                   :checked="agreementRules">
-              <template v-if="$v.agreeRules.$error">
-                <p v-if="!$v.agreeRules.required" class="errorMessage">
+              <template v-if="$v.agreementRules.$error">
+                <p v-if="!$v.agreementRules.required" class="errorMessage">
                   {{ $t("errorAgreeRules") }}
                 </p>
               </template>
@@ -194,9 +195,9 @@
         
         activePayment: "",
         paymentTypes: [{id: 2, name: "fondy"}],
-        agreementRules: false,
-        repeatEmail: '',
-        promo: '',
+        agreementRules: "",
+        repeatEmail: "",
+        promo: "",
         activeAdditionalServices: "",
         additionalServices: [
           "Перевезення тварини у салоні",
@@ -218,7 +219,7 @@
         required,
         minLength: minLength(17)
       },
-      agreeRules: {
+      agreementRules: {
         required
       }
     },
@@ -289,10 +290,12 @@
         this.setPromoCode(this.promo)
       },
       async getBookTicket() {
+        let catchErr = "";
         this.$v.$touch();
         if(!this.$v.$invalid) {
           await this.bookingTicketAircraft()
-            .then(() => {
+            .then((res) => {
+              catchErr = res.data.errors.length;
               this.clearPromoCode
             })
             .catch((error) => {
@@ -308,23 +311,25 @@
                 });
               }
             });
-          await this.startPayment()
-            .then((response) => {
-              var el = document.createElement("p");
-              el.innerHTML = response;
-              var form = el.querySelector("#returnForm");
-              var payment_no = form.querySelector('input[name="payment_no"]').value;
-              this.$refs.inputRef.value = payment_no;
-              this.$refs.formRef.action = form.action;
-              this.$refs.formRef.submit();
-              //this.isLoading = false;
-            })
-            .catch((error) => {
-              this.isLoading = false;
-              this.$toasted.global.my_app_error({
-                message: error.message,
+          if(catchErr === 0 ) {
+            await this.startPayment()
+              .then((response) => {
+                var el = document.createElement("p");
+                el.innerHTML = response;
+                var form = el.querySelector("#returnForm");
+                var payment_no = form.querySelector('input[name="payment_no"]').value;
+                this.$refs.inputRef.value = payment_no;
+                this.$refs.formRef.action = form.action;
+                this.$refs.formRef.submit();
+                //this.isLoading = false;
+              })
+              .catch((error) => {
+                this.isLoading = false;
+                this.$toasted.global.my_app_error({
+                  message: error.message,
+                });
               });
-            });
+          }
         }
       }
     }

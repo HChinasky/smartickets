@@ -65,7 +65,8 @@ const actions = {
       promo: rootState.cartAircraft.promoCode
     };
 
-    await api.bookingTicketAircraft(params);
+    var response = await api.bookingTicketAircraft(params);
+    return response;
   },
   setResultId({ commit }, data) {
     commit("updateResultId", data);
