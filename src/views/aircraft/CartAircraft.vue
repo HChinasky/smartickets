@@ -67,35 +67,39 @@
         this.validationHandler = $v;
       },
       getValidate() {
+        var isValid = false;
         for(var i=0; i<this.passengers.length;i++) {
-          this.validationHandler.passengers.$each.$touch()
+          this.validationHandler.passengers.$each.$touch();
           if(this.validationHandler.passengers.$each[i].lastName.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].firstName.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].birthDay.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].birthMonth.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].birthYear.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].genders.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].country.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].passportCode.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].passportDay.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].passportMonth.$invalid) {
-            return false;
+            isValid = false;
           } else if(this.validationHandler.passengers.$each[i].passportYear.$invalid) {
-            return false;
+            isValid = false;
           } else {
-            this.$router.push({
-              name: 'payment',
-            });
+            isValid = true;
           }
+        }
+        if(isValid) {
+          this.$router.push({
+            name: 'payment',
+          });
         }
       }
     }
