@@ -268,5 +268,14 @@
     "allowedList2": "Багаж <span>25 кг/люд.</span>",
     "allowedList3": "Зміна дати вильоту: <span class=\"activeTooltip\">з доплатою</span>",
     "allowedList4": "Зміна дати вильоту: <span>з доплатою</span>",
-    "allowedList5": "Скасування броні: <span>з доплатою</span>"
+    "allowedList5": "Скасування броні: <span>з доплатою</span>",
+    "errorBirthDay": "Будь ласка вкажіть день народження",
+    "errorBirthMonth": "Будь ласка вкажіть місяць народження",
+    "errorBirthYear": "Будь ласка вкажіть рік народження",
+    "errorPassportValidDay": "Будь ласка вкажіть день термін дії паспорта",
+    "errorPassportValidMonth": "Будь ласка вкажіть місяць термін дії паспорта",
+    "errorPassportValidYear": "Будь ласка вкажіть рік термін дії паспорта",
+    "errorCountry": "Будь ласка вкажіть громадянство",
+    "errorGender": "Будь ласка вкажіть стать",
+    "errorPassportCodeLength": "Це поле має дорівнювати 8 символам"
 }

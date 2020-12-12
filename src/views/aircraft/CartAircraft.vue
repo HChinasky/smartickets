@@ -20,27 +20,25 @@
         </a>
       </div>
       <h1>{{ $t('whoFlies') }}</h1>
-      <adultCart ref="mychild" />
+      <adultCart @input="handlerIcon" />
       <div class="d-flex">
         <div class="total-amount">
           <span class="label">{{ $t('cost') }}:</span>
           <span class="price">{{getPrice}} {{ $t('UAH') }}</span>
         </div>
-        <span @click="validationForm">checkValidate</span>
-        <router-link
-            :to="{ name: 'payment' }"
-            tag="button"
+        <button
             class="cart-submit btn btn--black"
-            
+            @click="getValidate"
         >
           {{ $t("next") }}
-        </router-link>
+        </button>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+  import {mapMultiRowFields} from 'vuex-map-fields';
   import { mapGetters } from "vuex";
   import adultCart from '../../components/aircraft/passengerCart';
   
@@ -49,7 +47,13 @@
     components: {
       adultCart
     },
+    data() {
+      return {
+        validationHandler: ""
+      }
+    },
     computed: {
+      ...mapMultiRowFields(["passengers"]),
       ...mapGetters([
         "getTicketPrice",
         "getField",
@@ -59,9 +63,41 @@
       },
     },
     methods: {
-      validationForm() {
-        console.log(this.$refs.mychild.$v)
+      handlerIcon($v) {
+        this.validationHandler = $v;
       },
+      getValidate() {
+        for(var i=0; i<this.passengers.length;i++) {
+          this.validationHandler.passengers.$each.$touch()
+          if(this.validationHandler.passengers.$each[i].lastName.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].firstName.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].birthDay.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].birthMonth.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].birthYear.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].genders.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].country.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].passportCode.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].passportDay.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].passportMonth.$invalid) {
+            return false;
+          } else if(this.validationHandler.passengers.$each[i].passportYear.$invalid) {
+            return false;
+          } else {
+            this.$router.push({
+              name: 'payment',
+            });
+          }
+        }
+      }
     }
   }
 </script>

@@ -261,5 +261,14 @@
     "allowedList2": "baggage <span>25 kg / person.</span>",
     "allowedList3": "Change of departure date:<span class=\"activeTooltip\">with surcharge</span>",
     "allowedList4": "Change of departure date:<span>with surcharge</span>'",
-    "allowedList5": "Cancellation: <span>with surcharge</span>"
+    "allowedList5": "Cancellation: <span>with surcharge</span>",
+    "errorBirthDay": "Please write your birthday",
+    "errorBirthMonth": "Please write your month of birth",
+    "errorBirthYear": "Please write your year of birth",
+    "errorPassportValidDay": "Please indicate the date of validity of the passport",
+    "errorPassportValidMonth": "Please indicate the month of validity of the passport",
+    "errorPassportValidYear": "Please indicate the year of validity of the passport",
+    "errorCountry": "Please write citizenship",
+    "errorGender": "Please specify gender",
+    "errorPassportCodeLength": "This field must be 8 characters"
 }
