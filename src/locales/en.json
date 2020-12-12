@@ -270,5 +270,6 @@
     "errorPassportValidYear": "Please indicate the year of validity of the passport",
     "errorCountry": "Please write citizenship",
     "errorGender": "Please specify gender",
+    "errorAgreeRules": "Please confirm that you are familiar with the rules",
     "errorPassportCodeLength": "This field must be 8 characters"
 }

@@ -134,13 +134,22 @@
                   @click="agreementRules = !agreementRules"
                   class="type-trips__btn">{{ $t('agreeRules') }}
               </button>
+              <input
+                  type="checkbox"
+                  @blur="$v.agreeRules.$touch()"
+                  class="hidden-checkbox"
+                  :checked="agreementRules">
+              <template v-if="$v.agreeRules.$error">
+                <p v-if="!$v.agreeRules.required" class="errorMessage">
+                  {{ $t("errorAgreeRules") }}
+                </p>
+              </template>
             </div>
             <div class="payment_sum">
               <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
               <p class="smart-tickets-tax">{{ $t('smartTicketRegistration') }} <span>0.06 {{ $t('UAH') }}</span></p>
               <button
                   @click="getBookTicket"
-                  :disabled="!getPersonPhone || !getPersonEmail || $v.repeatEmail.$error"
                   class="btn btn--black"
                   v-promise-btn>
                 {{ $t('gotToPay') }}
@@ -208,6 +217,9 @@
       phone: {
         required,
         minLength: minLength(17)
+      },
+      agreeRules: {
+        required
       }
     },
     computed: {
@@ -277,40 +289,43 @@
         this.setPromoCode(this.promo)
       },
       async getBookTicket() {
-        await this.bookingTicketAircraft()
-          .then(() => {
-            this.clearPromoCode
-          })
-          .catch((error) => {
-            console.log(error);
-            if (error.toString().includes("[PPCODE:104]")) {
-              this.$toasted.global.my_app_error({
-                type: "error",
-                message: this.$t("trainNotFoundMsg"),
-              });
-            } else {
+        this.$v.$touch();
+        if(!this.$v.$invalid) {
+          await this.bookingTicketAircraft()
+            .then(() => {
+              this.clearPromoCode
+            })
+            .catch((error) => {
+              console.log(error);
+              if (error.toString().includes("[PPCODE:104]")) {
+                this.$toasted.global.my_app_error({
+                  type: "error",
+                  message: this.$t("trainNotFoundMsg"),
+                });
+              } else {
+                this.$toasted.global.my_app_error({
+                  message: error.message,
+                });
+              }
+            });
+          await this.startPayment()
+            .then((response) => {
+              var el = document.createElement("p");
+              el.innerHTML = response;
+              var form = el.querySelector("#returnForm");
+              var payment_no = form.querySelector('input[name="payment_no"]').value;
+              this.$refs.inputRef.value = payment_no;
+              this.$refs.formRef.action = form.action;
+              this.$refs.formRef.submit();
+              //this.isLoading = false;
+            })
+            .catch((error) => {
+              this.isLoading = false;
               this.$toasted.global.my_app_error({
                 message: error.message,
               });
-            }
-          });
-        await this.startPayment()
-          .then((response) => {
-            var el = document.createElement("p");
-            el.innerHTML = response;
-            var form = el.querySelector("#returnForm");
-            var payment_no = form.querySelector('input[name="payment_no"]').value;
-            this.$refs.inputRef.value = payment_no;
-            this.$refs.formRef.action = form.action;
-            this.$refs.formRef.submit();
-            //this.isLoading = false;
-          })
-          .catch((error) => {
-            this.isLoading = false;
-            this.$toasted.global.my_app_error({
-              message: error.message,
             });
-          });
+        }
       }
     }
   }
@@ -699,6 +714,14 @@
                     height: 13px;
                   }
                 }
+              }
+              .hidden-checkbox {
+                display: none;
+              }
+              .errorMessage {
+                font-size: 14px;
+                font-weight: 100;
+                color: $DANGER_COLOR;
               }
             }
             
