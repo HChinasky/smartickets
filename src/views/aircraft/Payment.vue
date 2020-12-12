@@ -227,9 +227,9 @@
       ...mapMultiRowFields(["passengers"]),
       ...mapGetters([
         "getField",
-        "getDepartmentCity",
-        "getCityNameById",
-        "getArrivalCity",
+        "getDepartmentCityCode",
+        "getCityNameByCode",
+        "getArrivalCityCode",
         "getCityDepartmentDate",
         "getCityArrivalDate",
         "getTicketPrice",
@@ -241,10 +241,10 @@
         return this.getTicketPrice;
       },
       cityDepartment() {
-        return this.getCityNameById(this.getDepartmentCity);
+        return this.getCityNameByCode(this.getDepartmentCityCode);
       },
       cityArrival() {
-        return this.getCityNameById(this.getArrivalCity);
+        return this.getCityNameByCode(this.getArrivalCityCode);
       },
       ticketDepartmentDate() {
         return moment(this.getCityDepartmentDate).format("DD MMMM YYYY");

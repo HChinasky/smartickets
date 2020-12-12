@@ -32,24 +32,27 @@
       this.observer = new IntersectionObserver(this.infiniteScroll);
     },
     computed: {
-      ...mapGetters(["getCities", "getArrivalCity", "getCityNameById", "getCityCodeById"]),
+      ...mapGetters([
+        "getAirports",
+        "getArrivalCityCode",
+        "getCityNameByCode"
+      ]),
       selected: {
         get() {
-          if (this.getArrivalCity) {
-            return this.getCityNameById(this.getArrivalCity);
+          if (this.getArrivalCityCode) {
+            return this.getCityNameByCode(this.getArrivalCityCode);
           } else {
             return null;
           }
         },
         set(value) {
-          this.setArrivalCity(value.id);
-          this.setArrivalCityCode(this.getCityCodeById(value.id));
+          this.setArrivalCityCode(value.code);
         },
       },
 
       filtered() {
-        return this.getCities.filter((country) =>
-          country.text.toLowerCase().includes(this.search.toLowerCase())
+        return this.getAirports.filter((city) =>
+          city.label.toLowerCase().includes(this.search.toLowerCase())
         );
       },
       paginated() {
@@ -60,10 +63,7 @@
       },
     },
     methods: {
-      ...mapActions(["setArrivalCity", "setArrivalCityCode"]),
-      setSelected(id) {
-        this.setArrivalCity(id);
-      },
+      ...mapActions(["setArrivalCityCode"]),
 
       async onOpen() {
         if (this.hasNextPage) {

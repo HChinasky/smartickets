@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getArrivalDate", "getFlightArrivalDate", "getCityArrivalDate"]),
+    ...mapGetters(["getArrivalDate", "getCityArrivalDate"]),
     arrivalDate: {
       get() {
         if (this[this.getLink]) {

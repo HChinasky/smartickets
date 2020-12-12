@@ -15,7 +15,7 @@
           <div class="from-city__info">
             <p class="airport__iata">{{ tickets[2].departureAirport }}</p>
             <div class="airport__city">
-              <p class="region">{{ city(tickets[2].departureCity) }}</p>
+              <p class="region">{{ departmentCityName }}</p>
               <p class="city">{{ limitStr(airports(tickets[2].departureAirport), 15) }}</p>
             </div>
           </div>
@@ -31,7 +31,7 @@
           <div class="to-city__info">
             <p class="airport__iata">{{ tickets[2].arrivalAirport }}</p>
             <div class="airport__city">
-              <p class="region">{{ city(tickets[2].arrivalCity) }}</p>
+              <p class="region">{{ arrivalCityName }}</p>
               <p class="city">{{ limitStr(airports(tickets[2].arrivalAirport), 15) }}</p>
             </div>
           </div>
@@ -109,10 +109,18 @@
     },
     computed: {
       ...mapGetters([
-        "getCityNameByCode",
+        "getMainCityNameByCode",
+        "getDepartmentCityCode",
+        "getArrivalCityCode",
         "getAirportsNameById",
         "allAircrafts"
       ]),
+      departmentCityName() {
+        return this.getMainCityNameByCode(this.getDepartmentCityCode);
+      },
+      arrivalCityName() {
+        return this.getMainCityNameByCode(this.getArrivalCityCode);
+      },
     },
     methods: {
       limitStr(string, limit) {
@@ -214,9 +222,6 @@
           return this.getAirportsNameById(code).label + ' (' + this.getAirportsNameById(code).terminal + ')'
         }
         return this.getAirportsNameById(code).label
-      },
-      city(code) {
-        return this.getCityNameByCode(code);
       },
       formattedDate(date) {
         return moment(date).format("D MMMM");

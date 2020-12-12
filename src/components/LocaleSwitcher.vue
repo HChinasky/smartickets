@@ -28,7 +28,6 @@ export default {
     ...mapActions([
       "fetchStations",
       "fetchMetroStations",
-      "fetchCity",
       "fetchAirports",
     ]),
     setLocale() {
@@ -39,7 +38,6 @@ export default {
       }
       this.fetchStations();
       this.fetchMetroStations();
-      this.fetchCity();
       this.fetchAirports();
     },
   },

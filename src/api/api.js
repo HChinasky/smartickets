@@ -232,9 +232,9 @@ export default {
     return apiClientTest.post(
       "reference/city",
       {
-        value: "all",
+        "value": "all",
         "type": "SkyUp",
-        lng: i18n.locale == "uk" ? "UA" : "EN",
+        "lng": i18n.locale == "uk" ? "UA" : "EN",
       })
   },
 
@@ -242,9 +242,9 @@ export default {
     return apiClientTest.post(
       "reference/airport",
       {
-        value: "all",
+        "value": "all",
         "type": "SkyUp",
-        lng: i18n.locale == "uk" ? "UA" : "EN",
+        "lng": i18n.locale == "uk" ? "UA" : "EN",
       })
   },
 

@@ -42,27 +42,25 @@
     },
     computed: {
       ...mapGetters([
-        "getCities",
-        "getDepartmentCity",
-        "getCityNameById",
-        "getCityCodeById"
+        "getAirports",
+        "getDepartmentCityCode",
+        "getCityNameByCode"
       ]),
       selected: {
         get() {
-          if (this.getDepartmentCity) {
-            return this.getCityNameById(this.getDepartmentCity);
+          if (this.getDepartmentCityCode) {
+            return this.getCityNameByCode(this.getDepartmentCityCode);
           } else {
             return null;
           }
         },
         set(value) {
-          this.setDepartmentCity(value.id);
-          this.setDepartmentCityCode(this.getCityCodeById(value.id));
+          this.setDepartmentCityCode(value.code);
         },
       },
       filtered() {
-        return this.getCities.filter((city) =>
-          city.text.toLowerCase().includes(this.search.toLowerCase())
+        return this.getAirports.filter((city) =>
+          city.label.toLowerCase().includes(this.search.toLowerCase())
         );
       },
       paginated() {
@@ -73,7 +71,7 @@
       },
     },
     methods: {
-      ...mapActions(["setDepartmentCity", "setDepartmentCityCode"]),
+      ...mapActions(["setDepartmentCityCode"]),
       
       async onOpen() {
         if (this.hasNextPage) {

@@ -100,7 +100,6 @@
         "setDepartmentStation",
         "setArrivalStation",
         "clearSelectedStations",
-        "clearSelectedDates",
         "clearSelectedTrains",
       ]),
       ...mapMutations(["setStations"]),

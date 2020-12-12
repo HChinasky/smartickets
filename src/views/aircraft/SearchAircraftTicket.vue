@@ -181,7 +181,7 @@
             </div>
           </div>
           <div class="ts-form__submit">
-            <button class="btn btn--black" v-promise-btn @click="getData" :disabled="!getDepartmentCity || !getArrivalCity || !getCityDepartmentDate">
+            <button class="btn btn--black" v-promise-btn @click="getData" :disabled="!getDepartmentCityCode || !getArrivalCityCode || !getCityDepartmentDate">
               {{ $t("findTickets") }}
             </button>
           </div>
@@ -226,7 +226,6 @@
       ...mapMultiRowFields(['passenger']),
       ...mapGetters([
         "getArrivalCity",
-        "getDepartmentCity",
         "getDepartmentCityCode",
         "getArrivalCityCode",
         "getCityDepartmentDate",
@@ -248,11 +247,9 @@
     methods: {
       ...mapMutations(["addPassengerRow", "removePassengerRow"]),
       ...mapActions([
-        "fetchCity",
+        "fetchAirports",
         "regClient",
         "fetchAircrafts",
-        "setDepartmentCity",
-        "setArrivalCity",
         "setArrivalCityCode",
         "setDepartmentCityCode",
         "regClient",
@@ -268,21 +265,21 @@
       },
       async getData() {
         
-        if (!this.getDepartmentCity) {
+        if (!this.getDepartmentCityCode) {
           this.$toasted.global.my_app_error({
             message: this.$t("selectDepartureStation"),
           });
           return false;
         }
 
-        if (!this.getArrivalCity) {
+        if (!this.getArrivalCityCode) {
           this.$toasted.global.my_app_error({
             message: this.$t("selectArrivalStation"),
           });
           return false;
         }
 
-        if (this.getArrivalCity == this.getDepartmentCity) {
+        if (this.getArrivalCityCode == this.getDepartmentCityCode) {
           this.$toasted.global.my_app_error({
             message: this.$t("mustBeDifferentStations"),
           });
@@ -344,9 +341,9 @@
       },
 
       switchCities() {
-        const temp = this.getArrivalCity;
-        this.setArrivalCity(this.getDepartmentCity);
-        this.setDepartmentCity(temp);
+        const temp = this.getArrivalCityCode;
+        this.setArrivalCityCode(this.getDepartmentCityCode);
+        this.setDepartmentCityCode(temp);
 
         const tempCode = this.getArrivalCityCode;
         this.setArrivalCityCode(this.getDepartmentCityCode);
@@ -354,7 +351,6 @@
       },
     },
     mounted() {
-      this.$store.dispatch('fetchCity');
       this.$store.dispatch('fetchAirports');
     },
     created() {

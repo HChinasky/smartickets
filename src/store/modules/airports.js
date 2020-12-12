@@ -3,22 +3,28 @@ import i18n from "../../i18n";
 
 const state = {
   airports: [],
-  departmentAirports: null,
-  arrivalAirports: null,
-  flightArrivalDate: null,
-  flightDepartmentDate: null
+  departmentCityCode: null,
+  arrivalCityCode: null,
+  cityDepartmentDate: null,
+  cityArrivalDate: null,
 };
 
 const getters = {
   getAirports: (state) => state.airports,
-  getDepartmentAirports: (state) => state.departmentAirports,
-  getFlightDepartmentDate: (state) => state.flightDepartmentDate,
-  getArrivalAirports: (state) => state.arrivalAirports,
-  getFlightArrivalDate: (state) => state.flightArrivalDate,
   getAirportsNameById: (state) => (code) => {
     return state.airports.find((airport) => airport.code === code);
   },
+  getDepartmentCityCode: (state) => state.departmentCityCode,
+  getArrivalCityCode: (state) => state.arrivalCityCode,
+  getCityDepartmentDate: (state) => state.cityDepartmentDate,
+  getCityArrivalDate: (state) => state.cityArrivalDate,
 
+  getCityNameByCode: (state) => (code) => {
+    return state.airports.find((cities) => cities.code === code)?.label;
+  },
+  getMainCityNameByCode: (state) => (code) => {
+    return state.airports.find((cities) => cities.code === code)?.mainCity;
+  },
 };
 
 const actions = {
@@ -28,53 +34,49 @@ const actions = {
     if (response.data.code != 0) {
       throw new Error(response.data.msg);
     } else {
-      var airports = response.data.data.airports.map((airports) => ({
-        code: airports.code,
-        label: i18n.locale == "uk" ? airports.name_uk : airports.name_en,
-        terminal: airports.terminal,
-      }));
+
+      var airports = response.data.data.airports.filter((airport) => airport.check_in_allow == "1")
+                      .map((airport) => ({
+                        label: i18n.locale == "uk" ? airport.name_uk : airport.name_en,
+                        mainCity: i18n.locale == "uk" ? airport.city_name_uk : airport.city_name_en,
+                        code: airport.check_in_allow == 1 && airport.code,
+                        terminal: airport.terminal,
+                      }));
       commit("setAirports", airports);
+      commit("setPaymentId", response.data.payment_sid);
     }
   },
-  setDepartmentAirports({ commit }, data) {
-    commit("updateDepartmentAirports", data);
+  setDepartmentCityCode({ commit }, data) {
+    commit("updateDepartmentCityCode", data);
   },
-  setArrivalAirports({ commit }, data) {
-    commit("updateArrivalAirports", data);
+  setArrivalCityCode({ commit }, data) {
+    commit("updateArrivalCityCode", data);
   },
-  setFlightArrivalDate({ commit }, date) {
-    commit("updateFlightArrivalDate", date);
-  },
-  setFlightDepartmentDate({ commit }, date) {
-    commit("updateFlightDepartmentDate", date);
-  },
-  clearSelectedAirports({ commit }) {
-    commit("updateDepartmentAirports", null);
-    commit("updateArrivalAirports", null);
-  },
-  clearSelectedDates({ commit }) {
-    commit("updateFlightArrivalDate", null);
-    commit("updateFlightDepartmentDate", null);
-  }
 }
 
 const mutations = {
   setAirports: (state, airports) => {
     state.airports = airports;
   },
-  updateDepartmentAirports(state, airports) {
-    state.departmentAirports = airports;
+  clearAircrafts(state) {
+    state.aircrafts = null;
   },
-  updateArrivalAirports(state, airports) {
-    state.arrivalAirports = airports;
+  setPaymentId(state, payment_sid) {
+    state.payment_sid = payment_sid;
+    localStorage.setItem("payment_sid", payment_sid); //FIXME
   },
-  updateFlightArrivalDate(state, date) {
-    state.flightArrivalDate = date;
+  updateDepartmentCityCode(state, city) {
+    state.departmentCityCode = city;
   },
-  updateFlightDepartmentDate(state, date) {
-    state.flightDepartmentDate = date;
+  updateArrivalCityCode(state, city) {
+    state.arrivalCityCode = city;
   },
-
+  updateCityArrivalDate(state, date) {
+    state.cityArrivalDate = date;
+  },
+  updateCityDepartmentDate(state, date) {
+    state.cityDepartmentDate = date;
+  },
 };
 
 export default {

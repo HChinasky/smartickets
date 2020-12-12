@@ -455,7 +455,7 @@
             
             &:last-child {
               .ts-form__input {
-                width: 110px;
+                width: 115px;
               }
             }
           }

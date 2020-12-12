@@ -74,7 +74,7 @@
       };
     },
     computed: {
-      ...mapGetters(["getDepartmentDate", "getFlightDepartmentDate", "getCityDepartmentDate"]),
+      ...mapGetters(["getDepartmentDate", "getCityDepartmentDate"]),
       departureDate: {
         get() {
           if (this[this.getLink]) {

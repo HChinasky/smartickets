@@ -5,7 +5,7 @@
         <div class="tickets__title">
           <h3 class="to">{{ $t('departureDateShort') }}:
             <span>
-            {{cityName(departmentTicket[0].departureCity)}} - {{cityName(departmentTicket[0].arrivalCity)}}
+            {{departmentCityName}} - {{arrivalCityName}}
             </span>
           </h3>
         </div>
@@ -42,7 +42,7 @@
         <div class="tickets__title">
           <h3 class="from">{{ $t('back') }}:
             <span>
-              {{cityName(arrivalTicket[0].departureCity)}} - {{cityName(arrivalTicket[0].arrivalCity)}}
+              {{arrivalTicket[0].departureCity}} - {{arrivalTicket[0].arrivalCity}}
             </span>
           </h3>
         </div>
@@ -261,20 +261,24 @@
     },
     computed: {
       ...mapGetters([
-        "allAircrafts",
-        "getDepartmentAirports",
-        "getArrivalAirports",
-        "getCityNameByCode",
-        "getAirportsNameById",
+        "getMainCityNameByCode",
         "getCityDepartmentDate",
-        "getCityArrivalDate"
+        "getCityArrivalDate",
+        "getDepartmentCityCode",
+        "getArrivalCityCode"
       ]),
       returnBackward() {
         if(this.arrivalTicket.length !== 0) {
           return true
         }
         return false
-      }
+      },
+      departmentCityName() {
+        return this.getMainCityNameByCode(this.getDepartmentCityCode);
+      },
+      arrivalCityName() {
+        return this.getMainCityNameByCode(this.getArrivalCityCode);
+      },
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
@@ -284,15 +288,6 @@
           this.departmentDate = this.getCityDepartmentDate;
           this.arrivalDate = this.getCityArrivalDate;
         }
-      },
-      cityName(code) {
-        if(code) {
-          return this.getCityNameByCode(code);
-        }
-      },
-      fetchData(aircraftNumber) {
-        this.fetchAircrafts(aircraftNumber);
-
       },
       handlerIcon(iconArr) {
         this.baggageTypeIcon = iconArr;

@@ -16,22 +16,20 @@ const actions = {
   async fetchAircrafts({ rootState, commit }) {
     //const { token } = rootState.auth
     const params = {
-      city_from: rootState.cities.departmentCityCode,
-      city_to: rootState.cities.arrivalCityCode,
-      dep_date: moment(rootState.cities.cityDepartmentDate).format("DD-MM-YYYY"),
-      arr_date: rootState.cities.cityArrivalDate ? moment(rootState.cities.cityArrivalDate).format("DD-MM-YYYY") : null,
+      city_from: rootState.airports.departmentCityCode,
+      city_to: rootState.airports.arrivalCityCode,
+      dep_date: moment(rootState.airports.cityDepartmentDate).format("DD-MM-YYYY"),
+      arr_date: rootState.airports.cityArrivalDate ? moment(rootState.airports.cityArrivalDate).format("DD-MM-YYYY") : null,
       adult: rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "ADT").length,
       child: rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "CHD").length,
       inf:rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "INF").length
     };
-    // getAircraftByNumber: (state) => () => {
-    //   return state.cartAircraft.passengers((aircraft) => aircraft.number === number);
-    // },
+
     const response = await api.fetchAircrafts(params);
-    console.log(response.data.data.flights.length)
     if (response.data.data.flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
     } else {
+      commit("clearAircrafts");
       throw new Error(i18n.t("noFlight"));
     }
   },
