@@ -295,6 +295,12 @@
         if(!this.$v.$invalid) {
           await this.bookingTicketAircraft()
             .then((res) => {
+              console.log()
+              res.data.errors.forEach((err) => {
+                this.$toasted.global.my_app_error({
+                  message: err.error,
+                });
+              })
               catchErr = res.data.errors.length;
               this.clearPromoCode
             })
