@@ -66,7 +66,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { encode, decode } from "js-base64";
+import { decode } from "js-base64";
 import Loading from "vue-loading-overlay";
 
 export default {
@@ -109,82 +109,11 @@ export default {
           ",height=800,top=50,left=" +
           width
       );
-      win.document.body.innerHTML = decode(this.templateFormat(item.html_data));
-    },
-    templateFormat(html) {
-      var fragment = document
-        .createRange()
-        .createContextualFragment(decode(html));
-
-      fragment.getElementById("text_info").innerHTML = fragment
-        .getElementById("text_info")
-        .innerHTML.trim()
-        .slice(1, -1);
-
-      var textInfoHTML = fragment.getElementById("text_info").innerHTML;
-      var linesCount = textInfoHTML.match(/br/g).length + 1;
-      var margin = 0;
-      switch (linesCount) {
-        case 2:
-          margin = 0;
-          break;
-        case 3:
-          margin = 110;
-          break;
-        case 4:
-          margin = 55;
-          break;
-        default:
-          break;
-      }
-
-      var elem = fragment.querySelector("#ticketTableFooter");
-      elem.style.marginBottom = `${margin}px`;
-
-      fragment.getElementById("text_info").innerHTML = fragment.getElementById(
-        "text_info"
-      ).innerText;
-
-      fragment.getElementById("get_wagon_num").innerHTML = this.addFirstZero(
-        fragment.getElementById("get_wagon_num").innerText,
-        2
-      );
-      fragment.getElementById("get_place").innerHTML = this.addFirstZero(
-        fragment.getElementById("get_place").innerText,
-        3
-      );
-
-      let uuid = fragment.getElementById("get_uuid").innerHTML;
-      let first_uuid = uuid.substring(0, uuid.length - 14);
-      let second_uuid = uuid.substring(uuid.length - 14, uuid.length);
-
-      fragment.getElementById("get_uuid").innerHTML =
-        first_uuid + "<b style='font-size:20px;'>" + second_uuid + "</b>";
-
-      let special_num = fragment.getElementById("get_special_num").innerHTML;
-      let first_special_num = special_num.substring(0, special_num.length - 14);
-      let second_special_num = special_num.substring(
-        special_num.length - 14,
-        special_num.length
-      );
-
-      fragment.getElementById("get_special_num").innerHTML =
-        first_special_num +
-        "<b style='font-size:20px;'>" +
-        second_special_num +
-        "</b>";
-
-      if (fragment.getElementById("wagon_class").value != "")
-        fragment.getElementById("get_wagon_class").innerHTML =
-          "/" + fragment.getElementById("wagon_class").value + " КЛ";
-
-      return encode(
-        [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
-      );
+      win.document.body.innerHTML = decode(item.html_data);
     },
 
     async dwnTicket(pack_num, trn_date, html_data) {
-      var html = this.templateFormat(html_data);
+      var html = html_data;
       const response = await this.downloadTicket({ pack_num, trn_date, html });
       const source = "data:application/pdf;base64," + response.pdf;
       const fileName = "SmartTicket_" + response.file_name + ".pdf";
@@ -194,7 +123,7 @@ export default {
     },
     async sendToEmail(pack_num, trn_date, html_data) {
       this.isLoading = true;
-      var html = this.templateFormat(html_data);
+      var html = html_data;
       const response = await this.sendTicketToEmail({
         pack_num,
         trn_date,
