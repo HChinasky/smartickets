@@ -15,6 +15,9 @@
       <template #list-footer v-if="hasNextPage">
         <li ref="load" class="loader">Loading more options...</li>
       </template>
+      <template v-slot:option="option">
+        {{ option.label }} / {{ option.code }}
+      </template>
     </v-select>
   </span>
 </template>
@@ -40,7 +43,7 @@
       selected: {
         get() {
           if (this.getArrivalCityCode) {
-            return this.getCityNameByCode(this.getArrivalCityCode);
+            return this.getCityNameByCode(this.getArrivalCityCode) + ' / ' + this.getArrivalCityCode;
           } else {
             return null;
           }

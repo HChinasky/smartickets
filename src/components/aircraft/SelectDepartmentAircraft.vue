@@ -16,6 +16,9 @@
       <template #list-footer v-if="hasNextPage">
         <li ref="load" class="loader">Loading more options...</li>
       </template>
+      <template v-slot:option="option">
+        {{ option.label }} / {{ option.code }}
+      </template>
     </v-select>
   </span>
 </template>
@@ -33,9 +36,13 @@
         search: "",
       };
     },
-
     validations: {
       selected: { required },
+    },
+    watch:{
+      selected:function(v){
+        console.log(v)
+      }
     },
     mounted() {
       this.observer = new IntersectionObserver(this.infiniteScroll);
@@ -49,7 +56,7 @@
       selected: {
         get() {
           if (this.getDepartmentCityCode) {
-            return this.getCityNameByCode(this.getDepartmentCityCode);
+            return this.getCityNameByCode(this.getDepartmentCityCode) + ' / ' + this.getDepartmentCityCode;
           } else {
             return null;
           }
