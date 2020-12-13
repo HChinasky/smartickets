@@ -251,18 +251,7 @@ export default {
   bookingTicketAircraft(params) {
     return apiClientTest.post(
       "flights/book",
-      {
-        "type": "SkyUp",
-        "lng_id": i18n.locale == "uk" ? "UA" : "EN",
-        "result_id": params.result_id,
-        "search_id": params.searchId,
-        "payment_sid": params.payment_sid,
-        "passengers": params.passenger,
-        "email": params.email,
-        "phone": params.phone,
-        "agent_email": "test.solveast@gmail.com",
-        "promocode": params.promo,
-      }
+      params
     )
   }
 };

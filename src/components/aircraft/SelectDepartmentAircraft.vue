@@ -39,11 +39,6 @@
     validations: {
       selected: { required },
     },
-    watch:{
-      selected:function(v){
-        console.log(v)
-      }
-    },
     mounted() {
       this.observer = new IntersectionObserver(this.infiniteScroll);
     },

@@ -40,7 +40,6 @@ const getters = {
 
 const actions = {
   async bookingTicketAircraft({ rootState }) {
-    //const { token } = rootState.auth
     var passenger = [];
     rootState.cartAircraft.passengers.forEach((element, index) => {
       passenger[index] = {
@@ -55,14 +54,16 @@ const actions = {
       }
     })
     const params = {
-      result_id: rootState.cartAircraft.resultId,
-      searchId: rootState.cartAircraft.searchId,
-      payment_sid: localStorage.getItem("payment_sid"),
-
-      passenger: passenger,
-      email: rootState.cartAircraft.personEmail,
-      phone: rootState.cartAircraft.personPhone,
-      promo: rootState.cartAircraft.promoCode
+      "type": "SkyUp",
+      "result_id": rootState.cartAircraft.resultId,
+      "search_id": rootState.cartAircraft.searchId,
+      "payment_sid": localStorage.getItem("payment_sid"),
+      "passengers": passenger,
+      "email": rootState.cartAircraft.personEmail,
+      "phone": rootState.cartAircraft.personPhone,
+      "agent_email": "test.solveast@gmail.com",
+      "promocode": rootState.cartAircraft.promoCode
+      // ...(rootState.cartAircraft.promoCode && {"promocode": rootState.cartAircraft.promoCode})
     };
 
     var response = await api.bookingTicketAircraft(params);

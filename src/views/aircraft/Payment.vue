@@ -193,7 +193,7 @@
         loader: "spinner",
         color: "#1b73cd",
         
-        activePayment: "",
+        hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
         agreementRules: "",
         repeatEmail: "",
@@ -293,30 +293,32 @@
         let catchErr = "";
         this.$v.$touch();
         if(!this.$v.$invalid) {
-          await this.bookingTicketAircraft()
-            .then((res) => {
-              console.log()
-              res.data.errors.forEach((err) => {
-                this.$toasted.global.my_app_error({
-                  message: err.error,
-                });
+          if(!this.hasBooked) {
+            await this.bookingTicketAircraft()
+              .then((res) => {
+                res.data.errors.forEach((err) => {
+                  this.$toasted.global.my_app_error({
+                    message: err.error,
+                  });
+                })
+                catchErr = res.data.errors.length;
+                this.hasBooked = true;
+                this.clearPromoCode
               })
-              catchErr = res.data.errors.length;
-              this.clearPromoCode
-            })
-            .catch((error) => {
-              console.log(error);
-              if (error.toString().includes("[PPCODE:104]")) {
-                this.$toasted.global.my_app_error({
-                  type: "error",
-                  message: this.$t("trainNotFoundMsg"),
-                });
-              } else {
-                this.$toasted.global.my_app_error({
-                  message: error.message,
-                });
-              }
-            });
+              .catch((error) => {
+                console.log(error);
+                if (error.toString().includes("[PPCODE:104]")) {
+                  this.$toasted.global.my_app_error({
+                    type: "error",
+                    message: this.$t("trainNotFoundMsg"),
+                  });
+                } else {
+                  this.$toasted.global.my_app_error({
+                    message: error.message,
+                  });
+                }
+              });
+          }
           if(catchErr === 0 ) {
             await this.startPayment()
               .then((response) => {
