@@ -80,7 +80,7 @@
       />
     </div>
     <div class="ts-form__submit">
-      <router-link tag="button" :disabled="!baggageTypeIcon" class="btn btn--black" :to="{name: 'CartAircraft'}">
+      <router-link tag="button" :disabled="!validate" class="btn btn--black" :to="{name: 'CartAircraft'}">
         {{ $t('next') }}
       </router-link>
     </div>
@@ -270,6 +270,18 @@
         "getArrivalCityCode",
         "allAircrafts"
       ]),
+      validate() {
+        if(this.parseArrivalFlights.length !== 0) {
+          if(!this.baggageTypeIconFrom || !this.baggageTypeIconTo) {
+            return false
+          }
+        } else  {
+          if(!this.baggageTypeIconFrom) {
+            return false
+          }
+        }
+        return true
+      },
       returnBackward() {
         if(this.parseArrivalFlights.length !== 0) {
           return true

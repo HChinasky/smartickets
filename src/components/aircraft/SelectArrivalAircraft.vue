@@ -50,6 +50,7 @@
         },
         set(value) {
           this.setArrivalCityCode(value.code);
+          this.setArrivalMainCityCode(value.mainCityCode);
         },
       },
 
@@ -66,7 +67,7 @@
       },
     },
     methods: {
-      ...mapActions(["setArrivalCityCode"]),
+      ...mapActions(["setArrivalCityCode", "setArrivalMainCityCode"]),
 
       async onOpen() {
         if (this.hasNextPage) {

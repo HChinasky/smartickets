@@ -68,7 +68,7 @@
         <div class="ticket__info">
           <div class="price-ticket">
             <p v-if="!getIcon">від <span>{{ getPriceForOneTicket(this.tickets[2].amount) }}</span> грн</p>
-            <p v-else><span>{{ getIcon.price }}</span> грн</p>
+            <p v-else><span>{{ getPriceForOneTicket(getIcon.price) }}</span> грн</p>
             <p class="ticket-label_mobile">{{ tickets[2].fareName }}</p>
           </div>
           <div class="type-ticket">
@@ -114,6 +114,7 @@
         "getArrivalCityCode",
         "getAirportsNameById",
         "allAircrafts",
+        "getTicketPrice",
       ]),
       departmentCityName() {
         return this.getMainCityNameByCode(this.tickets[2].departureAirport);
@@ -132,8 +133,10 @@
         return str;
       },
       getPriceForOneTicket(price) {
-        if(this.backward) {
+        if(this.backward && !this.getTicketPrice) {
           return (price / 2).toFixed(2)
+        } else if(this.getTicketPrice) {
+          return (this.getTicketPrice / 2).toFixed(2)
         }
         return this.tickets[0].amount;
       },

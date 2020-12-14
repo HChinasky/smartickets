@@ -15,8 +15,8 @@ const actions = {
   async fetchAircrafts({ rootState, commit }) {
     //const { token } = rootState.auth
     const params = {
-      city_from: rootState.airports.departmentCityCode,
-      city_to: rootState.airports.arrivalCityCode,
+      city_from: rootState.airports.departmentMainCityCode,
+      city_to: rootState.airports.arrivalMainCityCode,
       dep_date: moment(rootState.airports.cityDepartmentDate).format("DD-MM-YYYY"),
       arr_date: rootState.airports.cityArrivalDate ? moment(rootState.airports.cityArrivalDate).format("DD-MM-YYYY") : null,
       adult: rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "ADT").length,

@@ -5,6 +5,10 @@ const state = {
   airports: [],
   departmentCityCode: null,
   arrivalCityCode: null,
+
+  departmentMainCityCode: null,
+  arrivalMainCityCode: null,
+
   cityDepartmentDate: null,
   cityArrivalDate: null,
 };
@@ -16,6 +20,10 @@ const getters = {
   },
   getDepartmentCityCode: (state) => state.departmentCityCode,
   getArrivalCityCode: (state) => state.arrivalCityCode,
+
+  getDepartmentMainCityCode: (state) => state.departmentMainCityCode,
+  getArrivalMainCityCode: (state) => state.arrivalMainCityCode,
+
   getCityDepartmentDate: (state) => state.cityDepartmentDate,
   getCityArrivalDate: (state) => state.cityArrivalDate,
 
@@ -39,7 +47,8 @@ const actions = {
                       .map((airport) => ({
                         label: i18n.locale == "uk" ? airport.name_uk : airport.name_en,
                         mainCity: i18n.locale == "uk" ? airport.city_name_uk : airport.city_name_en,
-                        code: airport.check_in_allow == 1 && airport.code,
+                        mainCityCode: airport.city_code,
+                        code: airport.code,
                         terminal: airport.terminal,
                       }));
       commit("setAirports", airports);
@@ -51,6 +60,12 @@ const actions = {
   },
   setArrivalCityCode({ commit }, data) {
     commit("updateArrivalCityCode", data);
+  },
+  setDepartmentMainCityCode({ commit }, data) {
+    commit("updateDepartmentMainCityCode", data);
+  },
+  setArrivalMainCityCode({ commit }, data) {
+    commit("updateArrivalMainCityCode", data);
   },
 }
 
@@ -76,6 +91,12 @@ const mutations = {
   },
   updateCityDepartmentDate(state, date) {
     state.cityDepartmentDate = date;
+  },
+  updateDepartmentMainCityCode(state, date) {
+    state.departmentMainCityCode = date;
+  },
+  updateArrivalMainCityCode(state, date) {
+    state.arrivalMainCityCode = date;
   },
 };
 

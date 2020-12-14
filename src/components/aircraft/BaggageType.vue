@@ -149,9 +149,9 @@
           if (tests.routes[0].fareName == this.tariffDepartment && tests.routes[1].fareName == this.tariffArrival) {
             this.setResultId(tests.resultId);
             this.setSearchId(tests.searchId);
+            this.setTicketPrice(iconArr.price);
           }
         });
-        this.setTicketPrice(iconArr.price);
       },
       beforeOpen (event) {
         this.modalId = event.params.item;

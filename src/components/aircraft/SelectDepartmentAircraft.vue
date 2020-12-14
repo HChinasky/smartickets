@@ -58,6 +58,7 @@
         },
         set(value) {
           this.setDepartmentCityCode(value.code);
+          this.setDepartmentMainCityCode(value.mainCityCode);
         },
       },
       filtered() {
@@ -73,7 +74,7 @@
       },
     },
     methods: {
-      ...mapActions(["setDepartmentCityCode"]),
+      ...mapActions(["setDepartmentCityCode", "setDepartmentMainCityCode"]),
       
       async onOpen() {
         if (this.hasNextPage) {
