@@ -40,12 +40,12 @@
 <script>
   import {mapMultiRowFields} from 'vuex-map-fields';
   import { mapGetters } from "vuex";
-  import passengerCart from '../../components/aircraft/passengerCart';
+  import PassengerCart from '../../components/aircraft/PassengerCart';
   
   export default {
     name: "CartAircraft",
     components: {
-      passengerCart
+      PassengerCart
     },
     data() {
       return {
