@@ -69,6 +69,21 @@ const actions = {
     var response = await api.bookingTicketAircraft(params);
     return response;
   },
+  async getCurrentPrice({rootState, commit}) {
+    const params = {
+      "type": "SkyUp",
+      "result_id": rootState.cartAircraft.resultId,
+      "promocode": rootState.cartAircraft.promoCode,
+    };
+
+    var response = await api.getPrice(params);
+
+    if(response.data.errors.length === 0) {
+      commit("updateTicketPrice", response.data.data.price_with_discount);
+    }
+
+    return response;
+  },
   setResultId({ commit }, data) {
     commit("updateResultId", data);
   },

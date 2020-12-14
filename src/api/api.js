@@ -253,5 +253,12 @@ export default {
       "flights/book",
       params
     )
+  },
+
+  getPrice(params) {
+    return apiClientTest.post(
+      "flights/get-price",
+      params
+    )
   }
 };
