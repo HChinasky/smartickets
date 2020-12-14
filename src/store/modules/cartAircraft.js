@@ -42,16 +42,17 @@ const getters = {
 const actions = {
   async bookingTicketAircraft({ rootState }) {
     var passenger = [];
+
     rootState.cartAircraft.passengers.forEach((element, index) => {
       passenger[index] = {
         "type": element.type,
         "firstname": element.firstName,
         "lastname": element.lastName,
-        "birthday": moment(element.birthMonth+'-'+element.birthDay+'-'+element.birthYear).format("DD-MM-YYYY"),
+        "birthday": moment(element.birthMonth+" "+element.birthDay+" "+element.birthYear).format("DD-MM-YYYY"),
         "gender": element.genders,
         "citizenship": element.country.code,
         "docnum": element.passportCode,
-        "doc-expire": moment(element.passportMonth+'-'+element.passportDay+'-'+element.passportYear).format("DD-MM-YYYY")
+        "doc-expire": moment(element.passportMonth+" "+element.passportDay+" "+element.passportYear).format("DD-MM-YYYY")
       }
     })
     const params = {
