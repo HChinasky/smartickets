@@ -69,7 +69,7 @@
           <div class="price-ticket">
             <pre style="display: none">{{tickets[2]}}</pre>
             <p v-if="!getIcon">від <span>{{ getPriceForOneTicket(this.tickets[2].amount) }}</span> грн</p>
-            <p v-else><span>{{ getPriceForOneTicket(getIcon.price) }}</span> грн</p>
+            <p v-else><span>{{ getIcon.price }}</span> грн</p>
             <p class="ticket-label_mobile">{{ tickets[2].fareName }}</p>
           </div>
           <div class="type-ticket">
@@ -109,11 +109,12 @@
     },
     computed: {
       ...mapGetters([
+        "resultId",
         "getMainCityNameByCode",
         "getDepartmentCityCode",
         "getArrivalCityCode",
         "getAirportsNameById",
-        "allAircrafts"
+        "allAircrafts",
       ]),
       departmentCityName() {
         return this.getMainCityNameByCode(this.getDepartmentCityCode);
@@ -129,7 +130,6 @@
         if (typeof str === 'string' && str.length > limit) {
           str = str.slice(0, limit) + '...';
         }
-        console.log(str)
         return str;
       },
       getPriceForOneTicket(price) {

@@ -290,25 +290,25 @@
       ]),
       async savePromo() {
         this.setPromoCode(this.promo);
-        // await this.getCurrentPrice().then((res) => {
-        //   res.data.errors.forEach((err) => {
-        //     this.$toasted.global.my_app_error({
-        //       message: err.error,
-        //     });
-        //   })
-        // }).catch((error) => {
-        //   console.log(error);
-        //   if (error.toString().includes("[PPCODE:104]")) {
-        //     this.$toasted.global.my_app_error({
-        //       type: "error",
-        //       message: this.$t("trainNotFoundMsg"),
-        //     });
-        //   } else {
-        //     this.$toasted.global.my_app_error({
-        //       message: error.message,
-        //     });
-        //   }
-        // });
+        await this.getCurrentPrice().then((res) => {
+          res.data.errors.forEach((err) => {
+            this.$toasted.global.my_app_error({
+              message: err.error,
+            });
+          })
+        }).catch((error) => {
+          console.log(error);
+          if (error.toString().includes("[PPCODE:104]")) {
+            this.$toasted.global.my_app_error({
+              type: "error",
+              message: this.$t("trainNotFoundMsg"),
+            });
+          } else {
+            this.$toasted.global.my_app_error({
+              message: error.message,
+            });
+          }
+        });
       },
       async getBookTicket() {
         let catchErr = "";
