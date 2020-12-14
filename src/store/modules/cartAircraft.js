@@ -24,7 +24,7 @@ const state = {
   ],
   personEmail: "",
   personPhone: "",
-  promoCode: ""
+  promoCode: "GL-SMART"
 };
 
 const getters = {
@@ -33,6 +33,7 @@ const getters = {
   getTicketPrice: (state) => state.ticketPrice,
   getPersonEmail: (state) => state.personEmail,
   getPersonPhone: (state) => state.personPhone,
+  getPromoCode: (state) => state.promoCode,
   getPassengersByType: (state) => (type) => {
     return state.passengers.filter((passengers) => passengers.type.indexOf(type) !== -1).length;
   },

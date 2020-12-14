@@ -197,7 +197,6 @@
         paymentTypes: [{id: 2, name: "fondy"}],
         agreementRules: "",
         repeatEmail: "",
-        promo: "",
         activeAdditionalServices: "",
         additionalServices: [
           "Перевезення тварини у салоні",
@@ -235,8 +234,8 @@
         "getTicketPrice",
         "getPersonPhone",
         "getPersonEmail",
-        "getPersonEmail",
-        "getPrice"
+        "getPrice",
+        "getPromoCode",
       ]),
       getPrice() {
         return this.getTicketPrice;
@@ -275,6 +274,18 @@
         },
         set(value) {
           this.setPersonPhone(value);
+        },
+      },
+      promo: {
+        get() {
+          if (this.getPromoCode) {
+            return this.getPromoCode;
+          } else {
+            return null;
+          }
+        },
+        set(value) {
+          this.setPromoCode(value);
         },
       },
     },

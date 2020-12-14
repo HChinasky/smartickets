@@ -28,7 +28,7 @@ const actions = {
     const response = await api.fetchAircrafts(params);
     if (response.data.data.flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
-      console.log(response.data.data)
+
       let flight = {
         departmentFlight: [],
         arrivalFlight: []
