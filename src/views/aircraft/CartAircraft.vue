@@ -92,6 +92,10 @@
             isValid = false;
           } else if(this.validationHandler.passengers.$each[i].passportYear.$invalid) {
             isValid = false;
+          }  else if(this.validationHandler.devLogin.$invalid) {
+            isValid = false;
+          }  else if(this.validationHandler.devPassword.$invalid) {
+            isValid = false;
           } else {
             isValid = true;
           }

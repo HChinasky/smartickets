@@ -133,10 +133,11 @@
         return str;
       },
       getPriceForOneTicket(price) {
-        if(this.backward && !this.getTicketPrice) {
+        console.log(this.allAircrafts.flights[0].routes.length)
+        if(this.allAircrafts.flights[0].routes.length > 1) {
           return (price / 2).toFixed(2)
         } else if(this.getTicketPrice) {
-          return (this.getTicketPrice / 2).toFixed(2)
+          return this.getTicketPrice
         }
         return this.tickets[0].amount;
       },

@@ -26,6 +26,55 @@
           {{ $t('beforeRegistration') }}
         </a>
       </div>
+      <template v-if="getIsDevLoginRequired">
+        <div class="ticket-list__header">
+          <h3 style="margin-left: 20px;margin-top: 45px">{{ $t("forTest") }}</h3>
+        </div>
+    
+        <div class="ticket-list__item">
+          <div class="ticket-list__inner">
+            <div class="ticket-list__group">
+              <label for="client-login" class="ticket-list__label">{{
+                $t("username")
+                }}</label>
+              <input
+                  v-model="devLogin"
+                  @blur="$v.devLogin.$touch()"
+                  @change="changeDevLogin($event.target.value)"
+                  type="text"
+                  id="client-login"
+                  class="ticket-list__input passenger-login"
+              />
+              <template v-if="$v.devLogin.$error">
+                <p v-if="!$v.devLogin.required" class="errorMessage">
+                  {{ $t("requiredFieldMsg") }}
+                </p>
+              </template>
+            </div>
+        
+            <div class="ticket-list__inner">
+              <div class="ticket-list__group">
+                <label for="client-password" class="ticket-list__label">{{
+                  $t("password")
+                  }}</label>
+                <input
+                    v-model="devPassword"
+                    @blur="$v.devPassword.$touch()"
+                    @change="changeDevPassword($event.target.value)"
+                    type="password"
+                    id="client-password"
+                    class="ticket-list__input passenger-password"
+                />
+                <template v-if="$v.devPassword.$error">
+                  <p v-if="!$v.devPassword.required" class="errorMessage">
+                    {{ $t("requiredFieldMsg") }}
+                  </p>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
       <div class="row">
         <div class="col-6">
           <div class="ticket__block ticket-department">
@@ -174,7 +223,8 @@
     required,
     sameAs,
     email,
-    minLength
+    minLength,
+    requiredIf
   } from "vuelidate/lib/validators";
   import InputMask from 'vue-input-mask';
   import Loading from "vue-loading-overlay";
@@ -220,7 +270,17 @@
       },
       agreementRules: {
         required
-      }
+      },
+      devLogin: {
+        required: requiredIf(function() {
+          return this.getIsDevLoginRequired;
+        }),
+      },
+      devPassword: {
+        required: requiredIf(function() {
+          return this.getIsDevLoginRequired;
+        }),
+      },
     },
     computed: {
       ...mapMultiRowFields(["passengers"]),
@@ -236,7 +296,26 @@
         "getPersonEmail",
         "getPrice",
         "getPromoCode",
+        "getDevLogin",
+        "getDevPassword",
+        "getIsDevLoginRequired",
       ]),
+      devLogin: {
+        get() {
+          return this.getDevLogin;
+        },
+        set(value) {
+          this.updateDevLogin(value);
+        },
+      },
+      devPassword: {
+        get() {
+          return this.getDevPassword;
+        },
+        set(value) {
+          this.updateDevPassword(value);
+        },
+      },
       getPrice() {
         return this.getTicketPrice;
       },
@@ -297,8 +376,16 @@
         "setPersonPhone",
         "setPromoCode",
         "clearPromoCode",
-        "getCurrentPrice"
+        "getCurrentPrice",
+        "updateDevPassword",
+        "updateDevLogin"
       ]),
+      changeDevLogin(value) {
+        this.updateDevLogin(value);
+      },
+      changeDevPassword(value) {
+        this.updateDevPassword(value);
+      },
       async savePromo() {
         this.setPromoCode(this.promo);
         await this.getCurrentPrice().then((res) => {
@@ -824,7 +911,16 @@
       }
     }
   }
+
+  .errorMessage {
+    font-size: 14px;
+    font-weight: 100;
+    color: $DANGER_COLOR;
   
+    &:nth-child(2) {
+      top: 15px;
+    }
+  }
   .d-flex {
     display: flex;
   }

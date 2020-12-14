@@ -229,60 +229,10 @@
           </div>
         </div>
       </div>
-        <template v-if="getIsDevLoginRequired">
-          <div class="ticket-list__header">
-            <h3 style="margin-left: 20px;margin-top: 45px">{{ $t("forTest") }}</h3>
-          </div>
-
-          <div class="ticket-list__item">
-            <div class="ticket-list__inner" style="padding-left: 0">
-              <div class="ticket-list__group">
-                <label for="client-login" class="ticket-list__label">{{
-                  $t("username")
-                }}</label>
-                <input
-                    v-model="devLogin"
-                    @blur="$v.devLogin.$touch()"
-                    @change="changeDevLogin($event.target.value)"
-                    type="text"
-                    id="client-login"
-                    class="ticket-list__input passenger-login"
-                />
-                <template v-if="$v.devLogin.$error">
-                  <p v-if="!$v.devLogin.required" class="errorMessage">
-                    {{ $t("requiredFieldMsg") }}
-                  </p>
-                </template>
-              </div>
-
-              <div class="ticket-list__inner">
-                <div class="ticket-list__group">
-                  <label for="client-password" class="ticket-list__label">{{
-                    $t("password")
-                  }}</label>
-                  <input
-                      v-model="devPassword"
-                      @blur="$v.devPassword.$touch()"
-                      @change="changeDevPassword($event.target.value)"
-                      type="password"
-                      id="client-password"
-                      class="ticket-list__input passenger-password"
-                  />
-                  <template v-if="$v.devPassword.$error">
-                    <p v-if="!$v.devPassword.required" class="errorMessage">
-                      {{ $t("requiredFieldMsg") }}
-                    </p>
-                  </template>
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
     </span>
 </template>
 
 <script>
-  import { mapGetters } from "vuex";
   import {mapMultiRowFields} from 'vuex-map-fields';
   import countries from '../../assets/country';
   import {
@@ -357,43 +307,15 @@
     },
     computed: {
       ...mapMultiRowFields(["passengers"]),
-      ...mapGetters([
-        "getDevLogin",
-        "getDevPassword",
-        "getIsDevLoginRequired",
-      ]),
       options() {
         return countries
       },
       input() {
         return this.$emit('input', this.$v);
       },
-      devLogin: {
-        get() {
-          return this.getDevLogin;
-        },
-        set(value) {
-          this.updateDevLogin(value);
-        },
-      },
-      devPassword: {
-        get() {
-          return this.getDevPassword;
-        },
-        set(value) {
-          this.updateDevPassword(value);
-        },
-      },
     },
 
     methods: {
-
-      changeDevLogin(value) {
-        this.updateDevLogin(value);
-      },
-      changeDevPassword(value) {
-        this.updateDevPassword(value);
-      },
       betweenYears() {
         const year = new Date().getFullYear();
         return Array.from({length: 35}, (value, index) => year + index)
@@ -587,18 +509,17 @@
             height: 40px;
             text-transform: uppercase;
           }
-          
-          .errorMessage {
-            font-size: 14px;
-            font-weight: 100;
-            color: $DANGER_COLOR;
-            
-            &:nth-child(2) {
-              top: 15px;
-            }
-          }
         }
       }
+    }
+  }
+  .errorMessage {
+    font-size: 14px;
+    font-weight: 100;
+    color: $DANGER_COLOR;
+  
+    &:nth-child(2) {
+      top: 15px;
     }
   }
   .error-block {

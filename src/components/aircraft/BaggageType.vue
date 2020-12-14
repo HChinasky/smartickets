@@ -145,11 +145,19 @@
         } else {
           this.tariffArrival = iconArr.title;
         }
-        this.allAircrafts.flights.filter((tests) => {
-          if (tests.routes[0].fareName == this.tariffDepartment && tests.routes[1].fareName == this.tariffArrival) {
-            this.setResultId(tests.resultId);
-            this.setSearchId(tests.searchId);
-            this.setTicketPrice(iconArr.price);
+        this.allAircrafts.flights.filter((aircraft) => {
+          if(aircraft.routes[1]) {
+            if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
+              this.setResultId(aircraft.resultId);
+              this.setSearchId(aircraft.searchId);
+              this.setTicketPrice(iconArr.price);
+            }
+          } else  {
+            if(aircraft.routes[0].fareName == this.tariffDepartment) {
+              this.setResultId(aircraft.resultId);
+              this.setSearchId(aircraft.searchId);
+              this.setTicketPrice(iconArr.price);
+            }
           }
         });
       },

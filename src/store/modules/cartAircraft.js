@@ -1,5 +1,6 @@
 import api from "../../api/api";
 import moment from "moment";
+var Hashes = require("jshashes");
 import { getField, updateField } from 'vuex-map-fields';
 
 const state = {
@@ -40,7 +41,8 @@ const getters = {
 };
 
 const actions = {
-  async bookingTicketAircraft({ rootState }) {
+  async bookingTicketAircraft({  rootState, rootGetters, getters }) {
+    var MD5 = new Hashes.MD5();
     var passenger = [];
 
     rootState.cartAircraft.passengers.forEach((element, index) => {
@@ -64,6 +66,8 @@ const actions = {
       "email": rootState.cartAircraft.personEmail,
       "phone": rootState.cartAircraft.personPhone,
       "agent_email": "test.solveast@gmail.com",
+      "login": rootGetters.getIsDevLoginRequired ? getters.getDevLogin : "",
+      "password": rootGetters.getIsDevLoginRequired ? MD5.hex(getters.getDevPassword) : "",
       "promocode": rootState.cartAircraft.promoCode
       // ...(rootState.cartAircraft.promoCode && {"promocode": rootState.cartAircraft.promoCode})
     };
