@@ -79,7 +79,7 @@ const actions = {
     var response = await api.getPrice(params);
 
     if(response.data.errors.length === 0) {
-      commit("updateTicketPrice", response.data.data.price_with_discount);
+      commit("updateTicketPrice", response.data.data.price_with_discount.toFixed(2));
     }
 
     return response;
