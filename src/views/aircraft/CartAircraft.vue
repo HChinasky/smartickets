@@ -20,7 +20,7 @@
         </a>
       </div>
       <h1>{{ $t('whoFlies') }}</h1>
-      <passengerCart @input="handlerIcon" />
+      <passengerCart @checkinput="handlerIcon" />
       <div class="d-flex">
         <div class="total-amount">
           <span class="label">{{ $t('cost') }}:</span>

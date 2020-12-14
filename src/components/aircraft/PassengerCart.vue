@@ -3,7 +3,7 @@
     <div class="persons-info"
          v-for="(passenger, index) in passengers"
          :key="index"
-         @input="input"
+         @checkinput="checkinput"
     >
             <div class="person-info__age">
         <p>
@@ -310,8 +310,8 @@
       options() {
         return countries
       },
-      input() {
-        return this.$emit('input', this.$v);
+      checkinput() {
+        return this.$emit('checkinput', this.$v);
       },
     },
 
