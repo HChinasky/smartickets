@@ -151,7 +151,6 @@
             this.setSearchId(tests.searchId);
           }
         });
-        this.setSearchId(iconArr.searchId);
         this.setTicketPrice(iconArr.price);
       },
       beforeOpen (event) {
