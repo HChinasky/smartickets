@@ -294,7 +294,9 @@
         }
         
         await this.fetchAircrafts()
-          .then(() => {
+          .then((res) => {
+            this.departmentFlight = res.departmentFlight;
+            this.arrivalFlight = res.arrivalFlight;
             this.$router
               .push({
                 name: "AircraftList",
@@ -315,29 +317,7 @@
               });
             }
           });
-
-        let departmentFlight = [],
-            arrivalFlight    = [];
         
-        if (this.allAircrafts) {
-          for (var i = 0; i < this.allAircrafts.flights.length; i++) {
-            for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
-              if (this.allAircrafts.flights[i].routes[k].backward === 1) {
-                arrivalFlight.push(this.allAircrafts.flights[i].routes[k]);
-                arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
-                arrivalFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
-                arrivalFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
-              } else {
-                departmentFlight.push(this.allAircrafts.flights[i].routes[k]);
-                departmentFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
-                departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
-                departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
-              }
-            }
-          }
-          this.departmentFlight = departmentFlight;
-          this.arrivalFlight = arrivalFlight;
-        }
       },
 
       switchCities() {

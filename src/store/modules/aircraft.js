@@ -28,6 +28,28 @@ const actions = {
     const response = await api.fetchAircrafts(params);
     if (response.data.data.flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
+      console.log(response.data.data)
+      let flight = {
+        departmentFlight: [],
+        arrivalFlight: []
+      }
+
+      for (var i = 0; i < response.data.data.flights.length; i++) {
+        for (var k = 0; k < response.data.data.flights[i].routes.length; k++) {
+          if (response.data.data.flights[i].routes[k].backward === 1) {
+            flight.arrivalFlight.push(response.data.data.flights[i].routes[k]);
+            flight.arrivalFlight[i]["amount"] = response.data.data.flights[i].amount.UAH.toFixed(2);
+            flight.arrivalFlight[i]["resultId"] = response.data.data.flights[i].resultId;
+            flight.arrivalFlight[i]["searchId"] = response.data.data.flights[i].searchId;
+          } else {
+            flight.departmentFlight.push(response.data.data.flights[i].routes[k]);
+            flight.departmentFlight[i]["amount"] = response.data.data.flights[i].amount.UAH.toFixed(2);
+            flight.departmentFlight[i]["resultId"] = response.data.data.flights[i].resultId;
+            flight.departmentFlight[i]["searchId"] = response.data.data.flights[i].searchId;
+          }
+        }
+      }
+      return flight;
     } else {
       commit("clearAircrafts");
       throw new Error(i18n.t("noFlight"));
