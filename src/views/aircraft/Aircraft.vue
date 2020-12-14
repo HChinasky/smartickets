@@ -38,7 +38,7 @@
     },
     mounted() {
 
-      // this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
+      this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
 //this.$refs.trains.scrollIntoView();
     },
     updated() {
