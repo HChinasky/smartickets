@@ -33,7 +33,7 @@
           <div class="swiper-button-next" slot="button-next"></div>
         </div>
         <ticket-card
-            :get-icon="baggageTypeIcon"
+            :get-icon="baggageTypeIconFrom"
             :tickets="parseDepartmentFlights"
             :backward="returnBackward"
         />
@@ -69,7 +69,7 @@
           <div class="swiper-button-next" slot="button-next"></div>
         </div>
           <ticket-card
-              :get-icon="baggageTypeIcon"
+              :get-icon="baggageTypeIconTo"
               :tickets="parseArrivalFlights"
               :backward="returnBackward"
           />
@@ -119,6 +119,8 @@
         activeFromDate: "",
         departmentDate: "",
         arrivalDate: "",
+        baggageTypeIconTo: "",
+        baggageTypeIconFrom: "",
         departmentFlight: [],
         arrivalFlight: [],
         swiperOptionDepartment: {
@@ -322,7 +324,11 @@
         }
       },
       handlerIcon(iconArr) {
-        this.baggageTypeIcon = iconArr;
+        if(iconArr.modalId === 0) {
+          this.baggageTypeIconFrom = iconArr;
+        } else {
+          this.baggageTypeIconTo = iconArr;
+        }
       },
       formattedDate(date) {
         if (this.$route.meta.clientArea)

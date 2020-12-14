@@ -91,7 +91,7 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   export default {
     name: "BaggageType",
@@ -104,6 +104,8 @@
       return {
         modalId: null,
         baggageTypes: null,
+        tariffDepartment: "",
+        tariffArrival: "",
         swiperOption: {
           slidesPerView: 'auto',
           spaceBetween: 10,
@@ -116,6 +118,9 @@
         },
         
       }
+    },
+    computed: {
+      ...mapGetters(["allAircrafts"])
     },
     methods: {
       ...mapActions([
@@ -134,7 +139,18 @@
         iconArr['modalId'] = this.modalId;
         this.$emit('baggageTypeData', iconArr);
         this.$modal.hide('baggageType');
-        this.setResultId(iconArr.resultId);
+        
+        if(this.modalId == 0) {
+          this.tariffDepartment = iconArr.title;
+        } else {
+          this.tariffArrival = iconArr.title;
+        }
+        this.allAircrafts.flights.filter((tests) => {
+          if (tests.routes[0].fareName == this.tariffDepartment && tests.routes[1].fareName == this.tariffArrival) {
+            this.setResultId(tests.resultId);
+            this.setSearchId(tests.searchId);
+          }
+        });
         this.setSearchId(iconArr.searchId);
         this.setTicketPrice(iconArr.price);
       },
