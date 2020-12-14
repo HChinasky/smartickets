@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tickets__body">
-      <div class="ticket__block ticket-department"  v-if="departmentTicket.length !== 0">
+      <div class="ticket__block ticket-department"  v-if="parseDepartmentFlights.length !== 0">
         <div class="tickets__title">
           <h3 class="to">{{ $t('departureDateShort') }}:
             <span>
@@ -34,15 +34,15 @@
         </div>
         <ticket-card
             :get-icon="baggageTypeIcon"
-            :tickets="departmentTicket"
+            :tickets="parseDepartmentFlights"
             :backward="returnBackward"
         />
       </div>
-      <div class="ticket__block ticket-arrival" v-if="arrivalTicket.length !== 0">
+      <div class="ticket__block ticket-arrival" v-if="parseArrivalFlights.length !== 0">
         <div class="tickets__title">
           <h3 class="from">{{ $t('back') }}:
             <span>
-              {{arrivalTicket[0].departureCity}} - {{arrivalTicket[0].arrivalCity}}
+              {{arrivalCityName}} - {{departmentCityName}}
             </span>
           </h3>
         </div>
@@ -70,11 +70,10 @@
         </div>
           <ticket-card
               :get-icon="baggageTypeIcon"
-              :tickets="arrivalTicket"
+              :tickets="parseArrivalFlights"
               :backward="returnBackward"
           />
       </div>
-      
       <BaggageType
           @baggageTypeData="handlerIcon"
           :backward="returnBackward"
@@ -102,8 +101,7 @@
   export default {
     name: "AircraftResult",
     props: {
-      "departmentTicket": Array,
-      "arrivalTicket": Array,
+      "flightsRoutes": Array,
       "validateDepartmentTickets": Boolean,
       "validateArrivalTickets": Boolean
     },
@@ -121,6 +119,8 @@
         activeFromDate: "",
         departmentDate: "",
         arrivalDate: "",
+        departmentFlight: [],
+        arrivalFlight: [],
         swiperOptionDepartment: {
           slidesPerView: 6,
           spaceBetween: 15,
@@ -265,10 +265,11 @@
         "getCityDepartmentDate",
         "getCityArrivalDate",
         "getDepartmentCityCode",
-        "getArrivalCityCode"
+        "getArrivalCityCode",
+        "allAircrafts"
       ]),
       returnBackward() {
-        if(this.arrivalTicket.length !== 0) {
+        if(this.parseArrivalFlights.length !== 0) {
           return true
         }
         return false
@@ -279,14 +280,45 @@
       arrivalCityName() {
         return this.getMainCityNameByCode(this.getArrivalCityCode);
       },
+      parseDepartmentFlights() {
+        let departmentFlight = [];
+        if (this.allAircrafts) {
+          for (var i = 0; i < this.allAircrafts.flights.length; i++) {
+            for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
+              if (this.allAircrafts.flights[i].routes[k].backward === 0) {
+                departmentFlight.push(this.allAircrafts.flights[i].routes[k]);
+                departmentFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
+                departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
+                departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
+              }
+            }
+          }
+        }
+        return departmentFlight
+      },
+      parseArrivalFlights() {
+        let arrivalFlight = [];
+        if (this.allAircrafts) {
+          for (var i = 0; i < this.allAircrafts.flights.length; i++) {
+            for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
+              if (this.allAircrafts.flights[i].routes[k].backward === 1) {
+                arrivalFlight.push(this.allAircrafts.flights[i].routes[k]);
+                arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
+                arrivalFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
+                arrivalFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
+              }
+            }
+          }
+        }
+        return arrivalFlight;
+      }
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
-
       cloneDate() {
         if(!this.departmentDate || !this.arrivalDate) {
-          this.departmentDate = this.getCityDepartmentDate;
-          this.arrivalDate = this.getCityArrivalDate;
+          this.departmentDate = moment(this.getCityDepartmentDate);
+          this.arrivalDate = moment(this.getCityArrivalDate);
         }
       },
       handlerIcon(iconArr) {

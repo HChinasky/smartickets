@@ -117,10 +117,10 @@
         "allAircrafts",
       ]),
       departmentCityName() {
-        return this.getMainCityNameByCode(this.getDepartmentCityCode);
+        return this.getMainCityNameByCode(this.tickets[2].departureAirport);
       },
       arrivalCityName() {
-        return this.getMainCityNameByCode(this.getArrivalCityCode);
+        return this.getMainCityNameByCode(this.tickets[2].arrivalAirport);
       },
     },
     methods: {

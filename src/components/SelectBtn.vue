@@ -10,7 +10,7 @@
 
 <script>
 
-  import { mapGetters, mapActions } from "vuex";
+  import { mapActions } from "vuex";
   import moment from "moment";
 
   export default {
@@ -20,12 +20,7 @@
       'activeKey': String,
       'title': String,
       'updateDate': String,
-    },
-    computed: {
-      ...mapGetters([
-        "getCityDepartmentDate",
-        "getCityArrivalDate",
-      ]),
+      'getDate': Object,
     },
     methods: {
       ...mapActions([
@@ -58,11 +53,23 @@
           default:
             break;
         }
-        await this.fetchAircrafts();
+        await this.fetchAircrafts().then((res) => {
+          console.log(res)
+        })
+          .catch((error) => {
+            console.log(error);
+            if (error.toString().includes("[PPCODE:104]")) {
+              this.$toasted.global.my_app_error({
+                type: "error",
+                message: this.$t("trainNotFoundMsg"),
+              });
+            } else {
+              this.$toasted.global.my_app_error({
+                message: error.message,
+              });
+            }
+          });;
       },
-      updateActiveIndex() {
-        this.$emit('onUpdateKey', this.objKey);
-      }
     }
   }
 </script>

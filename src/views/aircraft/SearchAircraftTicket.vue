@@ -191,8 +191,7 @@
     </section>
     <div ref="aircraftsView">
       <router-view
-          :departmentTicket="departmentFlight"
-          :arrivalTicket="arrivalFlight"
+          :flights="allAircrafts.flights"
       />
     </div>
   </span>
@@ -218,19 +217,15 @@
       return {
         teenagersAge: 0,
         kidsAge: 0,
-        departmentFlight: [],
-        arrivalFlight: []
       }
     },
     computed: {
       ...mapMultiRowFields(['passenger']),
       ...mapGetters([
-        "getArrivalCity",
         "getDepartmentCityCode",
         "getArrivalCityCode",
         "getCityDepartmentDate",
         "allAircrafts",
-        "getCountAdultByType",
         "getPassengersByType",
         "aircrafts"
       ]),
@@ -292,11 +287,12 @@
           });
           return false;
         }
+
+        let fligth = [];
         
         await this.fetchAircrafts()
           .then((res) => {
-            this.departmentFlight = res.departmentFlight;
-            this.arrivalFlight = res.arrivalFlight;
+            fligth = res;
             this.$router
               .push({
                 name: "AircraftList",
@@ -317,17 +313,13 @@
               });
             }
           });
-        return
+        return fligth
       },
 
       switchCities() {
         const temp = this.getArrivalCityCode;
         this.setArrivalCityCode(this.getDepartmentCityCode);
         this.setDepartmentCityCode(temp);
-
-        const tempCode = this.getArrivalCityCode;
-        this.setArrivalCityCode(this.getDepartmentCityCode);
-        this.setDepartmentCityCode(tempCode);
       },
     },
     mounted() {

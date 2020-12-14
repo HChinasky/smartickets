@@ -3,8 +3,7 @@
     <div class="container">
       <div class="ticket__inner">
         <AircraftResult
-            :departmentTicket="departmentTicket"
-            :arrivalTicket="arrivalTicket"
+            :flights-routes="flights"
         />
       </div>
     </div>
@@ -17,7 +16,7 @@
   export default {
     name: "Aircraft",
     props: {
-      'departmentTicket': Array,
+      'flights': Array,
       'arrivalTicket': Array
     },
     components: {
