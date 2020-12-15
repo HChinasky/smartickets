@@ -150,13 +150,13 @@
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(aircraft.amount.UAH);
+              this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
             }
           } else  {
             if(aircraft.routes[0].fareName == this.tariffDepartment) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(aircraft.amount.UAH);
+              this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
             }
           }
         });
