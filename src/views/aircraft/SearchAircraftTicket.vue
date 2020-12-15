@@ -538,7 +538,7 @@
                   }
                 }
                 &:nth-child(2) {
-                  input {
+                  .passengers {
                     background-image: url("../../assets/img/svg/teenager-tickets.svg");
                     background-repeat: no-repeat;
                     background-size: 30px;
@@ -546,7 +546,7 @@
                   }
                 }
                 &:last-child {
-                  input {
+                  .passengers {
                     background-image: url("../../assets/img/svg/teenager-tickets.svg");
                     background-repeat: no-repeat;
                     background-size: 20px;
