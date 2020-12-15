@@ -15,6 +15,7 @@ const actions = {
   async fetchAircrafts({ rootState, commit }) {
     //const { token } = rootState.auth
     const params = {
+      payment_sid: rootState.airports.payment_sid,
       city_from: rootState.airports.departmentMainCityCode,
       city_to: rootState.airports.arrivalMainCityCode,
       dep_date: moment(rootState.airports.cityDepartmentDate).format("DD-MM-YYYY"),

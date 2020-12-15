@@ -216,6 +216,7 @@ export default {
       "flights/search/",
       {
               "type": "SkyUp",
+              "payment_sid": params.payment_sid,
               "adt": params.adult,
               "chd": params.child,
               "inf": params.inf,
