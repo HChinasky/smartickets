@@ -150,13 +150,13 @@
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(iconArr.price);
+              this.setTicketPrice(aircraft.amount.UAH);
             }
           } else  {
             if(aircraft.routes[0].fareName == this.tariffDepartment) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(iconArr.price);
+              this.setTicketPrice(aircraft.amount.UAH);
             }
           }
         });
@@ -189,6 +189,7 @@
       .box {
         @include row(0, 0, 0, 0, 0);
         height: 100%;
+        justify-content: center;
         .close-popup {
           display: flex;
           justify-content: flex-end;
@@ -276,7 +277,7 @@
                   border-bottom: 1px solid $SECOND_FONT_COLOR;
                   max-width: 285px;
                   display: block;
-                  margin-top: 15px;
+                  margin: 15px auto;
                 }
               }
             }

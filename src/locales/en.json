@@ -271,5 +271,6 @@
     "errorCountry": "Please write citizenship",
     "errorGender": "Please specify gender",
     "errorAgreeRules": "Please confirm that you are familiar with the rules",
-    "errorPassportCodeLength": "This field must be 8 characters"
+    "errorPassportCodeLength": "This field must be 8 characters",
+    "errorFindTicket": "Sorry, but no flights were found on the date you selected, select the date closest to your"
 }

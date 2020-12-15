@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tickets__body">
-      <div class="ticket__block ticket-department"  v-if="parseDepartmentFlights.length !== 0">
+      <div class="ticket__block ticket-department">
         <div class="tickets__title">
           <h3 class="to">{{ $t('departureDateShort') }}:
             <span>
@@ -9,34 +9,41 @@
             </span>
           </h3>
         </div>
-        <div class="change-date">
-          <swiper class="swiper" :options="swiperOptionDepartment">
-            <swiper-slide
-                class="text"
-                v-for="date in toDate" :key="date.id"
-            >
-              <select-btn
-                  :key="date.id"
-                  :obj-key="date.name"
-                  :active-key="activeToDate"
-                  :title="date.name"
-                  :update-date="'updateCityDepartmentDate'"
-                  :get-date="departmentDate"
-                  @onUpdateKey="updateActiveDate('activeToDate', date.name)"
+        <template v-if="parseDepartmentFlights.length === 0">
+          <div class="change-date">
+            <swiper class="swiper" :options="swiperOptionDepartment">
+              <swiper-slide
+                  class="text"
+                  v-for="(date, index) in allAircrafts.additional_flights" :key="date.id"
               >
-              
-              </select-btn>
-            </swiper-slide>
-            <div class="swiper-scrollbar" slot="scrollbar"></div>
-          </swiper>
-          <div class="swiper-button-prev" slot="button-prev"></div>
-          <div class="swiper-button-next" slot="button-next"></div>
-        </div>
-        <ticket-card
-            :get-icon="baggageTypeIconFrom"
-            :tickets="parseDepartmentFlights"
-            :backward="returnBackward"
-        />
+                <select-btn
+                    :key="index"
+                    :obj-key="date.departure_datetime_loc"
+                    :active-key="activeToDate"
+                    :title="date.departure_datetime_loc"
+                    :update-date="'updateCityDepartmentDate'"
+                    :get-date="departmentDate"
+                    @onUpdateKey="updateActiveDate('activeToDate', date.departure_datetime_loc)"
+                >
+                
+                </select-btn>
+              </swiper-slide>
+              <div class="swiper-scrollbar" slot="scrollbar"></div>
+            </swiper>
+            <div class="swiper-button-prev" slot="button-prev"></div>
+            <div class="swiper-button-next" slot="button-next"></div>
+          </div>
+        </template>
+        <template v-if="parseDepartmentFlights.length !== 0">
+          <ticket-card
+              :get-icon="baggageTypeIconFrom"
+              :tickets="parseDepartmentFlights"
+              :backward="returnBackward"
+          />
+        </template>
+        <template v-else>
+          <h4 class="ticketError">{{ $t('errorFindTicket') }}</h4>
+        </template>
       </div>
       <div class="ticket__block ticket-arrival" v-if="parseArrivalFlights.length !== 0">
         <div class="tickets__title">
@@ -46,7 +53,7 @@
             </span>
           </h3>
         </div>
-        <div class="change-date">
+        <div class="change-date" v-if="parseArrivalFlights.length === 0">
           <swiper class="swiper" :options="swiperOptionArrival">
             <swiper-slide
                 class="text"
@@ -68,18 +75,23 @@
           <div class="swiper-button-prev" slot="button-prev"></div>
           <div class="swiper-button-next" slot="button-next"></div>
         </div>
+        <template v-if="parseArrivalFlights.length !== 0">
           <ticket-card
               :get-icon="baggageTypeIconTo"
               :tickets="parseArrivalFlights"
               :backward="returnBackward"
           />
+        </template>
+        <template v-else>
+          <h4 class="ticketError">{{ $t('errorFindTicket') }}</h4>
+        </template>
       </div>
       <BaggageType
           @baggageTypeData="handlerIcon"
           :backward="returnBackward"
       />
     </div>
-    <div class="ts-form__submit">
+    <div class="ts-form__submit" v-if="parseDepartmentFlights.length !== 0">
       <router-link tag="button" :disabled="!validate" class="btn btn--black" :to="{name: 'CartAircraft'}">
         {{ $t('next') }}
       </router-link>
@@ -101,7 +113,6 @@
   export default {
     name: "AircraftResult",
     props: {
-      "flightsRoutes": Array,
       "validateDepartmentTickets": Boolean,
       "validateArrivalTickets": Boolean
     },
@@ -301,6 +312,7 @@
             for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
               if (this.allAircrafts.flights[i].routes[k].backward === 0) {
                 departmentFlight.push(this.allAircrafts.flights[i].routes[k]);
+                
                 departmentFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
                 departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
                 departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
@@ -317,6 +329,7 @@
             for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
               if (this.allAircrafts.flights[i].routes[k].backward === 1) {
                 arrivalFlight.push(this.allAircrafts.flights[i].routes[k]);
+                
                 arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
                 arrivalFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
                 arrivalFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
@@ -526,5 +539,12 @@
         color: #fff;
       }
     }
+  }
+  .ticketError {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 300;
+    padding: 15px;
+    border: 1px dashed $BORDER_BOTTOM_LINK_COLOR;
   }
 </style>

@@ -216,14 +216,13 @@ export default {
       "flights/search/",
       {
               "type": "SkyUp",
-              "lng_id": 1,
               "adt": params.adult,
               "chd": params.child,
               "inf": params.inf,
               "departure": params.city_from,
               "arrival": params.city_to,
               "date": params.dep_date,
-              "dateback": params.arr_date
+              ...(params.arr_date && {"dateback": params.arr_date})
             }
     );
   },

@@ -111,6 +111,9 @@ const actions = {
   clearPromoCode({ commit }) {
     commit("updatePromoCode", null);
   },
+  clearPrice({ commit }) {
+    commit("clearTicketPrice", null);
+  },
 };
 const mutations = {
   updateField,
@@ -151,6 +154,9 @@ const mutations = {
   },
   updatePromoCode(state, promo) {
     state.promoCode = promo;
+  },
+  clearTicketPrice(state) {
+    state.ticketPrice = null;
   },
 };
 

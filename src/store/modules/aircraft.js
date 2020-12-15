@@ -23,9 +23,9 @@ const actions = {
       child: rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "CHD").length,
       inf:rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "INF").length
     };
-
+    // console.log(rootState.airports.cityArrivalDate)
     const response = await api.fetchAircrafts(params);
-    if (response.data.data.flights.length !== 0) {
+    if (response.data.data.flights.length !== 0 || response.data.data.additional_flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
     } else {
       commit("clearAircrafts");

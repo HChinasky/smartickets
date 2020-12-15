@@ -27,32 +27,19 @@
         "fetchAircrafts",
       ]),
       getNameDate(objKey) {
-        return moment(this.getDate).add(objKey, "days").format('DD MMMM')
+        return moment(objKey).format('DD MMMM')
       },
       async updateActiveDate(date, objKey) {
         this.$emit('onUpdateKey', this.objKey);
-        // const now = Date.now();
+        
         this.$store.commit(
           this.updateDate,
           moment(this.getDate).add(objKey, "days")
         );
-        switch (date) {
-          case "tomorrow":
-            this.$store.commit(
-              this.updateDate,
-              moment(this.getDate).add(objKey, "days")
-            );
-            break;
-          case "after_tomorrow":
-            this.$store.commit(
-              this.updateDate,
-              moment(this.getDate).add(objKey, "days")
-            );
-            break;
-
-          default:
-            break;
-        }
+        this.$store.commit(
+          this.updateDate,
+          moment(objKey)
+        );
         await this.fetchAircrafts().then((res) => {
           console.log(res)
         })

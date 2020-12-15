@@ -7,16 +7,16 @@
             <use :xlink:href="require('@/assets/img/sprite.svg') + '#icon-aircraft'" />
           </svg>
           <div class="aircraft__type">
-            <p class="number">{{ tickets[2].departureAirport }}</p>
-            <p class="type">{{ tickets[2].aircraftCode }}</p>
+            <p class="number">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].departureAirport }}</p>
+            <p class="type">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].aircraftCode }}</p>
           </div>
         </div>
         <div class="airport__info">
           <div class="from-city__info">
-            <p class="airport__iata">{{ tickets[2].departureAirport }}</p>
+            <p class="airport__iata">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].departureAirport }}</p>
             <div class="airport__city">
               <p class="region">{{ departmentCityName }}</p>
-              <p class="city">{{ limitStr(airports(tickets[2].departureAirport), 15) }}</p>
+              <p class="city">{{ limitStr(airports(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].departureAirport), 15) }}</p>
             </div>
           </div>
           <div class="aircraft__info">
@@ -24,52 +24,52 @@
               <use :xlink:href="require('@/assets/img/sprite.svg') + '#icon-aircraft'" />
             </svg>
             <div class="aircraft__type">
-              <p class="number">{{ tickets[2].flightNumber }}</p>
-              <p class="type">{{ tickets[2].aircraftCode }}</p>
+              <p class="number">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].flightNumber }}</p>
+              <p class="type">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].aircraftCode }}</p>
             </div>
           </div>
           <div class="to-city__info">
-            <p class="airport__iata">{{ tickets[2].arrivalAirport }}</p>
+            <p class="airport__iata">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].arrivalAirport }}</p>
             <div class="airport__city">
               <p class="region">{{ arrivalCityName }}</p>
-              <p class="city">{{ limitStr(airports(tickets[2].arrivalAirport), 15) }}</p>
+              <p class="city">{{ limitStr(airports(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].arrivalAirport), 15) }}</p>
             </div>
           </div>
         </div>
         <div class="border-way"></div>
         <div class="trip-info_mobile">
           <p class="label">{{ $t('travelTime') }}:</p>
-          <span class="duration">{{ tickets[2].flightDuration }}</span>
+          <span class="duration">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].flightDuration }}</span>
         </div>
         <div class="time-trip__info">
           <div class="departure-date__info">
             <p class="label">{{ $t('departure') }}</p>
             <div class="d-flex">
-              <span class="time">{{ formattedTime(tickets[2].departureTime) }}</span>
-              <span class="day-month">{{ formattedDate(tickets[2].departureTime) }}</span>
-              <span class="day">{{ formattedWeekDay(tickets[2].departureTime) }}</span>
+              <span class="time">{{ formattedTime(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].departureTime) }}</span>
+              <span class="day-month">{{ formattedDate(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].departureTime) }}</span>
+              <span class="day">{{ formattedWeekDay(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].departureTime) }}</span>
             </div>
           </div>
           <div class="trip-info">
             <p class="label">{{ $t('travelTime') }}</p>
             <div class="d-flex">
-              <span class="duration">{{ formattedTravelTime(tickets[2].flightDuration) }}</span>
+              <span class="duration">{{ formattedTravelTime(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].flightDuration) }}</span>
             </div>
           </div>
           <div class="arrival-date__info">
             <p class="label">{{ $t('arrival') }}</p>
             <div class="d-flex">
-              <span class="time">{{ formattedTime(tickets[2].arrivalTime) }}</span>
-              <span class="day-month">{{ formattedDate(tickets[2].arrivalTime) }}</span>
-              <span class="day">{{ formattedWeekDay(tickets[2].arrivalTime) }}</span>
+              <span class="time">{{ formattedTime(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].arrivalTime) }}</span>
+              <span class="day-month">{{ formattedDate(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].arrivalTime) }}</span>
+              <span class="day">{{ formattedWeekDay(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].arrivalTime) }}</span>
             </div>
           </div>
         </div>
         <div class="ticket__info">
           <div class="price-ticket">
             <p v-if="!getIcon">від <span>{{ getPriceForOneTicket(this.tickets[2].amount) }}</span> грн</p>
-            <p v-else><span>{{ getPriceForOneTicket(getIcon.price) }}</span> грн</p>
-            <p class="ticket-label_mobile">{{ tickets[2].fareName }}</p>
+            <p v-else><span>{{ getPriceForOneTicket(getTicketPrice) }}</span> грн</p>
+            <p class="ticket-label_mobile">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].fareName }}</p>
           </div>
           <div class="type-ticket">
             <p v-if="!getIcon">basic</p>
@@ -117,10 +117,10 @@
         "getTicketPrice",
       ]),
       departmentCityName() {
-        return this.getMainCityNameByCode(this.tickets[2].departureAirport);
+        return this.getMainCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].departureAirport);
       },
       arrivalCityName() {
-        return this.getMainCityNameByCode(this.tickets[2].arrivalAirport);
+        return this.getMainCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].arrivalAirport);
       },
     },
     methods: {
@@ -133,7 +133,6 @@
         return str;
       },
       getPriceForOneTicket(price) {
-        console.log(this.allAircrafts.flights[0].routes.length)
         if(this.allAircrafts.flights[0].routes.length > 1) {
           return (price / 2).toFixed(2)
         } else if(this.getTicketPrice) {
@@ -197,6 +196,7 @@
                   this.allAircrafts.flights[i].routes[k].fareName == 'Flex' ?
                   allowedListFlex : '',
                 icon: {
+                  id: this.allAircrafts.flights[i].routes[k].fareId,
                   title: this.allAircrafts.flights[i].routes[k].fareName,
                   price: this.allAircrafts.flights[i].amount.UAH.toFixed(2),
                   resultId: this.allAircrafts.flights[i].routes[k].resultId,
@@ -217,7 +217,7 @@
         }
         this.baggageType = flights;
         this.$modal.show('baggageType', {
-          item: this.tickets[2].backward, baggageTypes: this.baggageType
+          item: this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].backward, baggageTypes: this.baggageType
         })
       },
       airports(code) {

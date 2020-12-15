@@ -190,9 +190,7 @@
       </template>
     </section>
     <div ref="aircraftsView">
-      <router-view
-          :flights="allAircrafts.flights"
-      />
+      <router-view />
     </div>
   </span>
 </template>
@@ -248,7 +246,8 @@
         "setArrivalCityCode",
         "setDepartmentCityCode",
         "regClient",
-        "updateClientInfo"
+        "updateClientInfo",
+        "clearPrice"
       ]),
       increase: function(typePassenger){
         this.$store.commit("addPassengerRow", typePassenger);
@@ -287,12 +286,10 @@
           });
           return false;
         }
-
-        let fligth = [];
+        
         
         await this.fetchAircrafts()
-          .then((res) => {
-            fligth = res;
+          .then(() => {
             this.$router
               .push({
                 name: "AircraftList",
@@ -313,7 +310,7 @@
               });
             }
           });
-        return fligth
+        this.clearPrice();
       },
 
       switchCities() {
