@@ -86,7 +86,7 @@
           <h4 class="ticketError">{{ $t('errorFindTicket') }}</h4>
         </template>
       </div>
-      <BaggageType
+      <TariffType
           @baggageTypeData="handlerIcon"
           :backward="returnBackward"
       />
@@ -106,7 +106,7 @@
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   import SelectBtn from '../../components/SelectBtn';
   import TicketCard from './TicketCard';
-  import BaggageType from "./BaggageType";
+  import TariffType from "./TariffType";
   import 'swiper/css/swiper.css'
   moment.locale("uk", [ukLocale]);
 
@@ -121,7 +121,7 @@
       SwiperSlide,
       SelectBtn,
       TicketCard,
-      BaggageType
+      TariffType
     },
     data() {
       return {

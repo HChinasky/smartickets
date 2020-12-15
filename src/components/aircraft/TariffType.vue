@@ -94,7 +94,7 @@
   import { mapActions, mapGetters } from "vuex";
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   export default {
-    name: "BaggageType",
+    name: "TariffType",
     props:["backward"],
     components: {
       Swiper,
@@ -104,8 +104,8 @@
       return {
         modalId: null,
         baggageTypes: null,
-        tariffDepartment: "",
-        tariffArrival: "",
+        tariffDepartment: "Basic",
+        tariffArrival: "Basic",
         swiperOption: {
           slidesPerView: 'auto',
           spaceBetween: 10,
