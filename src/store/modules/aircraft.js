@@ -25,7 +25,7 @@ const actions = {
       inf:rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "INF").length
     };
     const response = await api.fetchAircrafts(params);
-
+    console.log(response.data.data)
     if (response.data.data.flights.length !== 0 || response.data.data.additional_flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
     } else {

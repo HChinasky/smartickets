@@ -24,7 +24,7 @@
       <div class="d-flex">
         <div class="total-amount">
           <span class="label">{{ $t('cost') }}:</span>
-          <span class="price">{{ getPrice.toFixed(2) }} {{ $t('UAH') }}</span>
+          <span class="price">{{ getPrice }} {{ $t('UAH') }}</span>
         </div>
         <button
             class="cart-submit btn btn--black"

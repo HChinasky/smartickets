@@ -150,11 +150,11 @@
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(aircraft.amount.UAH);
+              this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
               if(this.modalId == 0) {
-                this.setTicketDepartmentPrice(aircraft.routes[this.modalId].amount.UAH);
+                this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
               } else {
-                this.setTicketArrivalPrice(aircraft.routes[this.modalId].amount.UAH);
+                this.setTicketArrivalPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
               }
             }
           } else  {
@@ -162,7 +162,7 @@
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
               if (this.modalId == 0) {
-                this.setTicketDepartmentPrice(aircraft.routes[this.modalId].amount.UAH);
+                this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
               }
             }
           }

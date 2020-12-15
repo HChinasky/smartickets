@@ -196,7 +196,7 @@
               </template>
             </div>
             <div class="payment_sum">
-              <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice.toFixed(2) }} {{ $t('UAH') }}</span></p>
+              <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
               <p class="smart-tickets-tax">{{ $t('smartTicketRegistration') }} <span>0.06 {{ $t('UAH') }}</span></p>
               <button
                   @click="getBookTicket"

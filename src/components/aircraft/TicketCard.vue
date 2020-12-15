@@ -68,7 +68,7 @@
         <div class="ticket__info">
           <div class="price-ticket">
             <p v-if="!getIcon"><span>{{ this.tickets[0].amount.UAH.toFixed(2) }}</span> грн</p>
-            <p v-else><span>{{ getPrice.toFixed(2) }}</span> грн</p>
+            <p v-else><span>{{ getPrice }}</span> грн</p>
             <p class="ticket-label_mobile" v-if="!getIcon">basic</p>
             <p class="ticket-label_mobile" v-else>{{ getIcon.title }}</p>
           </div>
@@ -143,7 +143,7 @@
       },
       getPriceForOneTicket(price) {
         if(this.allAircrafts.flights[0].routes.length > 1) {
-          return (price / 2).toFixed(2)
+          return price / 2
         } else if(this.getTicketPrice) {
           return this.getTicketPrice
         }
@@ -192,8 +192,6 @@
         // FIXME
         for (var i = 0; i < this.allAircrafts.flights.length; i++) {
           for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
-            let testPrice = [];
-            testPrice.push(this.allAircrafts.flights[i].routes[k].amount.UAH.toFixed(2))
             
             if(this.allAircrafts.flights[i].routes[k].backward == backward) {
               flights[this.allAircrafts.flights[i].routes[k].fareName] = {
