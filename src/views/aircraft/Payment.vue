@@ -185,12 +185,11 @@
               </button>
               <input
                   type="checkbox"
-                  v-model="agreementRules"
-                  @blur="$v.agreementRules.$touch()"
-                  class="hidden-checkbox"
-                  :checked="agreementRules">
-              <template v-if="$v.agreementRules.$error">
-                <p v-if="!$v.agreementRules.required" class="errorMessage">
+                  v-model.trim="agreementRules"
+                  @change="$v.agreementRules.$touch()"
+                  class="hidden-checkbox">
+              <template v-if="$v.agreementRules.$anyDirty">
+                <p class="errorMessage" v-if="!agreementRules">
                   {{ $t("errorAgreeRules") }}
                 </p>
               </template>
@@ -246,7 +245,7 @@
         
         hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
-        agreementRules: "",
+        agreementRules: false,
         repeatEmail: "",
         activeAdditionalServices: "",
         additionalServices: [
@@ -281,7 +280,7 @@
         required: requiredIf(function() {
           return this.getIsDevLoginRequired;
         }),
-      },
+      }
     },
     computed: {
       ...mapMultiRowFields(["passengers"]),
@@ -417,7 +416,7 @@
         let catchErr     = "",
             checkDevUser = ""
         this.$v.$touch();
-        if(!this.$v.$invalid) {
+        if(!this.$v.$invalid && this.agreementRules) {
           if(!this.hasBooked) {
             await this.bookingTicketAircraft()
               .then((res) => {
