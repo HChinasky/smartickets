@@ -69,7 +69,8 @@
           <div class="price-ticket">
             <p v-if="!getIcon">від <span>{{ getPriceForOneTicket(this.tickets[2].amount) }}</span> грн</p>
             <p v-else><span>{{ getPriceForOneTicket(getTicketPrice) }}</span> грн</p>
-            <p class="ticket-label_mobile">{{ tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].fareName }}</p>
+            <p class="ticket-label_mobile" v-if="!getIcon">basic</p>
+            <p class="ticket-label_mobile" v-else>{{ getIcon.title }}</p>
           </div>
           <div class="type-ticket">
             <p v-if="!getIcon">basic</p>
