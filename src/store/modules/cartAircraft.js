@@ -7,6 +7,8 @@ const state = {
   resultId: "",
   searchId: "",
   ticketPrice: "",
+  ticketDepartmentPrice: "",
+  ticketArrivalPrice: "",
   passengers: [
     {
       type: "ADT",
@@ -31,7 +33,11 @@ const state = {
 const getters = {
   getField,
   getResultId: (state) => state.resultId,
+
   getTicketPrice: (state) => state.ticketPrice,
+  getTicketDepartmentPrice: (state) => state.ticketDepartmentPrice,
+  getTicketArrivalPrice: (state) => state.ticketArrivalPrice,
+
   getPersonEmail: (state) => state.personEmail,
   getPersonPhone: (state) => state.personPhone,
   getPromoCode: (state) => state.promoCode,
@@ -71,7 +77,6 @@ const actions = {
       "promocode": rootState.cartAircraft.promoCode
       // ...(rootState.cartAircraft.promoCode && {"promocode": rootState.cartAircraft.promoCode})
     };
-
     var response = await api.bookingTicketAircraft(params);
     return response;
   },
@@ -98,6 +103,12 @@ const actions = {
   },
   setTicketPrice({ commit }, price) {
     commit("updateTicketPrice", price);
+  },
+  setTicketDepartmentPrice({ commit }, departmentPrice) {
+    commit("updateTicketDepartmentPrice", departmentPrice);
+  },
+  setTicketArrivalPrice({ commit }, arrivalPrice) {
+    commit("updateTicketArrivalPrice", arrivalPrice);
   },
   setPersonEmail({ commit }, email) {
     commit("updatePersonEmail", email);
@@ -145,6 +156,12 @@ const mutations = {
   },
   updateTicketPrice(state, price) {
     state.ticketPrice = price;
+  },
+  updateTicketDepartmentPrice(state, departmentPrice) {
+    state.ticketDepartmentPrice = departmentPrice;
+  },
+  updateTicketArrivalPrice(state, arrivalPrice) {
+    state.ticketArrivalPrice = arrivalPrice;
   },
   updatePersonEmail(state, email) {
     state.personEmail = email;

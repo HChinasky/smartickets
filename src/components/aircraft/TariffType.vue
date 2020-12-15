@@ -13,6 +13,7 @@
         <swiper-slide
             v-for="baggageType in baggageTypes"
             :key="baggageType.baggageId">
+          
           <div class="card__block">
             <div class="card__content">
               <div class="card__name">
@@ -127,19 +128,18 @@
         "setResultId",
         "setSearchId",
         "setTicketPrice",
+        "setTicketDepartmentPrice",
+        "setTicketArrivalPrice",
         "setPersons"
       ]),
       getPriceForOneTicket(price) {
-        if(this.backward) {
-          return (price / 2).toFixed(2)
-        }
         return price;
       },
       clickBtn: function (iconArr) {
         iconArr['modalId'] = this.modalId;
         this.$emit('baggageTypeData', iconArr);
         this.$modal.hide('baggageType');
-        
+        console.log(this.modalId )
         if(this.modalId == 0) {
           this.tariffDepartment = iconArr.title;
         } else {
@@ -150,13 +150,20 @@
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
+              this.setTicketPrice(aircraft.amount.UAH);
+              if(this.modalId == 0) {
+                this.setTicketDepartmentPrice(aircraft.routes[this.modalId].amount.UAH);
+              } else {
+                this.setTicketArrivalPrice(aircraft.routes[this.modalId].amount.UAH);
+              }
             }
           } else  {
             if(aircraft.routes[0].fareName == this.tariffDepartment) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
+              if (this.modalId == 0) {
+                this.setTicketDepartmentPrice(aircraft.routes[this.modalId].amount.UAH);
+              }
             }
           }
         });

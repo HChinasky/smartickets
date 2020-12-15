@@ -67,8 +67,8 @@
         </div>
         <div class="ticket__info">
           <div class="price-ticket">
-            <p v-if="!getIcon">від <span>{{ getPriceForOneTicket(this.tickets[2].amount) }}</span> грн</p>
-            <p v-else><span>{{ getPriceForOneTicket(getTicketPrice) }}</span> грн</p>
+            <p v-if="!getIcon"><span>{{ this.tickets[0].amount.UAH.toFixed(2) }}</span> грн</p>
+            <p v-else><span>{{ getPrice.toFixed(2) }}</span> грн</p>
             <p class="ticket-label_mobile" v-if="!getIcon">basic</p>
             <p class="ticket-label_mobile" v-else>{{ getIcon.title }}</p>
           </div>
@@ -78,7 +78,7 @@
           </div>
           <div class="choose-ticket">
             <template v-if="!getIcon">
-              <button class="btn btn--black" @click="baggageTypeArr();">{{ $t('select') }}</button>
+              <button class="btn btn--black" @click="baggageTypeArr(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].backward);">{{ $t('select') }}</button>
             </template>
             <template v-else>
               <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,7 +115,8 @@
         "getArrivalCityCode",
         "getAirportsNameById",
         "allAircrafts",
-        "getTicketPrice",
+        "getTicketDepartmentPrice",
+        "getTicketArrivalPrice",
       ]),
       departmentCityName() {
         return this.getMainCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].departureAirport);
@@ -123,6 +124,13 @@
       arrivalCityName() {
         return this.getMainCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].arrivalAirport);
       },
+      getPrice() {
+        if(this.getIcon.modalId == 0) {
+          return this.getTicketDepartmentPrice
+        } else {
+          return this.getTicketArrivalPrice
+        }
+      }
     },
     methods: {
       limitStr(string, limit) {
@@ -141,7 +149,7 @@
         }
         return this.tickets[0].amount;
       },
-      baggageTypeArr() {
+      baggageTypeArr(backward) {
         var flights = {};
         var allowedListBasic = {
           0: {
@@ -184,8 +192,10 @@
         // FIXME
         for (var i = 0; i < this.allAircrafts.flights.length; i++) {
           for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
-
-            if(this.allAircrafts.flights[i].routes[k].backward == 0) {
+            let testPrice = [];
+            testPrice.push(this.allAircrafts.flights[i].routes[k].amount.UAH.toFixed(2))
+            
+            if(this.allAircrafts.flights[i].routes[k].backward == backward) {
               flights[this.allAircrafts.flights[i].routes[k].fareName] = {
                 flightId: this.allAircrafts.flights[i].routes[k].flightId,
                 baggageId: this.allAircrafts.flights[i].routes[k].fareId,
@@ -199,7 +209,7 @@
                 icon: {
                   id: this.allAircrafts.flights[i].routes[k].fareId,
                   title: this.allAircrafts.flights[i].routes[k].fareName,
-                  price: this.allAircrafts.flights[i].amount.UAH.toFixed(2),
+                  price: this.allAircrafts.flights[i].routes[k].amount.UAH.toFixed(2),
                   resultId: this.allAircrafts.flights[i].routes[k].resultId,
                   searchId: this.allAircrafts.flights[i].routes[k].searchId,
                   width: this.allAircrafts.flights[i].routes[k].fareName == 'Basic' ? '74' :
