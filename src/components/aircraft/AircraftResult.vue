@@ -9,12 +9,12 @@
             </span>
           </h3>
         </div>
-        <template v-if="parseDepartmentFlights.length === 0">
+        <template v-if="toDate.length !== 0">
           <div class="change-date">
             <swiper class="swiper" :options="swiperOptionDepartment">
               <swiper-slide
                   class="text"
-                  v-for="(date, index) in allAircrafts.additional_flights" :key="date.id"
+                  v-for="(date, index) in toDate" :key="date.id"
               >
                 <select-btn
                     :key="index"
@@ -45,7 +45,7 @@
           <h4 class="ticketError">{{ $t('errorFindTicket') }}</h4>
         </template>
       </div>
-      <div class="ticket__block ticket-arrival" v-if="parseArrivalFlights.length !== 0">
+      <div class="ticket__block ticket-arrival" v-if="parseArrivalFlights.length !== 0 || fromDate.length !== 0">
         <div class="tickets__title">
           <h3 class="from">{{ $t('back') }}:
             <span>
@@ -53,19 +53,19 @@
             </span>
           </h3>
         </div>
-        <div class="change-date" v-if="parseArrivalFlights.length === 0">
+        <div class="change-date" v-if="fromDate.length !== 0">
           <swiper class="swiper" :options="swiperOptionArrival">
             <swiper-slide
                 class="text"
-                v-for="date in fromDate" :key="date.id">
+                v-for="(date, index) in fromDate" :key="date.id">
               <select-btn
-                  :key="date.id"
-                  :obj-key="date.name"
+                  :key="index"
+                  :obj-key="date.departure_datetime_loc"
                   :active-key="activeFromDate"
-                  :title="date.name"
+                  :title="date.departure_datetime_loc"
                   :update-date="'updateCityArrivalDate'"
                   :get-date="arrivalDate"
-                  @onUpdateKey="updateActiveDate('activeFromDate', date.name)"
+                  @onUpdateKey="updateActiveDate('activeFromDate', date.departure_datetime_loc)"
               >
                 {{date.name}}
               </select-btn>
@@ -252,24 +252,26 @@
             }
           }
         },
-        toDate: [
-          {id: 0, name: '2'},
-          {id: 1, name: '4'},
-          {id: 2, name: '6'},
-          {id: 3, name: '8'},
-          {id: 4, name: '10'},
-          {id: 5, name: '12'},
-          {id: 6, name: '14'},
-        ],
-        fromDate: [
-          {id: 0, name: '2'},
-          {id: 1, name: '4'},
-          {id: 2, name: '6'},
-          {id: 3, name: '8'},
-          {id: 4, name: '10'},
-          {id: 5, name: '12'},
-          {id: 6, name: '14'},
-        ],
+        toDate: [],
+        fromDate: [],
+      }
+    },
+    watch: {
+      getRelatedDepartmentDate(newValue, oldValue) {
+        if (newValue.length !== 0) {
+          this.toDate = newValue
+        } else if (oldValue.length !== 0) {
+          this.toDate = oldValue
+          
+        }
+      },
+      getRelatedArrivalDate(newValue, oldValue) {
+        if (newValue.length !== 0) {
+          this.fromDate = newValue
+        } else if (oldValue.length !== 0) {
+          this.fromDate = oldValue
+          
+        }
       }
     },
     computed: {
@@ -312,7 +314,7 @@
             for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
               if (this.allAircrafts.flights[i].routes[k].backward === 0) {
                 departmentFlight.push(this.allAircrafts.flights[i].routes[k]);
-                
+
                 departmentFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
                 departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
                 departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
@@ -329,7 +331,7 @@
             for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
               if (this.allAircrafts.flights[i].routes[k].backward === 1) {
                 arrivalFlight.push(this.allAircrafts.flights[i].routes[k]);
-                
+
                 arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount.UAH.toFixed(2);
                 arrivalFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
                 arrivalFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
@@ -338,16 +340,28 @@
           }
         }
         return arrivalFlight;
-      }
+      },
+      getRelatedDepartmentDate() {
+        var depDate = [];
+        this.allAircrafts.additional_flights.filter((dep_date) => {
+          if(!dep_date.backward) {
+            depDate.push(dep_date);
+          }
+        })
+        return depDate;
+      },
+      getRelatedArrivalDate() {
+        var arrDate = [];
+        this.allAircrafts.additional_flights.filter((dep_date) => {
+          if(dep_date.backward) {
+            arrDate.push(dep_date);
+          }
+        })
+        return arrDate;
+      },
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
-      cloneDate() {
-        if(!this.departmentDate || !this.arrivalDate) {
-          this.departmentDate = moment(this.getCityDepartmentDate);
-          this.arrivalDate = moment(this.getCityArrivalDate);
-        }
-      },
       handlerIcon(iconArr) {
         if(iconArr.modalId === 0) {
           this.baggageTypeIconFrom = iconArr;
@@ -355,22 +369,10 @@
           this.baggageTypeIconTo = iconArr;
         }
       },
-      formattedDate(date) {
-        if (this.$route.meta.clientArea)
-          return moment(date).format("LL, dddd");
-        else
-          return moment(date).format("ll, dd");
-      },
-      formattedTime(date) {
-        return moment(date).format("HH:mm");
-      },
       updateActiveDate(directive, index) {
         this[directive] = index;
       },
     },
-    beforeMount() {
-      this.cloneDate();
-    }
   };
 </script>
 

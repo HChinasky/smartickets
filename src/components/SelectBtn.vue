@@ -1,10 +1,12 @@
 <template>
-  <span>
-    <button
-        :class="{active : objKey == activeKey}"
-        @click="updateActiveDate('tomorrow', objKey);">
-        {{ getNameDate(objKey) }}
-    </button>
+  <span class="button-component">
+      <button
+          :class="{active : objKey == activeKey}"
+          :disabled="isLoading"
+          @click="updateActiveDate('tomorrow', objKey);">
+          {{ getNameDate(objKey) }}
+      </button>
+      <span :class="{isLoading : isLoading}"></span>
     </span>
 </template>
 
@@ -20,7 +22,12 @@
       'activeKey': String,
       'title': String,
       'updateDate': String,
-      'getDate': Object,
+      'getDate': String,
+    },
+    data() {
+      return {
+        isLoading: false,
+      }
     },
     methods: {
       ...mapActions([
@@ -30,8 +37,8 @@
         return moment(objKey).format('DD MMMM')
       },
       async updateActiveDate(date, objKey) {
+        this.isLoading = true;
         this.$emit('onUpdateKey', this.objKey);
-        
         this.$store.commit(
           this.updateDate,
           moment(this.getDate).add(objKey, "days")
@@ -40,8 +47,8 @@
           this.updateDate,
           moment(objKey)
         );
-        await this.fetchAircrafts().then((res) => {
-          console.log(res)
+        await this.fetchAircrafts().then(() => {
+          this.isLoading = false;
         })
           .catch((error) => {
             console.log(error);
@@ -83,11 +90,50 @@
       transition: color .2s;
       text-transform: capitalize;
       margin-left: 25px;
+      position: relative;
       
       &.active {
         font-weight: normal;
         color: #3398FF;
       }
+      &:disabled {
+        opacity: .3;
+      }
+
+  }
+  .button-component {
+    position: relative;
+    width: 100%;
+    .isLoading {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 40%;
+      transform: translatex(-50%);
+      background-color: transparent;
+      width: 20px;
+      height: 20px;
+      border: 4px solid transparent;
+      border-top: 3px solid #3398FF;
+      border-radius: 50%;
+      animation: loading 1.5s infinite linear;
+      -moz-animation: loading 1.5s infinite linear;
+      -webkit-animation: loading 1.5s infinite linear;
     }
+  }
+  }
+  @keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+
+  @-moz-keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+
+  @-webkit-keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
   }
 </style>
