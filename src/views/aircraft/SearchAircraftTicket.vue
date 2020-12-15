@@ -181,7 +181,12 @@
             </div>
           </div>
           <div class="ts-form__submit">
-            <button class="btn btn--black" v-promise-btn @click="getData" :disabled="!getDepartmentCityCode || !getArrivalCityCode || !getCityDepartmentDate">
+            <button
+                class="btn btn--black"
+                v-promise-btn
+                @click="getData"
+                :disabled="disabledBtn"
+            >
               {{ $t("findTickets") }}
             </button>
           </div>
@@ -236,6 +241,12 @@
       getCountChildren() {
         return this.getPassengersByType('INF')
       },
+      disabledBtn() {
+        if (this.getPassengersByType('ADT') == 0 || !this.getDepartmentCityCode || !this.getArrivalCityCode || !this.getCityDepartmentDate) {
+          return true
+        }
+        return false
+      }
     },
     methods: {
       ...mapMutations(["addPassengerRow", "removePassengerRow"]),
