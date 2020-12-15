@@ -389,11 +389,17 @@
       async savePromo() {
         this.setPromoCode(this.promo);
         await this.getCurrentPrice().then((res) => {
-          res.data.errors.forEach((err) => {
+          if(res.data.errors.length !== 0) {
+            res.data.errors.forEach((err) => {
+              this.$toasted.global.my_app_error({
+                message: err.error,
+              });
+            })
+          } else {
             this.$toasted.global.my_app_error({
-              message: err.error,
+              message: res.msg,
             });
-          })
+          }
         }).catch((error) => {
           console.log(error);
           if (error.toString().includes("[PPCODE:104]")) {
@@ -415,13 +421,20 @@
           if(!this.hasBooked) {
             await this.bookingTicketAircraft()
               .then((res) => {
-                res.data.errors.forEach((err) => {
+                if(res.data.errors) {
+                  res.data.errors.forEach((err) => {
+                    this.$toasted.global.my_app_error({
+                      message: err.error,
+                    });
+                    catchErr = res.data.errors.length;
+                  })
+                } else if(res.data.msg) {
                   this.$toasted.global.my_app_error({
-                    message: err.error,
+                    message: res.data.msg,
                   });
-                })
-                catchErr = res.data.errors.length;
-                this.hasBooked = true;
+                } else {
+                  this.hasBooked = true;
+                }
               })
               .catch((error) => {
                 console.log(error);
