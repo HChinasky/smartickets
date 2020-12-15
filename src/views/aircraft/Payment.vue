@@ -428,7 +428,7 @@
                     });
                     catchErr = res.data.errors.length;
                   })
-                } else if(res.data.msg) {
+                } else if (res.data.msg) {
                   this.$toasted.global.my_app_error({
                     message: res.data.msg,
                   });
