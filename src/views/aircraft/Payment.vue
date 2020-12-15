@@ -411,12 +411,14 @@
         });
       },
       async getBookTicket() {
-        let catchErr = "";
+        let catchErr     = "",
+            checkDevUser = ""
         this.$v.$touch();
         if(!this.$v.$invalid) {
           if(!this.hasBooked) {
             await this.bookingTicketAircraft()
               .then((res) => {
+                console.log(res.data.code)
                 if(res.data.errors) {
                   res.data.errors.forEach((err) => {
                     this.$toasted.global.my_app_error({
@@ -431,7 +433,7 @@
                 } else {
                   this.hasBooked = true;
                 }
-                console.log(catchErr)
+                checkDevUser = res.data.code;
               })
               .catch((error) => {
                 console.log(error);
@@ -447,7 +449,7 @@
                 }
               });
           }
-          if(!catchErr) {
+          if(!catchErr && checkDevUser !== 207) {
             this.setPromoCode("");
             await this.startPayment()
               .then((response) => {
