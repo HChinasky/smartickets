@@ -254,7 +254,7 @@
         this.$store.commit("addPassengerRow", typePassenger);
       },
       decrease: function(type){
-        if(type !== "ADT" && this.getPassengersByType(type) !== 0) {
+        if(this.getPassengersByType(type) !== 0) {
           this.$store.commit("removePassengerRow", type);
         }
       },
