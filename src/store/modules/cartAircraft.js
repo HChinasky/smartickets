@@ -80,11 +80,11 @@ const actions = {
     var response = await api.bookingTicketAircraft(params);
     return response;
   },
-  async getCurrentPrice({rootState, commit}) {
+  async getCurrentPrice({rootState, commit}, promo) {
     const params = {
       "type": "SkyUp",
       "result_id": rootState.cartAircraft.resultId,
-      "promocode": rootState.cartAircraft.promoCode,
+      "promocode": promo,
     };
 
     var response = await api.getPrice(params);

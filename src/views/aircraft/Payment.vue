@@ -242,6 +242,7 @@
         fullPage: true,
         loader: "spinner",
         color: "#1b73cd",
+        promo: "",
         
         hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
@@ -355,18 +356,6 @@
           this.setPersonPhone(value);
         },
       },
-      promo: {
-        get() {
-          if (this.getPromoCode) {
-            return this.getPromoCode;
-          } else {
-            return null;
-          }
-        },
-        set(value) {
-          this.setPromoCode(value);
-        },
-      },
     },
     methods: {
       ...mapActions([
@@ -387,8 +376,7 @@
         this.updateDevPassword(value);
       },
       async savePromo() {
-        this.setPromoCode(this.promo);
-        await this.getCurrentPrice().then((res) => {
+        await this.getCurrentPrice(this.promo).then((res) => {
           if(res.data.errors.length !== 0) {
             res.data.errors.forEach((err) => {
               this.$toasted.global.my_app_error({
@@ -396,9 +384,17 @@
               });
             })
           } else {
-            this.$toasted.global.my_app_error({
-              message: res.msg,
-            });
+            if(res.data.data.price_with_discount !== res.data.data.price_without_discount) {
+              
+              this.setPromoCode(this.promo);
+              this.$toasted.global.my_app_success({
+                message: res.data.msg,
+              });
+            } else {
+              this.$toasted.global.my_app_error({
+                message: this.$t("errorPromoCode"),
+              });
+            }
           }
         }).catch((error) => {
           console.log(error);
@@ -424,9 +420,9 @@
                 if(res.data.errors) {
                   res.data.errors.forEach((err) => {
                     this.$toasted.global.my_app_error({
-                      message: err.error,
+                      message: err.error ? err.error : err,
                     });
-                    catchErr = res.data.errors.length;
+                    catchErr = err;
                   })
                 } else if (res.data.msg) {
                   this.$toasted.global.my_app_error({
@@ -435,6 +431,7 @@
                 } else {
                   this.hasBooked = true;
                 }
+                console.log(catchErr)
               })
               .catch((error) => {
                 console.log(error);
@@ -450,8 +447,8 @@
                 }
               });
           }
-          if(catchErr === 0 ) {
-            this.clearPromoCode
+          if(!catchErr) {
+            this.setPromoCode("");
             await this.startPayment()
               .then((response) => {
                 var el = document.createElement("p");
