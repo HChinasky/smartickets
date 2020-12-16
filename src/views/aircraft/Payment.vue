@@ -26,7 +26,7 @@
           {{ $t('beforeRegistration') }}
         </a>
       </div>
-      <template v-if="!getIsDevSkyUpLoginRequired">
+      <template v-if="getIsDevSkyUpLoginRequired">
         <div class="ticket-list__header">
           <h3 style="margin-left: 20px;margin-top: 45px">{{ $t("forTest") }}</h3>
         </div>
@@ -241,7 +241,6 @@
         fullPage: true,
         loader: "spinner",
         color: "#1b73cd",
-        promo: "",
 
         hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
@@ -298,7 +297,7 @@
         "getPromoCode",
         "getDevLogin",
         "getDevPassword",
-        "getIsDevLoginRequired",
+        "getIsDevSkyUpLoginRequired",
       ]),
       devLogin: {
         get() {
@@ -306,6 +305,14 @@
         },
         set(value) {
           this.updateDevLogin(value);
+        },
+      },
+      promo: {
+        get() {
+          return this.getPromoCode;
+        },
+        set(value) {
+          this.setPromoCode(value);
         },
       },
       devPassword: {
@@ -393,6 +400,7 @@
                 message: res.data.msg,
               });
             } else {
+              this.setPromoCode("");
               this.$toasted.global.my_app_error({
                 message: this.$t("errorPromoCode"),
               });
@@ -452,7 +460,7 @@
                 }
               });
           }
-          if(!catchErr && checkDevUser === 200 && !networkError) {
+          if(!catchErr && checkDevUser === 0 && !networkError) {
             this.setPromoCode("");
             await this.startPayment()
               .then((response) => {

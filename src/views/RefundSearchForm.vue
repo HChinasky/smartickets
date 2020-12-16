@@ -1,7 +1,7 @@
 <template>
   <span>
     <!--
-    <section      
+    <section
       class="cart-table"
       style="padding-top: 20px;"
     >
@@ -22,7 +22,7 @@
     </section>
 -->
 
-    <section      
+    <section
       class="cart-table"
       style="padding-top: 20px;"
     >
@@ -35,7 +35,7 @@
       ></loading>
       <div class="container">
         <div class="cart-table__inner">
-          <h2>{{$t("refundTicket")}}:</h2>
+          <h2>{{$t("refundTickets")}}:</h2>
           <form>
             <div class="ticket-list" style="padding-top: 20px;">
               <div class="ticket-list__item">
@@ -169,7 +169,7 @@ export default {
           message: i18n.t("purchaseDateEmpty"),
         });
         return;
-      }      
+      }
 
       await api
         .getRefundInfo({
@@ -185,7 +185,7 @@ export default {
             } else {
               throw new Error(response.data.msg);
             }
-          } else {            
+          } else {
             this.$router.push({
               name: "makeRefund",
               params: {
@@ -196,13 +196,13 @@ export default {
             });
           }
         })
-        .catch((error) => {          
+        .catch((error) => {
           this.$toasted.global.my_app_error({
             message: error.message,
           });
         });
     },
-  },  
+  },
 };
 </script>
 
