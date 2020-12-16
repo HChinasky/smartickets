@@ -318,7 +318,7 @@
     methods: {
       betweenYears() {
         const year = new Date().getFullYear();
-        return Array.from({length: 35}, (value, index) => year + index)
+        return Array.from({length: 11}, (value, index) => year + index)
       },
       years() {
         const year = new Date().getFullYear();
