@@ -10,7 +10,7 @@ const apiClient = axios.create({
 });
 
 const apiClientTest = axios.create({
-  baseURL: "https://st-bknd.e-transport.gov.ua/FrontEnd/API/Service/",
+  baseURL: process.env.VUE_APP_API_BASE_URL,
   withCredentials: false,
   headers: {
     Accept: "application/json",

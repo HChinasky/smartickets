@@ -27,7 +27,7 @@ const state = {
   ],
   personEmail: "",
   personPhone: "",
-  promoCode: ""
+  promoCode: "GL-SMART"
 };
 
 const getters = {
