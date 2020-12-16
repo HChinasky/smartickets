@@ -31,12 +31,9 @@
             </svg>
           </div>
           <div class="type-trips__btn">
-            <button :class="{active : tripItem.link == link[tripItem.id]}" @click="chooseTrips(tripItem.id, tripItem.link)" class="type-trips__link">{{ $t('select') }}</button>
+            <router-link :to="{ name: tripItem.link }" class="btn btn--black">{{ $t('searchTickets') }}</router-link>
           </div>
         </div>
-      </div>
-      <div class="btn-next__block">
-        <router-link :class="{disabled : !returnLink}" :to="{ name: returnLink }" class="search-ticket__link btn--black">{{ $t('next') }}</router-link>
       </div>
     </div>
   </div>
@@ -280,6 +277,9 @@
             }
           }
         }
+      }
+      .btn--black {
+        text-decoration: none;
       }
       .btn-next__block {
         display: flex;
