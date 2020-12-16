@@ -71,7 +71,6 @@ const actions = {
       "passengers": passenger,
       "email": rootState.cartAircraft.personEmail,
       "phone": rootState.cartAircraft.personPhone.replace(/[^\w\s]/gi, ''),
-      "agent_email": "test.solveast@gmail.com",
       "login": rootGetters.getIsDevLoginRequired ? getters.getDevLogin : "",
       "password": rootGetters.getIsDevLoginRequired ? MD5.hex(getters.getDevPassword) : "",
       "promocode": rootState.cartAircraft.promoCode
