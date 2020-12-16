@@ -344,15 +344,21 @@
         this.allAircrafts.additional_flights.filter((dep_date) => {
           if(!dep_date.backward) {
             depDate.push(dep_date);
+            if(this.toDate) {
+              this.toDate.push(dep_date)
+            }
           }
         })
         return depDate;
       },
       getRelatedArrivalDate() {
         var arrDate = [];
-        this.allAircrafts.additional_flights.filter((dep_date) => {
-          if(dep_date.backward) {
-            arrDate.push(dep_date);
+        this.allAircrafts.additional_flights.filter((arr_date) => {
+          if(arr_date.backward) {
+            arrDate.push(arr_date);
+            if(this.fromDate) {
+              this.fromDate.push(arr_date)
+            }
           }
         })
         return arrDate;
