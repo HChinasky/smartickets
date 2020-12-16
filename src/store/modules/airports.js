@@ -104,7 +104,7 @@ const mutations = {
     state.arrivalMainCityCode = date;
   },
   SET_DEV_SKYUP_LOGIN_REQUIRED(state, isRequired) {
-    state.isDevLoginRequired = isRequired;
+    state.isDevSkyUpLoginRequired = isRequired;
   },
 };
 
