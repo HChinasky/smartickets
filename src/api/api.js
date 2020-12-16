@@ -213,7 +213,7 @@ export default {
 
   fetchAircrafts(params) {
     return apiClientTest.post(
-      "flights/search/",
+      "/FrontEnd/API/Service/flights/search/",
       {
               "type": "SkyUp",
               "payment_sid": params.payment_sid,
@@ -230,7 +230,7 @@ export default {
 
   fetchCity() {
     return apiClientTest.post(
-      "reference/city",
+      "/FrontEnd/API/Service/reference/city",
       {
         "value": "all",
         "type": "SkyUp",
@@ -240,7 +240,7 @@ export default {
 
   fetchAirports() {
     return apiClientTest.post(
-      "reference/airport",
+      "/FrontEnd/API/Service/reference/airport",
       {
         "value": "all",
         "type": "SkyUp",
@@ -250,14 +250,14 @@ export default {
 
   bookingTicketAircraft(params) {
     return apiClientTest.post(
-      "flights/book",
+      "/FrontEnd/API/Service/flights/book",
       params
     )
   },
 
   getPrice(params) {
     return apiClientTest.post(
-      "flights/get-price",
+      "/FrontEnd/API/Service/flights/get-price",
       params
     )
   }

@@ -30,7 +30,7 @@
         <div class="ticket-list__header">
           <h3 style="margin-left: 20px;margin-top: 45px">{{ $t("forTest") }}</h3>
         </div>
-    
+        
         <div class="ticket-list__item">
           <div class="ticket-list__inner">
             <div class="ticket-list__group">
@@ -51,7 +51,7 @@
                 </p>
               </template>
             </div>
-        
+            
             <div class="ticket-list__inner">
               <div class="ticket-list__group">
                 <label for="client-password" class="ticket-list__label">{{
@@ -163,7 +163,7 @@
                     {{ $t('errorEmptyPhone') }}
                   </p>
                   <p v-if="!$v.phone.minLength" class="errorMessage">
-                  {{ $t('errorShortPhone') }}
+                    {{ $t('errorShortPhone') }}
                   </p>
                 </template>
               </div>
@@ -233,7 +233,7 @@
     components: {
       InputMask,
       Loading
-      
+
     },
     data() {
       return {
@@ -242,7 +242,7 @@
         loader: "spinner",
         color: "#1b73cd",
         promo: "",
-        
+
         hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
         agreementRules: false,
@@ -387,7 +387,7 @@
             })
           } else {
             if(res.data.data.price_with_discount !== res.data.data.price_without_discount) {
-              
+
               this.setPromoCode(this.promo);
               this.$toasted.global.my_app_success({
                 message: res.data.msg,
@@ -414,13 +414,13 @@
       },
       async getBookTicket() {
         let catchErr     = "",
-            checkDevUser = ""
+          checkDevUser = "",
+          networkError = ""
         this.$v.$touch();
         if(!this.$v.$invalid && this.agreementRules) {
           if(!this.hasBooked) {
             await this.bookingTicketAircraft()
               .then((res) => {
-                console.log(res.data.code)
                 if(res.data.errors) {
                   res.data.errors.forEach((err) => {
                     this.$toasted.global.my_app_error({
@@ -438,6 +438,7 @@
                 checkDevUser = res.data.code;
               })
               .catch((error) => {
+                networkError = error;
                 console.log(error);
                 if (error.toString().includes("[PPCODE:104]")) {
                   this.$toasted.global.my_app_error({
@@ -451,7 +452,7 @@
                 }
               });
           }
-          if(!catchErr && checkDevUser !== 207) {
+          if(!catchErr && checkDevUser === 200 && !networkError) {
             this.setPromoCode("");
             await this.startPayment()
               .then((response) => {
@@ -516,7 +517,7 @@
       .row {
         @include row(0, 0, 0, 0, 0, 0);
         margin-top: 80px;
-  
+        
         @include respond-until(sm) {
           margin-top: 0;
         }
@@ -553,7 +554,7 @@
               font-size: 28px;
               color: #000;
               margin-top: 0;
-  
+              
               @include respond-until(sm) {
                 font-size: 24px;
               }
@@ -744,7 +745,7 @@
               .payment__list {
                 display: flex;
                 justify-content: space-between;
-  
+                
                 @include respond-until(m) {
                   justify-content: flex-start;
                 }
@@ -827,7 +828,7 @@
                 position: relative;
                 display: flex;
                 align-items: center;
-  
+                
                 @include respond-until(sm) {
                   padding-left: 45px;
                 }
@@ -873,7 +874,7 @@
             
             .payment_sum {
               margin-top: 60px;
-  
+              
               @include respond-until(sm) {
                 display: flex;
                 flex-direction: column;
@@ -925,12 +926,12 @@
       }
     }
   }
-
+  
   .errorMessage {
     font-size: 14px;
     font-weight: 100;
     color: $DANGER_COLOR;
-  
+    
     &:nth-child(2) {
       top: 15px;
     }
