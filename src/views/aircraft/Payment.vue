@@ -197,6 +197,11 @@
             <div class="payment_sum">
               <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
               <p class="smart-tickets-tax">{{ $t('smartTicketRegistration') }} <span>0.06 {{ $t('UAH') }}</span></p>
+              <div class="cart-total__cost cart-total__cost_skyup">
+                {{ $t("additionalFeeTxt") }}<strong>
+              </strong
+              >
+              </div>
               <button
                   @click="getBookTicket"
                   class="btn btn--black"
@@ -915,7 +920,7 @@
                 }
               }
               
-              .smart-tickets-tax {
+              .smart-tickets-tax, .cart-total__cost_skyup {
                 font-size: 17px;
                 font-weight: 200;
                 color: $LABEL_COLOR;
