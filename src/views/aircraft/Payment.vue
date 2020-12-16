@@ -26,7 +26,7 @@
           {{ $t('beforeRegistration') }}
         </a>
       </div>
-      <template v-if="getIsDevLoginRequired">
+      <template v-if="!getIsDevSkyUpLoginRequired">
         <div class="ticket-list__header">
           <h3 style="margin-left: 20px;margin-top: 45px">{{ $t("forTest") }}</h3>
         </div>

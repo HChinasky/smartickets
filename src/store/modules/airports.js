@@ -11,6 +11,8 @@ const state = {
 
   cityDepartmentDate: null,
   cityArrivalDate: null,
+
+  isDevSkyUpLoginRequired: null
 };
 
 const getters = {
@@ -23,6 +25,8 @@ const getters = {
 
   getDepartmentMainCityCode: (state) => state.departmentMainCityCode,
   getArrivalMainCityCode: (state) => state.arrivalMainCityCode,
+
+  getIsDevSkyUpLoginRequired: (state) => state.isDevSkyUpLoginRequired,
 
   getCityDepartmentDate: (state) => state.cityDepartmentDate,
   getCityArrivalDate: (state) => state.cityArrivalDate,
@@ -53,6 +57,7 @@ const actions = {
                       }));
       commit("setAirports", airports);
       commit("setPaymentId", response.data.payment_sid);
+      commit("SET_DEV_SKYUP_LOGIN_REQUIRED", response.data.NEED_AUTH_SkyUp);
     }
   },
   setDepartmentCityCode({ commit }, data) {
@@ -97,6 +102,9 @@ const mutations = {
   },
   updateArrivalMainCityCode(state, date) {
     state.arrivalMainCityCode = date;
+  },
+  SET_DEV_SKYUP_LOGIN_REQUIRED(state, isRequired) {
+    state.isDevLoginRequired = isRequired;
   },
 };
 
