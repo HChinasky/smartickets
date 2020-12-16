@@ -139,7 +139,7 @@
         iconArr['modalId'] = this.modalId;
         this.$emit('baggageTypeData', iconArr);
         this.$modal.hide('baggageType');
-        console.log(this.modalId )
+        
         if(this.modalId == 0) {
           this.tariffDepartment = iconArr.title;
         } else {
