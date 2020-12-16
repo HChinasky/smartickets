@@ -84,9 +84,12 @@
               <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.37496 14.2753L2.56246 9.46284C2.43661 9.33547 2.28674 9.23433 2.12151 9.16531C1.95629 9.09628 1.77902 9.06074 1.59996 9.06074C1.4209 9.06074 1.24362 9.09628 1.0784 9.16531C0.913176 9.23433 0.7633 9.33547 0.637456 9.46284C0.510076 9.58869 0.408943 9.73857 0.339918 9.90379C0.270894 10.069 0.235352 10.2463 0.235352 10.4253C0.235352 10.6044 0.270894 10.7817 0.339918 10.9469C0.408943 11.1121 0.510076 11.262 0.637456 11.3878L6.39871 17.1491C6.93496 17.6853 7.80121 17.6853 8.33746 17.1491L22.9125 2.58785C23.0398 2.462 23.141 2.31213 23.21 2.1469C23.279 1.98168 23.3146 1.80441 23.3146 1.62535C23.3146 1.44629 23.279 1.26901 23.21 1.10379C23.141 0.938567 23.0398 0.78869 22.9125 0.662846C22.7866 0.535467 22.6367 0.434333 22.4715 0.365309C22.3063 0.296284 22.129 0.260742 21.95 0.260742C21.7709 0.260742 21.5936 0.296284 21.4284 0.365309C21.2632 0.434333 21.1133 0.535467 20.9875 0.662846L7.37496 14.2753Z" fill="#3398FF"/>
               </svg>
-              <svg :width="getIcon.width" :height="getIcon.height" :viewBox="'0 0 ' + getIcon.width + ' ' + getIcon.height">
-                <use :xlink:href="require('@/assets/img/sprite.svg') + getIcon.iconId" />
-              </svg>
+              
+              <div class="change-tariff" @click="baggageTypeArr(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].backward);">
+                <svg :width="getIcon.width" :height="getIcon.height" :viewBox="'0 0 ' + getIcon.width + ' ' + getIcon.height">
+                  <use :xlink:href="require('@/assets/img/sprite.svg') + getIcon.iconId" />
+                </svg>
+              </div>
             </template>
           </div>
         </div>
@@ -636,5 +639,8 @@
         }
       }
     }
+  }
+  .change-tariff {
+    cursor: pointer;
   }
 </style>
