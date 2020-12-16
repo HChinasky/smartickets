@@ -286,7 +286,7 @@
 
         if (this.getArrivalCityCode == this.getDepartmentCityCode) {
           this.$toasted.global.my_app_error({
-            message: this.$t("mustBeDifferentStations"),
+            message: this.$t("mustBeDifferentAirports"),
           });
           return false;
         }
