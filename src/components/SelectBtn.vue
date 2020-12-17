@@ -52,6 +52,7 @@
         })
           .catch((error) => {
             console.log(error);
+            this.isLoading = false;
             if (error.toString().includes("[PPCODE:104]")) {
               this.$toasted.global.my_app_error({
                 type: "error",
