@@ -17,7 +17,16 @@
           <div class="card__block">
             <div class="card__content">
               <div class="card__name">
-                <div class="card__title">{{ baggageType.title }}</div>
+                <div class="card__title">
+                  <a href="#">
+                    {{ baggageType.title }}
+                    <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <use
+                          :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
+                      />
+                    </svg>
+                  </a>
+                </div>
                 <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} {{ $t('UAH') }}</div>
               </div>
               <div class="card__info">
@@ -57,8 +66,17 @@
       >
         <div class="card__content">
           <div class="card__name">
-            <div class="card__title">{{ baggageType.icon.title }}</div>
-              <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} {{ $t('UAH') }}</div>
+            <div class="card__title">
+              {{ baggageType.icon.title }}
+              <a :href="'https://skyup.aero/'+$i18n.locale+'/faq/rates'" target="_blank">
+                <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <use
+                      :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} {{ $t('UAH') }}</div>
           </div>
           <div class="card__info">
             <div class="card__icon">
@@ -267,11 +285,18 @@
             justify-content: space-between;
             .card__name {
               .card__title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-left: 35px;
                 font-weight: 500;
                 font-size: 28px;
                 text-transform: uppercase;
                 color: #000;
                 text-align: center;
+                a {
+                  outline: none;
+                }
               }
               .card__price {
                 font-size: 24px;
