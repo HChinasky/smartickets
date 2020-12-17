@@ -18,8 +18,6 @@
           <span>{{ $t("refundTickets") }}</span>
         </a>
         
-        
-        <a class="btn green" @click="$modal.show('signUpForm')">Login</a>
       </Slide>
     </template>
     
