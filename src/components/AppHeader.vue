@@ -5,7 +5,7 @@
         <div class="header__brand site-brand">
           <router-link to="/">
             <div class="site-brand__logo">
-              <svg viewBox="0 0 323 92">
+              <svg viewBox="0 0 323 92" preserveAspectRatio="xMinYMid">
                 <use
                     :xlink:href="
                     require('@/assets/img/sprite.svg') + '#icon-logo-new'
