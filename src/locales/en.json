@@ -275,5 +275,8 @@
     "errorFindTicket": "Sorry, but no flights were found on the date you selected, select the date closest to your",
     "errorPromoCode": "Promo code is invalid",
     "mustBeDifferentAirports": "Departure and arrival stations must be different",
-    "passengersFAQ": "Information for passengers"
+    "passengersFAQ": "Information for passengers",
+    "discountAlert": "You used a promo code for a discount ",
+    "promoHaveDiscount": "This promo code provides a discount ",
+    "discountPrice": "Discounted price"
 }

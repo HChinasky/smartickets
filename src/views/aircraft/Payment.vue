@@ -172,9 +172,11 @@
                 <input
                     class="ticket-list__input"
                     type="text"
+                    disabled
                     v-model="promo"
                 >
-                <span class="apply-promo" @click="savePromo">{{ $t('applyPromo') }}</span>
+                <span class="apply-promo">{{ $t('applyPromo') }}</span>
+                <span class="promo-discount__label" v-if="priceDiscount">{{ $t('promoHaveDiscount') }} {{ priceDiscount }} {{ $t('UAH') }}</span>
               </div>
             </div>
             <div class="agreement-rules">
@@ -195,12 +197,16 @@
               </template>
             </div>
             <div class="payment_sum">
-              <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+              <template v-if="fullPrice !== getPrice">
+                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ fullPrice }} {{ $t('UAH') }}</span></p>
+                <p class="total-sum" v-if="fullPrice">{{ $t('discountPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+              </template>
+              <template v-else>
+                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+              </template>
               <p class="smart-tickets-tax">{{ $t('smartTicketRegistration') }} <span>0.06 {{ $t('UAH') }}</span></p>
               <div class="cart-total__cost cart-total__cost_skyup">
-                {{ $t("additionalFeeTxt") }}<strong>
-              </strong
-              >
+                {{ $t("additionalFeeTxt") }}
               </div>
               <button
                   @click="getBookTicket"
@@ -246,6 +252,9 @@
         fullPage: true,
         loader: "spinner",
         color: "#1b73cd",
+        fullPrice: "",
+        priceDiscount: "",
+        beforeMountPriceDiscount: false,
 
         hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
@@ -391,6 +400,10 @@
       },
       async savePromo() {
         await this.getCurrentPrice(this.promo).then((res) => {
+          let priceWithDiscount = res.data.data.price_with_discount,
+              priceWithoutDiscount = res.data.data.price_without_discount;
+          this.fullPrice = priceWithoutDiscount.toFixed(2);
+          
           if(res.data.errors.length !== 0) {
             res.data.errors.forEach((err) => {
               this.$toasted.global.my_app_error({
@@ -398,13 +411,15 @@
               });
             })
           } else {
-            if(res.data.data.price_with_discount !== res.data.data.price_without_discount) {
-
+            if(priceWithDiscount !== priceWithoutDiscount) {
+              this.priceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
+              var getPercent = ((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100;
               this.setPromoCode(this.promo);
               this.$toasted.global.my_app_success({
-                message: res.data.msg,
+                message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
               });
             } else {
+              this.priceDiscount = false;
               this.setPromoCode("");
               this.$toasted.global.my_app_error({
                 message: this.$t("errorPromoCode"),
@@ -489,7 +504,45 @@
       }
     },
     beforeMount() {
-      this.savePromo()
+      this.getCurrentPrice(this.promo).then((res) => {
+        let priceWithDiscount = res.data.data.price_with_discount,
+          priceWithoutDiscount = res.data.data.price_without_discount;
+        this.fullPrice = priceWithoutDiscount.toFixed(2);
+        if(res.data.errors.length !== 0) {
+          res.data.errors.forEach((err) => {
+            this.$toasted.global.my_app_error({
+              message: err.error,
+            });
+          })
+        } else {
+          if(priceWithDiscount !== priceWithoutDiscount) {
+            this.beforeMountPriceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
+            var getPercent = ((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100;
+            this.setPromoCode(this.promo);
+            this.$toasted.global.my_app_success({
+              message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
+            });
+          } else {
+            this.beforeMountPriceDiscount = false;
+            this.setPromoCode("");
+            this.$toasted.global.my_app_error({
+              message: this.$t("errorPromoCode"),
+            });
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+        if (error.toString().includes("[PPCODE:104]")) {
+          this.$toasted.global.my_app_error({
+            type: "error",
+            message: this.$t("trainNotFoundMsg"),
+          });
+        } else {
+          this.$toasted.global.my_app_error({
+            message: error.message,
+          });
+        }
+      });
     }
   }
 </script>
@@ -713,7 +766,7 @@
                     font-weight: 300;
                     position: absolute;
                     right: 0;
-                    bottom: 10px;
+                    top: 28px;
                     padding: 6px 17px;
                     color: #000;
                     border: 1px solid #000;
@@ -730,6 +783,12 @@
                       color: $LINK_COLOR;
                       border-color: $LINK_COLOR;
                     }
+                  }
+                  .promo-discount__label {
+                    font-size: 14px;
+                    margin-top: 15px;
+                    font-weight: 500;
+                    color: #25a20f;
                   }
                 }
                 
