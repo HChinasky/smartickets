@@ -5676,6 +5676,7 @@ body.nav-open {
   .site-brand__desc {
     line-height: 1.5;
     font-size: 1.1rem;
+    margin-top: 10px;
   }
   .site-brand__logo > svg {
     width: 235px;
