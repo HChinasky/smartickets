@@ -452,11 +452,11 @@
           }
           @include respond-until(sm) {
             font-size: 26px;
-            margin: 0;
+            margin: 0 0 15px;
           }
           @include respond-until(xs) {
             font-size: 24px;
-            margin: 0;
+            margin: 0 0 15px;
           }
           span {
             color: $SECOND_FONT_COLOR;

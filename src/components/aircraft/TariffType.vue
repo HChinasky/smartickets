@@ -18,8 +18,9 @@
             <div class="card__content">
               <div class="card__name">
                 <div class="card__title">
-                  <a href="#">
-                    {{ baggageType.title }}
+                  {{ baggageType.icon.title }}
+                  <a  :href="'https://skyup.aero/'+$i18n.locale+'/faq/rates'" target="_blank">
+                    
                     <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
                       <use
                           :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
