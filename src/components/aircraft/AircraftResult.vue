@@ -92,6 +92,16 @@
       />
     </div>
     <div class="ts-form__submit" v-if="parseDepartmentFlights.length !== 0">
+      <div class="passenger_faq">
+        <a :href="getLinklocale" target="_blank">
+          <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
+            <use
+                :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
+            />
+          </svg>
+          {{ $t('passengersFAQ') }}
+        </a>
+      </div>
       <router-link tag="button" :disabled="!validate" class="btn btn--black" :to="{name: 'CartAircraft'}">
         {{ $t('next') }}
       </router-link>
@@ -363,6 +373,13 @@
         })
         return arrDate;
       },
+      getLinklocale() {
+        if (this.$i18n.locale == "uk") {
+          return "https://skyup.aero/uk/faq";
+        } else {
+          return  "https://skyup.aero/en/faq";
+        }
+      }
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
@@ -540,6 +557,37 @@
     }
   }
   .ts-form__submit {
+    position: relative;
+    .passenger_faq {
+      position: absolute;
+      @include respond-until(m) {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      @include respond-until(sm) {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      @include respond-until(xs) {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      a {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 300;
+        color: $BORDER_BOTTOM_LINK_COLOR;
+        text-decoration: none;
+        outline: none;
+      }
+    }
     .btn {
       &:disabled {
         color: #fff;

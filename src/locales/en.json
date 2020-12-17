@@ -274,5 +274,6 @@
     "errorPassportCodeLength": "This field must be 8 characters",
     "errorFindTicket": "Sorry, but no flights were found on the date you selected, select the date closest to your",
     "errorPromoCode": "Promo code is invalid",
-    "mustBeDifferentAirports": "Departure and arrival stations must be different"
+    "mustBeDifferentAirports": "Departure and arrival stations must be different",
+    "passengersFAQ": "Information for passengers"
 }
