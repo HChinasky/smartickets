@@ -11,30 +11,8 @@
             {{ $t("mainTitle2") }}
           </div>
         </div>
-        
-        <nav class="header__top-nav top-nav">
-          <!--
-          <ul class="top-nav__list">
-            <li class="top-nav__item">
-              <a href="#" class="top-nav__link">Довідка</a>
-            </li>
-            <li class="top-nav__item">
-              <a href="#" class="top-nav__link">Кабінет</a>
-            </li>
-            <li class="top-nav__item">
-              <a href="#" class="top-nav__link">Контакти</a>
-            </li>
-          </ul>
-          -->
-        </nav>
-        
-        <!--
-        <button class="hamburger">
-          <span class="hamburger__s"></span>
-          <span class="hamburger__s"></span>
-          <span class="hamburger__s"></span>
-        </button>
-        -->
+
+
       </div>
       
       <div class="header__bot">
@@ -106,7 +84,6 @@
     height: 75px;
     background-size: contain;
     @include respond-until(xs) {
-      background-position: left -25px center;
       background-repeat: no-repeat;
       display: block;
       width: 280px;
