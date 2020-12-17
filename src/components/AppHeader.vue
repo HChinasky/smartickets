@@ -78,7 +78,6 @@
         </nav>
         
         <div class="header__socials">
-          <span class="sign-in__btn" @click="$modal.show('signUpForm')">Login</span>
           <LocaleSwitcher />
         </div>
       </div>
