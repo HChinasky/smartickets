@@ -481,7 +481,6 @@
               });
           }
           if(!catchErr && checkDevUser === 0 && !networkError) {
-            this.setPromoCode("");
             await this.startPayment()
               .then((response) => {
                 var el = document.createElement("p");
