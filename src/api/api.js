@@ -199,6 +199,15 @@ export default {
       doc_num: params.doc_num,
     });
   },
+  getRefundInfoSkyUp(params) {
+    return apiClient.post("/FrontEnd/API/Service/refunds/refund-request", {
+      type: "SkyUp",
+      name: params.name,
+      surname: params.surname,
+      date: params.date,
+      doc_num: params.doc_num,
+    });
+  },
   makeRefund(token) {
     return apiClient.post("/Tickets/EndRefund", {
       refund_token: token,

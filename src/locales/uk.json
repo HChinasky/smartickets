@@ -121,6 +121,8 @@
     "metroDestination": "Куди прямуєте",
     "metroDeparture": "Звідки прямуєте",
     "refundTickets": "Повернення квитків",
+    "refundTicketsUZ": "Повернення квитків Укрзалізниця",
+    "refundTicketsSkyUp": "Повернення квитків SkyUp",
     "wagonClass": "{class} клас",
     "fromGen": "з",
     "toGen": "до",
@@ -164,6 +166,7 @@
     "orderNumber": "Номер замовлення",
     "carrier": "Перевізник",
     "Ukrzaliznytsia": "АТ Укрзалізниця",
+    "UkrzaliznytsiaShort": "Укрзалізниця",
     "amount": "Сума",
     "refundAmount": "Сума повернення",
     "receiptDownload": "Завантажити квитанцію",
@@ -285,5 +288,9 @@
     "passengersFAQ": "Інформація для пасажирів",
     "discountAlert": "Ви викоростали промокод на знижку ",
     "promoHaveDiscount": "Цей промокод надає знижку ",
-    "discountPrice": "Вартість зі знижкою"
+    "discountPrice": "Вартість зі знижкою",
+    "refundErrorSurnameSymbols": "Прізвище має містити тільки латинськи символи",
+    "refundErrorNameSymbols": "Ім’я має містити тільки латинськи символи",
+    "refundErrorSurnameMinLength": "Прізвище має містити не менше 3-х символів",
+    "refundErrorNameMinLength": "Ім’я має містити не менше 3-х символів"
 }
