@@ -2,7 +2,7 @@
   <section class="ticket" ref="aircrafts">
     <div class="container">
       <div class="ticket__inner">
-        <AircraftResult />
+        <AircraftResult :allAircraft="test" />
       </div>
     </div>
   </section>

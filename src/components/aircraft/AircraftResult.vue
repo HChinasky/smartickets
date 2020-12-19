@@ -89,6 +89,7 @@
       <TariffType
           @baggageTypeData="handlerIcon"
           :backward="returnBackward"
+          :aircraftTariff="allAircraft"
       />
     </div>
     <div class="ts-form__submit" v-if="parseDepartmentFlights.length !== 0">
@@ -124,7 +125,8 @@
     name: "AircraftResult",
     props: {
       "validateDepartmentTickets": Boolean,
-      "validateArrivalTickets": Boolean
+      "validateArrivalTickets": Boolean,
+      "allAircraft": Object
     },
     components: {
       Swiper,
@@ -297,8 +299,7 @@
         "getCityDepartmentDate",
         "getCityArrivalDate",
         "getDepartmentCityCode",
-        "getArrivalCityCode",
-        "allAircrafts"
+        "getArrivalCityCode"
       ]),
       validate() {
         if(this.parseArrivalFlights.length !== 0) {
@@ -326,14 +327,14 @@
       },
       parseDepartmentFlights() {
         let departmentFlight = [];
-        if (this.allAircrafts) {
-          for (var i = 0; i < this.allAircrafts.flights.length; i++) {
-            for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
-              if (this.allAircrafts.flights[i].routes[k].backward === 0) {
-                departmentFlight.push(this.allAircrafts.flights[i].routes[k]);
+        if (this.allAircraft) {
+          for (var i = 0; i < this.allAircraft.flights.length; i++) {
+            for (var k = 0; k < this.allAircraft.flights[i].routes.length; k++) {
+              if (this.allAircraft.flights[i].routes[k].backward === 0) {
+                departmentFlight.push(this.allAircraft.flights[i].routes[k]);
 
-                departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
-                departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
+                departmentFlight[i]["resultId"] = this.allAircraft.flights[i].resultId;
+                departmentFlight[i]["searchId"] = this.allAircraft.flights[i].searchId;
               }
             }
           }
@@ -342,14 +343,14 @@
       },
       parseArrivalFlights() {
         let arrivalFlight = [];
-        if (this.allAircrafts) {
-          for (var i = 0; i < this.allAircrafts.flights.length; i++) {
-            for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
-              if (this.allAircrafts.flights[i].routes[k].backward === 1) {
-                arrivalFlight.push(this.allAircrafts.flights[i].routes[k]);
+        if (this.allAircraft) {
+          for (var i = 0; i < this.allAircraft.flights.length; i++) {
+            for (var k = 0; k < this.allAircraft.flights[i].routes.length; k++) {
+              if (this.allAircraft.flights[i].routes[k].backward === 1) {
+                arrivalFlight.push(this.allAircraft.flights[i].routes[k]);
 
-                arrivalFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
-                arrivalFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
+                arrivalFlight[i]["resultId"] = this.allAircraft.flights[i].resultId;
+                arrivalFlight[i]["searchId"] = this.allAircraft.flights[i].searchId;
               }
             }
           }
@@ -358,7 +359,7 @@
       },
       getRelatedDepartmentDate() {
         var depDate = [];
-        this.allAircrafts.additional_flights.filter((dep_date) => {
+        this.allAircraft.additional_flights.filter((dep_date) => {
           if(!dep_date.backward) {
             depDate.push(dep_date);
           }
@@ -367,7 +368,7 @@
       },
       getRelatedArrivalDate() {
         var arrDate = [];
-        this.allAircrafts.additional_flights.filter((arr_date) => {
+        this.allAircraft.additional_flights.filter((arr_date) => {
           if(arr_date.backward) {
             arrDate.push(arr_date);
           }

@@ -111,11 +111,11 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from "vuex";
+  import { mapActions } from "vuex";
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   export default {
     name: "TariffType",
-    props:["backward"],
+    props:["backward", "aircraftTariff"],
     components: {
       Swiper,
       SwiperSlide,
@@ -136,11 +136,7 @@
           },
           mousewheel: true
         },
-        
       }
-    },
-    computed: {
-      ...mapGetters(["allAircrafts"])
     },
     methods: {
       ...mapActions([
@@ -164,7 +160,7 @@
         } else {
           this.tariffArrival = iconArr.title;
         }
-        this.allAircrafts.flights.filter((aircraft) => {
+        this.aircraftTariff.flights.filter((aircraft) => {
           if(aircraft.routes[1]) {
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
               this.setResultId(aircraft.resultId);
