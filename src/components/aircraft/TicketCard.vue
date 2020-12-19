@@ -113,19 +113,20 @@
     computed: {
       ...mapGetters([
         "resultId",
-        "getMainCityNameByCode",
+        "getCityNameByCode",
         "getDepartmentCityCode",
         "getArrivalCityCode",
         "getAirportsNameById",
         "allAircrafts",
         "getTicketDepartmentPrice",
         "getTicketArrivalPrice",
+        "getSecondCityNameByCode",
       ]),
       departmentCityName() {
-        return this.getMainCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].departureAirport);
+        return this.getCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].departureAirport);
       },
       arrivalCityName() {
-        return this.getMainCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].arrivalAirport);
+        return this.getCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].arrivalAirport);
       },
       getPrice() {
         if(this.getIcon.modalId == 0) {
@@ -234,9 +235,9 @@
       },
       airports(code) {
         if (this.getAirportsNameById(code).terminal) {
-          return this.getAirportsNameById(code).label + ' (' + this.getAirportsNameById(code).terminal + ')'
+          return this.getAirportsNameById(code).second_city_name + ' (' + this.getAirportsNameById(code).terminal + ')'
         }
-        return this.getAirportsNameById(code).label
+        return this.getAirportsNameById(code).second_city_name
       },
       formattedDate(date) {
         return moment(date).format("D MMMM");

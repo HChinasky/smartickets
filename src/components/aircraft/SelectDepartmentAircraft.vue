@@ -4,31 +4,35 @@
         class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
         v-model="selected"
         :options="paginated"
-        :filterable="true"
+        :filter="fuseSearch"
         :clearable="false"
         :limit="limit"
         :placeholder="$t('flyFrom')"
         @open="onOpen"
         @close="onClose"
-        @search="(query) => (search = query)"
-        @search:blur="$v.selected.$touch()"
     >
       <template #list-footer v-if="hasNextPage">
-        <li ref="load" class="loader">Loading more options...</li>
+        <li ref="load" class="loader"> </li>
       </template>
-      <template v-slot:option="option">
-        {{ option.label }} / {{ option.code }}
+      <template #option="{ code, is_new}">
+          <span class="label">{{ getCityNameByCode(code) }} / {{ getCityCountryByCode(code) }}</span>
+          <small class="code">({{ code }})</small>
+          <span class="in-new" v-show="is_new == '1'">new</span>
       </template>
     </v-select>
   </span>
 </template>
 
 <script>
+  import Fuse from "fuse.js";
   import { mapGetters, mapActions } from "vuex";
   import { required } from "vuelidate/lib/validators";
-  
+
   export default {
     name: "SelectDepartmentAircraft",
+    component: {
+      Fuse
+    },
     data() {
       return {
         observer: null,
@@ -46,36 +50,57 @@
       ...mapGetters([
         "getAirports",
         "getDepartmentCityCode",
-        "getCityNameByCode"
+        "getCityNameByCode",
+        "getArrivalCityCode",
+        "getDepartmentCountry",
+        "getCityCountryByCode",
       ]),
       selected: {
         get() {
           if (this.getDepartmentCityCode) {
-            return this.getCityNameByCode(this.getDepartmentCityCode) + ' / ' + this.getDepartmentCityCode;
+            return this.getCityNameByCode(this.getDepartmentCityCode) + ' / ' + this.getCityCountryByCode(this.getDepartmentCityCode);
           } else {
             return null;
           }
         },
         set(value) {
           this.setDepartmentCityCode(value.code);
-          this.setDepartmentMainCityCode(value.mainCityCode);
+          this.setDepartmentCountry(this.getCityCountryByCode(this.getDepartmentCityCode));
+          if(value.city_code) {
+            this.setDepartmentMainCityCode(value.city_code)
+          }
         },
       },
-      filtered() {
-        return this.getAirports.filter((city) =>
-          city.label.toLowerCase().includes(this.search.toLowerCase())
-        );
+      findRelated() {
+        if(this.getArrivalCityCode) {
+          return this.getAirports.find((airport) => airport.code == this.getArrivalCityCode)?.connection
+        } else {
+          return this.getAirports;
+        }
+        
       },
       paginated() {
-        return this.filtered.slice(0, this.limit);
+          return this.findRelated.slice(0, this.limit);
       },
       hasNextPage() {
-        return this.paginated.length < this.filtered.length;
+          return this.paginated.length < this.findRelated.length;
       },
     },
     methods: {
-      ...mapActions(["setDepartmentCityCode", "setDepartmentMainCityCode"]),
-      
+      ...mapActions([
+        "setDepartmentCityCode",
+        "setDepartmentMainCityCode",
+        "setDepartmentCountry"
+      ]),
+      fuseSearch(options, search) {
+        const fuse = new Fuse(options, {
+          keys: ["city_name", "country_name", "code", "is_new", "city_name_uk", "city_name_en", "country_name_en", "country_name_uk"],
+          threshold: 0.1,
+        });
+        return search.length
+          ? fuse.search(search).map(({ item }) => item)
+          : fuse.list;
+      },
       async onOpen() {
         if (this.hasNextPage) {
           await this.$nextTick();
@@ -117,7 +142,7 @@
       }
     }
   }
-
+  
   .errorMessage {
     color: red;
     font-weight: bold;
@@ -127,5 +152,21 @@
   {
     display: none;
   }
-  
+  .label {
+    margin-bottom: 0;
+    font-size: 14px;
+  }
+  .in-new {
+    font-size: 9px;
+    padding: 3px;
+    margin-left: 5px;
+    background-color: #1B73CD;
+    border-radius: 5px;
+    color: #fff;
+  }
+  .code {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
 </style>

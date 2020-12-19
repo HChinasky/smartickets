@@ -230,7 +230,6 @@
         "getCityDepartmentDate",
         "allAircrafts",
         "getPassengersByType",
-        "aircrafts"
       ]),
       getCountAdult() {
         return this.getPassengersByType('ADT')

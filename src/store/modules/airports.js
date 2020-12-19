@@ -6,6 +6,10 @@ const state = {
   departmentCityCode: null,
   arrivalCityCode: null,
 
+
+  departmentCountry: null,
+  arrivalCountry: null,
+
   departmentMainCityCode: null,
   arrivalMainCityCode: null,
 
@@ -21,6 +25,7 @@ const getters = {
     return state.airports.find((airport) => airport.code === code);
   },
   getDepartmentCityCode: (state) => state.departmentCityCode,
+  getDepartmentCountry: (state) => state.departmentCountry,
   getArrivalCityCode: (state) => state.arrivalCityCode,
 
   getDepartmentMainCityCode: (state) => state.departmentMainCityCode,
@@ -32,10 +37,13 @@ const getters = {
   getCityArrivalDate: (state) => state.cityArrivalDate,
 
   getCityNameByCode: (state) => (code) => {
-    return state.airports.find((cities) => cities.code === code)?.label;
+    return state.airports.find((cities) => cities.code === code).city_name;
   },
-  getMainCityNameByCode: (state) => (code) => {
-    return state.airports.find((cities) => cities.code === code)?.mainCity;
+  getSecondCityNameByCode: (state) => (code) => {
+    return state.airports.find((cities) => cities.code === code).second_city_name;
+  },
+  getCityCountryByCode: (state) => (code) => {
+    return state.airports.find((cities) => cities.code === code).country_name;
   },
 };
 
@@ -47,30 +55,39 @@ const actions = {
       throw new Error(response.data.msg);
     } else {
 
-      var airports = response.data.data.airports.filter((airport) => airport.check_in_allow == "1")
-                      .map((airport) => ({
-                        label: i18n.locale == "uk" ? airport.name_uk : airport.name_en,
-                        mainCity: i18n.locale == "uk" ? airport.city_name_uk : airport.city_name_en,
-                        mainCityCode: airport.city_code,
-                        code: airport.code,
-                        terminal: airport.terminal,
-                      }));
+      var airports = response.data.data.airports.map((airport) => ({
+        city_code: airport.city_code,
+        label: i18n.locale == "uk" ? airport.city_name_uk : airport.city_name_en,
+        city_name:  i18n.locale == "uk" ? airport.city_name_uk : airport.city_name_en,
+        second_city_name:  i18n.locale == "uk" ? airport.name_uk : airport.name_en,
+        country_name:  i18n.locale == "uk" ? airport.country_name_uk : airport.country_name_en,
+        code: airport.code,
+        is_new: airport.is_new,
+        terminal: airport.terminal,
+        connection: airport.connections
+      }));
       commit("setAirports", airports);
       commit("setPaymentId", response.data.payment_sid);
       commit("SET_DEV_SKYUP_LOGIN_REQUIRED", response.data.NEED_AUTH_SkyUp);
     }
   },
+  setDepartmentCountry({ commit }, data) {
+    commit("updateCountryDepartment", data);
+  },
+  setArrivalCountry({ commit }, data) {
+    commit("updateCountryArrival", data);
+  },
   setDepartmentCityCode({ commit }, data) {
     commit("updateDepartmentCityCode", data);
-  },
-  setArrivalCityCode({ commit }, data) {
-    commit("updateArrivalCityCode", data);
   },
   setDepartmentMainCityCode({ commit }, data) {
     commit("updateDepartmentMainCityCode", data);
   },
   setArrivalMainCityCode({ commit }, data) {
     commit("updateArrivalMainCityCode", data);
+  },
+  setArrivalCityCode({ commit }, data) {
+    commit("updateArrivalCityCode", data);
   },
 }
 
@@ -85,6 +102,12 @@ const mutations = {
     state.payment_sid = payment_sid;
     localStorage.setItem("payment_sid", payment_sid); //FIXME
   },
+  updateCountryDepartment(state, country) {
+    state.departmentCountry = country;
+  },
+  updateCountryArrival(state, country) {
+    state.arrivalCountry = country;
+  },
   updateDepartmentCityCode(state, city) {
     state.departmentCityCode = city;
   },
@@ -94,14 +117,14 @@ const mutations = {
   updateCityArrivalDate(state, date) {
     state.cityArrivalDate = date;
   },
-  updateCityDepartmentDate(state, date) {
-    state.cityDepartmentDate = date;
-  },
   updateDepartmentMainCityCode(state, date) {
     state.departmentMainCityCode = date;
   },
   updateArrivalMainCityCode(state, date) {
     state.arrivalMainCityCode = date;
+  },
+  updateCityDepartmentDate(state, date) {
+    state.cityDepartmentDate = date;
   },
   SET_DEV_SKYUP_LOGIN_REQUIRED(state, isRequired) {
     state.isDevSkyUpLoginRequired = isRequired;

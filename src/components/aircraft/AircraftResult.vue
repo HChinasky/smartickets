@@ -286,7 +286,7 @@
     },
     computed: {
       ...mapGetters([
-        "getMainCityNameByCode",
+        "getCityNameByCode",
         "getCityDepartmentDate",
         "getCityArrivalDate",
         "getDepartmentCityCode",
@@ -312,10 +312,10 @@
         return false
       },
       departmentCityName() {
-        return this.getMainCityNameByCode(this.getDepartmentCityCode);
+        return this.getCityNameByCode(this.getDepartmentCityCode);
       },
       arrivalCityName() {
-        return this.getMainCityNameByCode(this.getArrivalCityCode);
+        return this.getCityNameByCode(this.getArrivalCityCode);
       },
       parseDepartmentFlights() {
         let departmentFlight = [];

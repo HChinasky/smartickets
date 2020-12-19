@@ -4,31 +4,33 @@
         class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
         v-model="selected"
         :options="paginated"
-        :filterable="true"
-        :limit="limit"
+        :filter="fuseSearch"
         :clearable="false"
-        :placeholder="$t('flyTo')"
+        :limit="limit"
+        :placeholder="$t('flyFrom')"
         @open="onOpen"
         @close="onClose"
-        @search="(query) => (search = query)"
     >
       <template #list-footer v-if="hasNextPage">
-        <li ref="load" class="loader">Loading more options...</li>
+        <li ref="load" class="loader"></li>
       </template>
-      <template v-slot:option="option">
-        {{ option.label }} / {{ option.code }}
+      <template #option="{ code, is_new}">
+          <span class="label">{{ getCityNameByCode(code) }} / {{ getCityCountryByCode(code) }}</span>
+          <small class="code">({{ code }})</small>
+          <span class="in-new" v-show="is_new == '1'">new</span>
       </template>
     </v-select>
   </span>
 </template>
 
 <script>
+  import Fuse from "fuse.js";
   import { mapGetters, mapActions } from "vuex";
   export default {
     name: "SelectArrivalAircraft",
     data: () => ({
       observer: null,
-      limit: 3,
+      limit: 10,
       search: "",
     }),
     mounted() {
@@ -38,37 +40,56 @@
       ...mapGetters([
         "getAirports",
         "getArrivalCityCode",
-        "getCityNameByCode"
+        "getDepartmentCityCode",
+        "getCityNameByCode",
+        "getCityCountryByCode"
       ]),
       selected: {
         get() {
           if (this.getArrivalCityCode) {
-            return this.getCityNameByCode(this.getArrivalCityCode) + ' / ' + this.getArrivalCityCode;
+            return this.getCityNameByCode(this.getArrivalCityCode) + ' / ' + this.getCityCountryByCode(this.getArrivalCityCode);
           } else {
             return null;
           }
         },
         set(value) {
           this.setArrivalCityCode(value.code);
-          this.setArrivalMainCityCode(value.mainCityCode);
-        },
+          this.setArrivalCountry(this.getCityCountryByCode(this.getArrivalCityCode));
+          if(value.city_code) {
+            this.setArrivalMainCityCode(value.city_code)
+          }
       },
-
-      filtered() {
-        return this.getAirports.filter((city) =>
-          city.label.toLowerCase().includes(this.search.toLowerCase())
-        );
+      },
+      findRelated() {
+        if(this.getDepartmentCityCode) {
+          return this.getAirports.find((airport) => airport.code == this.getDepartmentCityCode)?.connection
+        } else {
+          return this.getAirports;
+        }
+        
       },
       paginated() {
-        return this.filtered.slice(0, this.limit);
+        return this.findRelated.slice(0, this.limit);
       },
       hasNextPage() {
-        return this.paginated.length < this.filtered.length;
+        return this.paginated.length < this.findRelated.length;
       },
     },
     methods: {
-      ...mapActions(["setArrivalCityCode", "setArrivalMainCityCode"]),
+      ...mapActions(["setArrivalCityCode","setArrivalMainCityCode","setArrivalCountry"]),
 
+      fuseSearch(options, search) {
+        console.log(options)
+        const fuse = new Fuse(options, {
+          keys: ["code", "is_new", "city_name_uk", "city_name_en", "country_name_en", "country_name_uk"],
+          shouldSort: true,
+          threshold: 0.0,
+          includeMatches: true,
+        });
+        return search.length
+          ? fuse.search(search).map(({ item }) => item)
+          : fuse.list;
+      },
       async onOpen() {
         if (this.hasNextPage) {
           await this.$nextTick();
@@ -103,5 +124,21 @@
   .dropdown-input >>> .vs__open-indicator {
     fill: black;
     cursor: pointer;
+  }
+  .label {
+    margin-bottom: 0;
+    font-size: 14px;
+  }
+  .in-new {
+    font-size: 9px;
+    padding: 3px;
+    margin-left: 5px;
+    background-color: #1B73CD;
+    border-radius: 5px;
+    color: #fff;
+  }
+  .code {
+    font-size: 12px;
+    margin-left: 5px;
   }
 </style>
