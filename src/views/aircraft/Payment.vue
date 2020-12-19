@@ -401,9 +401,9 @@
       async savePromo() {
         await this.getCurrentPrice(this.promo).then((res) => {
           let priceWithDiscount = res.data.data.price_with_discount,
-              priceWithoutDiscount = res.data.data.price_without_discount;
+            priceWithoutDiscount = res.data.data.price_without_discount;
           this.fullPrice = priceWithoutDiscount.toFixed(2);
-          
+
           if(res.data.errors.length !== 0) {
             res.data.errors.forEach((err) => {
               this.$toasted.global.my_app_error({
@@ -413,7 +413,8 @@
           } else {
             if(priceWithDiscount !== priceWithoutDiscount) {
               this.priceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
-              var getPercent = ((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100;
+              var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
+              console.log(getPercent)
               this.setPromoCode(this.promo);
               this.$toasted.global.my_app_success({
                 message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
@@ -481,6 +482,7 @@
               });
           }
           if(!catchErr && checkDevUser === 0 && !networkError) {
+            this.setPromoCode("");
             await this.startPayment()
               .then((response) => {
                 var el = document.createElement("p");
@@ -516,7 +518,8 @@
         } else {
           if(priceWithDiscount !== priceWithoutDiscount) {
             this.beforeMountPriceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
-            var getPercent = ((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100;
+            var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
+            console.log(getPercent)
             this.setPromoCode(this.promo);
             this.$toasted.global.my_app_success({
               message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
