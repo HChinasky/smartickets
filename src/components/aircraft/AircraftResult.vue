@@ -272,7 +272,7 @@
       getRelatedDepartmentDate: {
         immediate: true,
         handler(newValue, oldValue) {
-          if (newValue && !oldValue) {
+          if (!oldValue) {
             this.toDate = newValue.filter((airports) => !airports.backward)
           }
           if (oldValue && oldValue.length !== 0) {
@@ -283,7 +283,6 @@
       getRelatedArrivalDate: {
         immediate: true,
         handler(newValue, oldValue) {
-          console.log(this.fromDate.length);
           if (this.fromDate.length == 0 && this.toDate) {
             this.fromDate = newValue.filter((airports) => airports.backward)
           }
