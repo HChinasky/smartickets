@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getArrivalDate", "getCityArrivalDate"]),
+    ...mapGetters(["getArrivalDate", "getCityArrivalDate", "getCityDepartmentDate"]),
     arrivalDate: {
       get() {
         if (this[this.getLink]) {
@@ -90,9 +90,11 @@ export default {
   },
   methods: {
     yesterday() {
-      return moment()
-        .subtract(1, "days")
-        .toDate();
+      if (this.hideHelpLinks) {
+        return moment(this.getCityDepartmentDate).subtract(1, "days").toDate();
+      } else {
+        return moment().subtract(1, "days").toDate();
+      }
     },
     twoMonth() {
       let monthDisabled = this.hideHelpLinks ? 180 : 60;
