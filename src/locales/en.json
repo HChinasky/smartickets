@@ -275,7 +275,7 @@
     "errorGender": "Please specify gender",
     "errorAgreeRules": "Please confirm that you are familiar with the rules",
     "errorPassportCodeLength": "This field must be 8 characters",
-    "errorFindTicket": "Sorry, but no flights were found on the date you selected, select the date closest to your",
+    "errorFindTicket": "Sorry, no flights were found for the date you selected. Choose another date closest to yours.",
     "errorPromoCode": "Promo code is invalid",
     "mustBeDifferentAirports": "Departure and arrival stations must be different",
     "passengersFAQ": "Information for passengers",

@@ -77,73 +77,7 @@
                 </form>
             </div>
           </Tab>
-          <Tab name="SkyUp">
-            <div class="cart-table__inner">
-              <h2>{{$t("refundTicketsSkyUp")}}:</h2>
-                <form>
-                  <div class="ticket-list" style="padding-top: 20px;">
-                    <div class="ticket-list__item">
-                      <div class="ticket-list__inner">
-                        <div class="ticket-list__passenger">
-                          <div class="ticket-list__group">
-                            <label class="ticket-list__label">{{
-                              $t("lastname")
-                            }}</label>
-                            <input
-                                id="surnameSkyUp"
-                                v-model.trim="surnameSkyUp"
-                                @blur="$v.surnameSkyUp.$touch()"
-                                class="ticket-list__input"
-                                type="text"
-                            />
-                          </div>
-                          <div class="ticket-list__group">
-                            <label class="ticket-list__label">{{
-                              $t("firstname")
-                            }}</label>
-                            <input
-                                class="ticket-list__input"
-                                id="nameSkyUp"
-                                v-model.trim="nameSkyUp"
-                                @blur="$v.nameSkyUp.$touch()"
-                                type="text"
-                            />
-                          </div>
-                          <div class="ticket-list__group">
-                            <label class="ticket-list__label">
-                             {{$t("ticketNumber")}}
-                            </label>
-                            <input
-                                id="docNumSkyUp"
-                                v-model="docNumSkyUp"
-                                @blur="$v.docNumSkyUp.$touch()"
-                                class="ticket-list__input"
-                            />
-                          </div>
-                          <div class="ticket-list__group">
-                            <label class="ticket-list__label">
-                             {{$t("purchaseDate")}}
-                            </label>
-                            <DatepickerRefund
-                                @changeRefundTicketDate="changeEventSkyUp($event)"
-                            ></DatepickerRefund>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-      
-                    <button
-                        class="cart-total__submit btn btn--black"
-                        style="margin-top: 15px;"
-                        v-promise-btn
-                        @click="onSubmitSkyUp()"
-                    >
-                      {{ $t("find") }}
-                    </button>
-                  </div>
-                </form>
-            </div>
-          </Tab>
+          
         </Tabs>
       </div>
     </section>

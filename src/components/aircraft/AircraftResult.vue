@@ -93,7 +93,7 @@
     </div>
     <div class="ts-form__submit" v-if="parseDepartmentFlights.length !== 0">
       <div class="passenger_faq">
-        <a :href="'https://skyup.aero/' + $i18n.locale + '/faq'" target="_blank">
+        <a :href="getLinklocale" target="_blank">
           <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
             <use
                 :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
@@ -267,22 +267,26 @@
       }
     },
     watch: {
-      getRelatedDepartmentDate(newValue, oldValue) {
-        if (newValue.length !== 0) {
-          this.toDate = newValue
-        } else if (oldValue.length !== 0) {
-          this.toDate = oldValue
-          
+      getRelatedDepartmentDate: {
+        immediate: true,
+        handler(newValue, oldValue) {
+          if (newValue.length !== 0) {
+            this.toDate = newValue
+          } else if (oldValue.length !== 0) {
+            this.toDate = oldValue
+          }
         }
       },
-      getRelatedArrivalDate(newValue, oldValue) {
-        if (newValue.length !== 0) {
-          this.fromDate = newValue
-        } else if (oldValue.length !== 0) {
-          this.fromDate = oldValue
-          
+      getRelatedArrivalDate: {
+        immediate: true,
+        handler(newValue, oldValue) {
+          if (newValue.length !== 0) {
+            this.fromDate = newValue
+          } else if (oldValue.length !== 0) {
+            this.fromDate = oldValue
+          }
         }
-      }
+      },
     },
     computed: {
       ...mapGetters([
@@ -354,9 +358,6 @@
         this.allAircrafts.additional_flights.filter((dep_date) => {
           if(!dep_date.backward) {
             depDate.push(dep_date);
-            if(this.toDate) {
-              this.toDate.push(dep_date)
-            }
           }
         })
         return depDate;
@@ -366,13 +367,17 @@
         this.allAircrafts.additional_flights.filter((arr_date) => {
           if(arr_date.backward) {
             arrDate.push(arr_date);
-            if(this.fromDate) {
-              this.fromDate.push(arr_date)
-            }
           }
         })
         return arrDate;
       },
+      getLinklocale() {
+        if (this.$i18n.locale == "uk") {
+          return "https://skyup.aero/uk/faq";
+        } else {
+          return  "https://skyup.aero/en/faq";
+        }
+      }
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
