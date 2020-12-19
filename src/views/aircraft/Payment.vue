@@ -415,13 +415,11 @@
               this.priceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
               var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
               console.log(getPercent)
-              this.setPromoCode(this.promo);
               this.$toasted.global.my_app_success({
                 message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
               });
             } else {
               this.priceDiscount = false;
-              this.setPromoCode("");
               this.$toasted.global.my_app_error({
                 message: this.$t("errorPromoCode"),
               });
@@ -482,7 +480,6 @@
               });
           }
           if(!catchErr && checkDevUser === 0 && !networkError) {
-            this.setPromoCode("");
             await this.startPayment()
               .then((response) => {
                 var el = document.createElement("p");
@@ -519,14 +516,12 @@
           if(priceWithDiscount !== priceWithoutDiscount) {
             this.beforeMountPriceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
             var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
-            console.log(getPercent)
-            this.setPromoCode(this.promo);
+            
             this.$toasted.global.my_app_success({
               message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
             });
           } else {
             this.beforeMountPriceDiscount = false;
-            this.setPromoCode("");
             this.$toasted.global.my_app_error({
               message: this.$t("errorPromoCode"),
             });

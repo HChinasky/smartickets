@@ -9,17 +9,11 @@
 </template>
 
 <script>
-  import { mapGetters } from "vuex";
   import AircraftResult from "../../components/aircraft/AircraftResult";
   export default {
     name: "Aircraft",
     components: {
       AircraftResult
-    },
-    computed: {
-      ...mapGetters([
-        "getResultId"
-      ]),
     },
     mounted() {
       this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
