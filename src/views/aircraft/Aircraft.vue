@@ -15,13 +15,19 @@
     components: {
       AircraftResult
     },
+    props: ["test"],
+    watch: {
+      test: {
+        immediate: true,
+        deep: true,
+        handler() {
+          this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
+        }
+      },
+    },
     mounted() {
       this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
     },
-    updated() {
-      this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
-    }
-
   };
 </script>
 <style lang="scss" scoped>

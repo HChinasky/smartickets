@@ -195,7 +195,7 @@
       </template>
     </section>
     <div ref="aircraftsView">
-      <router-view />
+      <router-view :test="allAircrafts" />
     </div>
   </span>
 </template>
