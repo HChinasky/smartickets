@@ -93,7 +93,7 @@
     </div>
     <div class="ts-form__submit" v-if="parseDepartmentFlights.length !== 0">
       <div class="passenger_faq">
-        <a :href="getLinklocale" target="_blank">
+        <a :href="'https://skyup.aero/' + $i18n.locale + '/faq'" target="_blank">
           <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
             <use
                 :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
@@ -270,20 +270,23 @@
       getRelatedDepartmentDate: {
         immediate: true,
         handler(newValue, oldValue) {
-          if (newValue.length !== 0) {
-            this.toDate = newValue
-          } else if (oldValue.length !== 0) {
-            this.toDate = oldValue
+          if (newValue && !oldValue) {
+            this.toDate = newValue.filter((airports) => !airports.backward)
+          }
+          if (oldValue && oldValue.length !== 0) {
+            this.toDate = oldValue.filter((airports) => !airports.backward)
           }
         }
       },
       getRelatedArrivalDate: {
         immediate: true,
         handler(newValue, oldValue) {
-          if (newValue.length !== 0) {
-            this.fromDate = newValue
-          } else if (oldValue.length !== 0) {
-            this.fromDate = oldValue
+          console.log(this.fromDate.length);
+          if (this.fromDate.length == 0 && this.toDate) {
+            this.fromDate = newValue.filter((airports) => airports.backward)
+          }
+          if (oldValue && oldValue.length !== 0) {
+            this.fromDate = oldValue.filter((airports) => airports.backward)
           }
         }
       },
@@ -370,13 +373,6 @@
           }
         })
         return arrDate;
-      },
-      getLinklocale() {
-        if (this.$i18n.locale == "uk") {
-          return "https://skyup.aero/uk/faq";
-        } else {
-          return  "https://skyup.aero/en/faq";
-        }
       }
     },
     methods: {
