@@ -7,7 +7,7 @@
         :filter="fuseSearch"
         :clearable="false"
         :limit="limit"
-        :placeholder="$t('flyFrom')"
+        :placeholder="$t('flyTo')"
         @open="onOpen"
         @close="onClose"
     >

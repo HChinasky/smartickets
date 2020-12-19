@@ -13,8 +13,6 @@
   import AircraftResult from "../../components/aircraft/AircraftResult";
   export default {
     name: "Aircraft",
-    props: {
-    },
     components: {
       AircraftResult
     },
@@ -22,23 +20,12 @@
       ...mapGetters([
         "getResultId"
       ]),
-      checkTypeTicket() {
-        return this.getResultId;
-      }
-    },
-    methods: {
-      handler(e) {
-        this.baggageTypeIconTo = e;
-      },
     },
     mounted() {
-
       this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
-//this.$refs.trains.scrollIntoView();
     },
     updated() {
       this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
-      //this.$refs.trains.scrollIntoView();
     }
 
   };
