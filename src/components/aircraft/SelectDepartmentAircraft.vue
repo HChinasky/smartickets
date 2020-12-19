@@ -58,7 +58,8 @@
       selected: {
         get() {
           if (this.getDepartmentCityCode) {
-            return this.getCityNameByCode(this.getDepartmentCityCode) + ' / ' + this.getCityCountryByCode(this.getDepartmentCityCode);
+            return this.getCityNameByCode(this.getDepartmentCityCode) + ' / ' +
+              this.getCityCountryByCode(this.getDepartmentCityCode) + ' (' + this.getDepartmentCityCode + ')';
           } else {
             return null;
           }

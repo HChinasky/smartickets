@@ -47,7 +47,8 @@
       selected: {
         get() {
           if (this.getArrivalCityCode) {
-            return this.getCityNameByCode(this.getArrivalCityCode) + ' / ' + this.getCityCountryByCode(this.getArrivalCityCode);
+            return this.getCityNameByCode(this.getArrivalCityCode) + ' / ' +
+              this.getCityCountryByCode(this.getArrivalCityCode) + '(' + this.getArrivalCityCode + ')';
           } else {
             return null;
           }
