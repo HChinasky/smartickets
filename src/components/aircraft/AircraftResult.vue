@@ -296,6 +296,13 @@
           }
         }
       },
+      allAircraft: {
+        immediate: true,
+        handler() {
+          this.baggageTypeIconFrom = null
+          this.baggageTypeIconTo = null
+        }
+      },
     },
     computed: {
       ...mapGetters([

@@ -110,6 +110,15 @@
         baggageType: Object,
       }
     },
+    watch: {
+      tickets: {
+        immediate: true,
+        deep: true,
+        handler() {
+          this.getIcon = null;
+        }
+      },
+    },
     computed: {
       ...mapGetters([
         "resultId",
