@@ -272,22 +272,27 @@
       getRelatedDepartmentDate: {
         immediate: true,
         handler(newValue, oldValue) {
-          if (!oldValue) {
-            this.toDate = newValue.filter((airports) => !airports.backward)
-          }
-          if (oldValue && oldValue.length !== 0) {
-            this.toDate = oldValue.filter((airports) => !airports.backward)
+          if(this.toDate && this.toDate.length === 0) {
+            if (!oldValue) {
+              this.toDate = newValue.filter((airports) => !airports.backward)
+            }
+            if (oldValue && oldValue.length !== 0) {
+              this.toDate = oldValue.filter((airports) => !airports.backward)
+            }
+            
           }
         }
       },
       getRelatedArrivalDate: {
         immediate: true,
         handler(newValue, oldValue) {
-          if (this.fromDate.length == 0 && this.toDate) {
-            this.fromDate = newValue.filter((airports) => airports.backward)
-          }
-          if (oldValue && oldValue.length !== 0) {
-            this.fromDate = oldValue.filter((airports) => airports.backward)
+          if(this.fromDate.length === 0) {
+            if (this.toDate) {
+              this.fromDate = newValue.filter((airports) => airports.backward)
+            }
+            if (oldValue && oldValue.length !== 0) {
+              this.fromDate = oldValue.filter((airports) => airports.backward)
+            }
           }
         }
       },
