@@ -84,7 +84,7 @@ export default {
         }
       },
       set(value) {
-        this.$store.commit(this.updateDate, moment(value, "DD.MM.YYYY"));
+        this.$store.commit(this.updateDate, value ? moment(value, "DD.MM.YYYY") : null);
       },
     },
   },
