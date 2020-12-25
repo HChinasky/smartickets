@@ -9,6 +9,8 @@
         @focusin.native="datepickerOpenedFunction"
         :input-class="'ts-form__input ts-form__date'"
         :popup-class="$route.meta.clientArea ? 'client-area' : ''"
+        :calendar-class="{'loading' : loading}"
+        :disabled="!this.getDepartmentCityCode || !this.getArrivalCityCode"
     >
       <datepicker>
         <span slot="afterDateInput" class="animated-placeholder">
@@ -39,6 +41,7 @@
         disabledDates: {
         },
         availableDates: [],
+        loading: false
       };
     },
     watch: {
@@ -46,7 +49,7 @@
         immediate: true,
         handler(newVal, oldVal) {
           let getAvailableDate = [];
-          if (this.getDepartmentCityCode && this.getDepartmentCityCode) {
+          if (this.getDepartmentCityCode && this.getArrivalCityCode) {
             if(newVal) {
               this.disabledDates = {
                 customPredictor: function(date) {
@@ -94,16 +97,16 @@
     methods: {
       ...mapActions(["fetchAvailableDate"]),
       async datepickerOpenedFunction() {
+        this.loading = true
         let payload = {
           date: new Date(),
           arrival: this.getArrivalCityCode,
           department: this.getDepartmentCityCode
         }
-        console.log(this.availableDates);
         await this.fetchAvailableDate(payload)
-          .then((res) => {
-            this.availableDates = res.data;
-          })
+          .then(() => {
+            this.loading = false;
+          }).catch((err) => {console.log(err)})
       },
       customFormatter(date) {
         return moment(date).format('DD.MM.YYYY');
@@ -126,6 +129,35 @@
     border: none;
     padding: 10px;
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    &.loading {
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(255,255,255,.7);
+        
+      }
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translatex(-50%);
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        border: 4px solid transparent;
+        border-top: 3px solid #3398FF;
+        border-radius: 50%;
+        animation: loading 1.5s infinite linear;
+        -moz-animation: loading 1.5s infinite linear;
+        -webkit-animation: loading 1.5s infinite linear;
+      }
+    }
     .next {
       &:after {
         border-left-color: #73879c;
@@ -172,5 +204,24 @@
         }
       }
     }
+  }
+  ::v-deep .ts-form__date {
+    &:disabled {
+      background-color: transparent;
+    }
+  }
+  @keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+
+  @-moz-keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+
+  @-webkit-keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
   }
 </style>

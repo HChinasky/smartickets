@@ -100,28 +100,27 @@
       &:disabled {
         opacity: .3;
       }
-
-  }
-  .button-component {
-    position: relative;
-    width: 100%;
-    .isLoading {
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 40%;
-      transform: translatex(-50%);
-      background-color: transparent;
-      width: 20px;
-      height: 20px;
-      border: 4px solid transparent;
-      border-top: 3px solid #3398FF;
-      border-radius: 50%;
-      animation: loading 1.5s infinite linear;
-      -moz-animation: loading 1.5s infinite linear;
-      -webkit-animation: loading 1.5s infinite linear;
     }
-  }
+    .button-component {
+      position: relative;
+      width: 100%;
+      .isLoading {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 40%;
+        transform: translatex(-50%);
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        border: 4px solid transparent;
+        border-top: 3px solid #3398FF;
+        border-radius: 50%;
+        animation: loading 1.5s infinite linear;
+        -moz-animation: loading 1.5s infinite linear;
+        -webkit-animation: loading 1.5s infinite linear;
+      }
+    }
   }
   @keyframes loading {
     0% {transform: rotate(0deg);}
