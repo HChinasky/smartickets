@@ -141,7 +141,7 @@
             </div>
           </div>
         </div>
-        <div class="person-info__card">
+        <div class="person-info__card mt-5">
           <div class="form-list">
             <div class="form-list__group">
               <label class="ticket-list__label">{{ $t('citizenship') }}</label>
@@ -377,8 +377,12 @@
     &:not(:first-child) {
       margin-top: 60px;
     }
-    
     .person-info__card {
+      &.mt-5 {
+        @include respond-until(sm) {
+          margin-top: 40px;
+        }
+      }
       @include make-col(6, $grid-columns, 0);
       @include respond-until(sm) {
         @include make-col(12, $grid-columns, 0);

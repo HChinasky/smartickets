@@ -69,11 +69,11 @@
           <div class="price-ticket">
             <p v-if="!getIcon"><span>{{ this.tickets[0].amount.UAH.toFixed(2) }}</span> грн</p>
             <p v-else><span>{{ getPrice }}</span> грн</p>
-            <p class="ticket-label_mobile" v-if="!getIcon">basic</p>
+            <p class="ticket-label_mobile" v-if="!getIcon">Basic</p>
             <p class="ticket-label_mobile" v-else>{{ getIcon.title }}</p>
           </div>
           <div class="type-ticket">
-            <p v-if="!getIcon">basic</p>
+            <p v-if="!getIcon">Basic</p>
             <p v-else>{{ getIcon.title }}</p>
           </div>
           <div class="choose-ticket">
@@ -583,6 +583,7 @@
         }
         .ticket-label_mobile {
           display: none;
+          text-transform: capitalize;
           @include respond-to(md) {
             display: block;
             color: #3398FF;
