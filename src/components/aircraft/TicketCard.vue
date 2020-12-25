@@ -628,10 +628,11 @@
           display: none;
         }
         p {
-          margin: 0 0 0 5px;
-          color: $BORDER_BOTTOM_LINK_COLOR;
           font-weight: 200;
           font-size: 17px;
+          margin: 0 0 0 5px;
+          color: $BORDER_BOTTOM_LINK_COLOR;
+          text-transform: capitalize;
         }
       }
       .choose-ticket {

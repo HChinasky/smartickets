@@ -2,7 +2,7 @@
   <section class="card-aircraft">
     <div class="container">
       <div class="step-back__block">
-        <a v-back class="back-to-site__link">
+        <router-link class="back-to-site__link" :to="{name : 'SearchAircraftTicket'}">
           <svg
               width="36"
               height="23"
@@ -16,8 +16,8 @@
                 stroke-width="2"
             />
           </svg>
-          {{ $t('backToChooseTypeTrips') }}
-        </a>
+          {{ $t('toSearchPage') }}
+        </router-link>
       </div>
       <h1>{{ $t('whoFlies') }}</h1>
       <passengerCart @checkinput="handlerIcon" />
@@ -128,6 +128,8 @@
         .back-to-site__link {
           cursor: pointer;
           display: flex;
+          color: #000;
+          text-decoration: none;
           align-items: center;
           transition: color .2s;
           &:hover {

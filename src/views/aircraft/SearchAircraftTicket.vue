@@ -9,7 +9,7 @@
       <template v-if="!$appConfig.siteOnMaintenance">
       <div class="container">
         <div class="step-back__block">
-          <a v-back class="back-to-site__link">
+          <router-link class="back-to-site__link" to="/">
             <svg
                 width="36"
                 height="23"
@@ -24,7 +24,7 @@
               />
             </svg>
             {{ $t('backToChooseTypeTrips') }}
-          </a>
+          </router-link>
         </div>
         <div class="ts-form">
         <h2 class="ticket-search__title">{{ $t("searchSkyUpTicket") }}</h2>
@@ -222,6 +222,8 @@
         "getCityDepartmentDate",
         "allAircrafts",
         "getPassengersByType",
+        "getDepartmentMainCityCode",
+        "getArrivalMainCityCode"
       ]),
       getCountAdult() {
         return this.getPassengersByType('ADT')
@@ -249,7 +251,9 @@
         "setDepartmentCityCode",
         "regClient",
         "updateClientInfo",
-        "clearPrice"
+        "clearPrice",
+        "setArrivalMainCityCode",
+        "setDepartmentMainCityCode",
       ]),
       increase: function(typePassenger){
         this.$store.commit("addPassengerRow", typePassenger);
@@ -319,6 +323,10 @@
         const temp = this.getArrivalCityCode;
         this.setArrivalCityCode(this.getDepartmentCityCode);
         this.setDepartmentCityCode(temp);
+
+        const tempMain = this.getArrivalMainCityCode;
+        this.setArrivalMainCityCode(this.getDepartmentMainCityCode);
+        this.setDepartmentMainCityCode(tempMain);
       },
     },
     mounted() {
@@ -358,6 +366,8 @@
         .back-to-site__link {
           cursor: pointer;
           display: flex;
+          color: #000;
+          text-decoration: none;
           align-items: center;
           transition: color .2s;
           &:hover {
