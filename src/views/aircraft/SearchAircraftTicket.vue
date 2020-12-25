@@ -187,7 +187,7 @@
       </template>
     </section>
     <div ref="aircraftsView">
-      <router-view :test="allAircrafts" />
+      <router-view :test="allAircrafts" v-if="allAircrafts.length !== 0"/>
     </div>
   </span>
 </template>

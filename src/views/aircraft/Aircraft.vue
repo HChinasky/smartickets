@@ -20,8 +20,9 @@
       test: {
         immediate: true,
         deep: true,
-        handler() {
-          this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
+        handler(newVal) {
+          if(newVal.length !== 0)
+            this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
         }
       },
     },

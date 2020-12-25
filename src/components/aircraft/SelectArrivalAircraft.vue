@@ -43,6 +43,7 @@
           if(newValue) {
             this.$store.commit('updateCityDepartmentDate', null);
             this.$store.commit('updateCityArrivalDate', null);
+            this.resetCartState();
           }
         }
       }
@@ -94,7 +95,8 @@
         "setArrivalMainCityCode",
         "setArrivalCountry",
         "updateCityDepartmentDate",
-        "updateCityArrivalDate"
+        "updateCityArrivalDate",
+        "resetCartState"
       ]),
 
       fuseSearch(options, search) {
