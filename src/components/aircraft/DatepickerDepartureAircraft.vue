@@ -208,6 +208,8 @@
   ::v-deep .ts-form__date {
     &:disabled {
       background-color: transparent;
+      cursor: not-allowed;
+      border-bottom-color: rgba(0,0,0,.2);
     }
   }
   @keyframes loading {
