@@ -1,8 +1,10 @@
 import api from "../../api/api";
 import i18n from "../../i18n";
+import moment from "moment";
 
 const state = {
   airports: [],
+  availableDates: [],
   departmentCityCode: null,
   arrivalCityCode: null,
 
@@ -21,6 +23,7 @@ const state = {
 
 const getters = {
   getAirports: (state) => state.airports,
+  getAvailableDates: (state) => state.availableDates,
   getAirportsNameById: (state) => (code) => {
     return state.airports.find((airport) => airport.code === code);
   },
@@ -71,6 +74,24 @@ const actions = {
       commit("SET_DEV_SKYUP_LOGIN_REQUIRED", response.data.NEED_AUTH_SkyUp);
     }
   },
+  async fetchAvailableDate({ getters, commit }, payload) {
+    let dateFormat = payload.date ? moment(payload.date).format("DD-MM-YYYY") : moment(new Date()).format("DD-MM-YYYY")
+    const params = {
+      "type": "SkyUp",
+      "lng_id": 1,
+      "departure": payload.department,
+      "arrival": payload.arrival,
+      "date": dateFormat,
+      "for_next_days": 365,
+      "adt": getters.getPassengersByType("ADT"),
+      "chd": getters.getPassengersByType("CHD"),
+      "inf": getters.getPassengersByType("INF"),
+      "group_by_date": 1
+    }
+    const response = await api.availableDate(params);
+    commit("setAvailableDates", response.data);
+    return response;
+  },
   setDepartmentCountry({ commit }, data) {
     commit("updateCountryDepartment", data);
   },
@@ -94,6 +115,9 @@ const actions = {
 const mutations = {
   setAirports: (state, airports) => {
     state.airports = airports;
+  },
+  setAvailableDates: (state, airports) => {
+    state.availableDates = airports;
   },
   clearAircrafts(state) {
     state.aircrafts = null;

@@ -36,13 +36,25 @@
     mounted() {
       this.observer = new IntersectionObserver(this.infiniteScroll);
     },
+    watch: {
+      getArrivalCityCode: {
+        immediate: true,
+        handler(newValue) {
+          if(newValue) {
+            this.$store.commit('updateCityDepartmentDate', null);
+            this.$store.commit('updateCityArrivalDate', null);
+          }
+        }
+      }
+    },
     computed: {
       ...mapGetters([
         "getAirports",
         "getArrivalCityCode",
         "getDepartmentCityCode",
         "getCityNameByCode",
-        "getCityCountryByCode"
+        "getCityCountryByCode",
+        "getArrivalCityCode"
       ]),
       selected: {
         get() {
@@ -77,7 +89,13 @@
       },
     },
     methods: {
-      ...mapActions(["setArrivalCityCode","setArrivalMainCityCode","setArrivalCountry"]),
+      ...mapActions([
+        "setArrivalCityCode",
+        "setArrivalMainCityCode",
+        "setArrivalCountry",
+        "updateCityDepartmentDate",
+        "updateCityArrivalDate"
+      ]),
 
       fuseSearch(options, search) {
         console.log(options)

@@ -46,10 +46,22 @@
     mounted() {
       this.observer = new IntersectionObserver(this.infiniteScroll);
     },
+    watch: {
+      getDepartmentCityCode: {
+        immediate: true,
+        handler(newValue) {
+          if(newValue) {
+            this.$store.commit('updateCityDepartmentDate', null);
+            this.$store.commit('updateCityArrivalDate', null);
+          }
+        }
+      }
+    },
     computed: {
       ...mapGetters([
         "getAirports",
         "getDepartmentCityCode",
+        "getArrivalCityCode",
         "getCityNameByCode",
         "getArrivalCityCode",
         "getDepartmentCountry",
@@ -91,7 +103,9 @@
       ...mapActions([
         "setDepartmentCityCode",
         "setDepartmentMainCityCode",
-        "setDepartmentCountry"
+        "setDepartmentCountry",
+        "updateCityDepartmentDate",
+        "updateCityArrivalDate"
       ]),
       fuseSearch(options, search) {
         const fuse = new Fuse(options, {

@@ -3,9 +3,13 @@ import moment from "moment";
 import api from "../../api/api";
 import i18n from "../../i18n";
 
-const state = {
-  aircrafts: [],
-};
+const getDefaultState = () => {
+  return {
+    aircrafts: []
+  }
+}
+
+const state = getDefaultState()
 
 const getters = {
   allAircrafts: (state) => state.aircrafts,
@@ -28,10 +32,14 @@ const actions = {
 
     if (response.data.data.flights.length !== 0 || response.data.data.additional_flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
+      return response.data.data;
     } else {
       commit("clearAircrafts");
       throw new Error(i18n.t("noFlight"));
     }
+  },
+  resetCartState ({ commit }) {
+    commit('resetState')
   },
 };
 
@@ -39,6 +47,11 @@ const mutations = {
   updateAircrafts(state, aircrafts) {
     state.aircrafts = aircrafts;
   },
+  resetState (state) {
+    // Merge rather than replace so we don't lose observers
+    // https://github.com/vuejs/vuex/issues/1118
+    Object.assign(state, getDefaultState())
+  }
 };
 
 export default {

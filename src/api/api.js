@@ -9,21 +9,12 @@ const apiClient = axios.create({
   },
 });
 
-const apiClientTest = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL,
-  withCredentials: false,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
-
 export default {
   registerClient(params) {
     return apiClient.post(
       "/Client/Register" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         lng: i18n.locale == "uk" ? "UA" : "EN",
         uuid: params.uuid,
@@ -47,8 +38,8 @@ export default {
   fetchTrains(params) {
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         req_level: "1.1",
         lng: i18n.locale == "uk" ? "UA" : "EN",
@@ -71,8 +62,8 @@ export default {
   fetchTrain(params) {
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         req_level: "1.2",
         lng: i18n.locale == "uk" ? "UA" : "EN",
@@ -88,8 +79,8 @@ export default {
   fetchWagon(params) {
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         req_level: "1.3",
         lng: i18n.locale == "uk" ? "UA" : "EN",
@@ -129,8 +120,8 @@ export default {
     }
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       request
     );
   },
@@ -221,24 +212,24 @@ export default {
   },
 
   fetchAircrafts(params) {
-    return apiClientTest.post(
+    return apiClient.post(
       "/FrontEnd/API/Service/flights/search/",
       {
-              "type": "SkyUp",
-              "payment_sid": params.payment_sid,
-              "adt": params.adult,
-              "chd": params.child,
-              "inf": params.inf,
-              "departure": params.city_from,
-              "arrival": params.city_to,
-              "date": params.dep_date,
-              ...(params.arr_date && {"dateback": params.arr_date})
-            }
+        "type": "SkyUp",
+        "payment_sid": params.payment_sid,
+        "adt": params.adult,
+        "chd": params.child,
+        "inf": params.inf,
+        "departure": params.city_from,
+        "arrival": params.city_to,
+        "date": params.dep_date,
+        ...(params.arr_date && {"dateback": params.arr_date})
+      }
     );
   },
 
   fetchCity() {
-    return apiClientTest.post(
+    return apiClient.post(
       "/FrontEnd/API/Service/reference/city",
       {
         "value": "all",
@@ -248,7 +239,7 @@ export default {
   },
 
   fetchAirports() {
-    return apiClientTest.post(
+    return apiClient.post(
       "/FrontEnd/API/Service/reference/airport",
       {
         "value": "all",
@@ -258,15 +249,22 @@ export default {
   },
 
   bookingTicketAircraft(params) {
-    return apiClientTest.post(
+    return apiClient.post(
       "/FrontEnd/API/Service/flights/book",
       params
     )
   },
 
   getPrice(params) {
-    return apiClientTest.post(
+    return apiClient.post(
       "/FrontEnd/API/Service/flights/get-price",
+      params
+    )
+  },
+
+  availableDate(params) {
+    return apiClient.post(
+      "/FrontEnd/API/Service/reference/flight-dates",
       params
     )
   }

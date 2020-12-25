@@ -43,11 +43,7 @@
                     $t("departureDateShort")
                   }}</label>
 
-                  <DatepickerDeparture
-                      :hide-help-links="true"
-                      :get-link="'getCityDepartmentDate'"
-                      :update-date="'updateCityDepartmentDate'"
-                  />
+                  <DatepickerDepartureAircraft/>
                 </div>
                 <button
                     class="ts-form__switch mobile"
@@ -66,11 +62,7 @@
                   <label class="ts-form__label">{{
                     $t("back")
                   }}</label>
-                  <DatepickerArrival
-                      :hide-help-links="true"
-                      :get-link="'getCityArrivalDate'"
-                      :update-date="'updateCityArrivalDate'"
-                  />
+                  <DatepickerArrivalAircraft />
                 </div>
               </div>
             </div>
@@ -204,8 +196,8 @@
   import { mapMultiRowFields } from 'vuex-map-fields';
   import SelectDepartmentAircraft from "../../components/aircraft/SelectDepartmentAircraft"
   import SelectArrivalAircraft from "../../components/aircraft/SelectArrivalAircraft";
-  import DatepickerDeparture from "../../components/DatepickerDeparture";
-  import DatepickerArrival from "../../components/DatepickerArrival";
+  import DatepickerDepartureAircraft from "../../components/aircraft/DatepickerDepartureAircraft";
+  import DatepickerArrivalAircraft from "../../components/aircraft/DatepickerArrivalAircraft";
   import { mapGetters, mapActions, mapMutations } from "vuex";
 
   export default {
@@ -213,8 +205,8 @@
     components: {
       SelectDepartmentAircraft,
       SelectArrivalAircraft,
-      DatepickerDeparture,
-      DatepickerArrival
+      DatepickerDepartureAircraft,
+      DatepickerArrivalAircraft
     },
     data() {
       return {
@@ -416,6 +408,7 @@
             }
             
             .ts-form__group {
+              position: relative;
               @include respond-until(m) {
                 width: 100%;
               }
