@@ -35,29 +35,45 @@
                   $t("cityOfDeparture")
                 }}</label>
 
-                <SelectDepartmentAircraft ref="departmentSelect"/>
+                <SelectDepartmentAircraft ref="departmentSelect" />
+              </div>
+              <div class="switch-btn__wrap">
+                <button
+                    class="ts-form__switch mobile"
+                    type="button"
+                    @click="switchCities()"
+                >
+                  <svg width="40" height="37" viewBox="0 0 40 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.73998 35.3032L2.00012 28.1421L8.73998 20.981" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2.42132 28.1421L38 28.1421" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M31.2601 1.73347L38 8.89457L31.2601 16.0557" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M37.5788 8.89454L2.00012 8.89453" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="ts-form__group ts-form__group--swap mobile">
+                <label class="ts-form__label">{{
+                  $t("cityOfArrival")
+                }}</label>
+                <SelectArrivalAircraft/>
               </div>
               <div class="ts-form__row">
-                <div class="ts-form__group">
+                <div class="ts-form__group desktop">
                   <label class="ts-form__label">{{
                     $t("departureDateShort")
                   }}</label>
 
                   <DatepickerDepartureAircraft/>
                 </div>
-                <button
-                    class="ts-form__switch mobile"
-                    type="button"
-                    @click="switchCities()"
-                >
-              <svg width="40" height="37" viewBox="0 0 40 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8.73998 35.3032L2.00012 28.1421L8.73998 20.981" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2.42132 28.1421L38 28.1421" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
-                <path d="M31.2601 1.73347L38 8.89457L31.2601 16.0557" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M37.5788 8.89454L2.00012 8.89453" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
-              </svg>
+                
+                <div class="ts-form__group mobile">
+                  <label class="ts-form__label">{{
+                    $t("departureDateShort")
+                  }}</label>
 
-            </button>
+                  <DatepickerDepartureAircraft/>
+                </div>
+                
                 <div class="ts-form__group">
                   <label class="ts-form__label">{{
                     $t("back")
@@ -80,7 +96,7 @@
 
             </button>
             <div class="ts-form__where-to">
-              <div class="ts-form__group ts-form__group--swap">
+              <div class="ts-form__group ts-form__group--swap desktop">
                 <label class="ts-form__label">{{
                   $t("cityOfArrival")
                 }}</label>
@@ -419,8 +435,18 @@
             
             .ts-form__group {
               position: relative;
+              &.mobile {
+                display: none;
+              }
               @include respond-until(m) {
                 width: 100%;
+                &.desktop {
+                  display: none;
+                }
+                &.mobile {
+                  display: block;
+                  margin-bottom: 25px;
+                }
               }
               ::v-deep .mx-datepicker {
                 @include respond-until(l) {
@@ -576,6 +602,10 @@
               }
             }
           }
+          .switch-btn__wrap {
+            display: flex;
+            justify-content: center;
+          }
           .ts-form__switch {
             border: none;
             background-color: transparent;
@@ -591,7 +621,7 @@
               display: none;
               @include respond-until(m) {
                 position: relative;
-                top: 45px;
+                top: 30px;
                 display: flex;
                 justify-content: center;
                 margin: 20px 0;
