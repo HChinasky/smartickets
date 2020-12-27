@@ -38,44 +38,8 @@
       return {
         en: en,
         uk: uk,
-        disabledDates: {
-        },
-        availableDates: [],
         loading: false
       };
-    },
-    watch: {
-      getAvailableDates: {
-        immediate: true,
-        handler(newVal, oldVal) {
-          let getAvailableDate = [];
-          if (this.getDepartmentCityCode && this.getArrivalCityCode) {
-            if(newVal) {
-              this.disabledDates = {
-                customPredictor: function(date) {
-                  getAvailableDate = newVal.data.filter((dep) => moment(dep.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
-                  if (getAvailableDate.length !== 0) {
-                    return false
-                  } else {
-                    return true
-                  }
-                }
-              };
-            } else {
-              this.disabledDates = {
-                customPredictor: function(date) {
-                  getAvailableDate = oldVal.data.filter((dep) => moment(dep.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
-                  if (getAvailableDate.length !== 0) {
-                    return false
-                  } else {
-                    return true
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
     },
     computed: {
       ...mapGetters([
@@ -85,6 +49,23 @@
         "getArrivalCityCode",
         "getDepartmentCityCode",
       ]),
+      disabledDates: {
+        get() {
+          var self = this,
+              availableDates = self.getAvailableDates.data;
+          return {
+            customPredictor: function (date, index) {
+              console.log(index)
+              if (self.getDepartmentCityCode && self.getArrivalCityCode) {
+                const getAvailableDate = availableDates.filter((department) => moment(department.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
+                if (getAvailableDate.length === 0) {
+                  return true
+                }
+              }
+            }
+          }
+        }
+      },
       departureDate: {
         get() {
           return moment(this.getCityDepartmentDate).format('MM.DD.YYYY');

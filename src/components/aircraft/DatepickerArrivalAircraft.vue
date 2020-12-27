@@ -1,7 +1,6 @@
 <template>
   <span class="datepicker-wrap">
     <date-picker
-        :disabled-dates="disabledDates"
         :format="customFormatter"
         v-model="arrivalDate"
         :language="uk"
@@ -34,46 +33,8 @@
       return {
         en: en,
         uk: uk,
-        test: "",
-        disabledDates: {
-        },
-        availableDates: [],
         loading: false
       };
-    },
-    watch: {
-      getAvailableDates: {
-        immediate: true,
-        handler(newVal, oldVal) {
-          let getAvailableDate = [];
-          if(this.getArrivalCityCode && this.getDepartmentCityCode) {
-            if(newVal) {
-              this.disabledDates = {
-                to: moment(this.getCityDepartmentDate).subtract(1, "days").toDate(),
-                customPredictor: function(date) {
-                  getAvailableDate = newVal.data.filter((arrival) => moment(arrival.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
-                  if (getAvailableDate.length !== 0) {
-                    return false
-                  } else {
-                    return true
-                  }
-                }
-              };
-            } else {
-              this.disabledDates = {
-                customPredictor: function(date) {
-                  getAvailableDate = oldVal.data.filter((arrival) => moment(arrival.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
-                  if (getAvailableDate.length !== 0) {
-                    return false
-                  } else {
-                    return true
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
     },
     computed: {
       ...mapGetters([
@@ -83,6 +44,24 @@
         "getArrivalCityCode",
         "getDepartmentCityCode",
       ]),
+      disabledDates: {
+        get() {
+          var self = this,
+            availableDates = self.getAvailableDates.data;
+          return {
+            to: moment(this.getCityDepartmentDate).subtract(1, "days").toDate(),
+            customPredictor: function (date, index) {
+              console.log(index)
+              if (self.getDepartmentCityCode && self.getArrivalCityCode) {
+                const getAvailableDate = availableDates.filter((arrival) => moment(arrival.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
+                if (getAvailableDate.length === 0) {
+                  return true
+                }
+              }
+            }
+          }
+        }
+      },
       arrivalDate: {
         get() {
           return moment(this.getCityArrivalDate).format('MM.DD.YYYY');
