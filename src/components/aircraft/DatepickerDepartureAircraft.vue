@@ -54,8 +54,7 @@
           var self = this,
               availableDates = self.getAvailableDates.data;
           return {
-            customPredictor: function (date, index) {
-              console.log(index)
+            customPredictor: function (date) {
               if (self.getDepartmentCityCode && self.getArrivalCityCode) {
                 const getAvailableDate = availableDates.filter((department) => moment(department.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
                 if (getAvailableDate.length === 0) {
