@@ -4,9 +4,7 @@ import moment from "moment";
 
 const state = {
   airports: [],
-  availableDates: {
-    data:[{}]
-  },
+  availableDates: [{}],
   departmentCityCode: null,
   arrivalCityCode: null,
 
