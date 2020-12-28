@@ -74,7 +74,7 @@
       };
     },
     computed: {
-      ...mapGetters(["getDepartmentDate", "getFlightDepartmentDate", "getCityDepartmentDate"]),
+      ...mapGetters(["getDepartmentDate", "getCityDepartmentDate"]),
       departureDate: {
         get() {
           if (this[this.getLink]) {
@@ -95,9 +95,8 @@
           .toDate();
       },
       twoMonth() {
-        return moment()
-          .add(60, "days")
-          .toDate();
+        let monthDisabled = this.hideHelpLinks ? 180 : 60;
+        return moment().add(monthDisabled, "days").toDate();
       },
       setDate(date) {
         const now = Date.now();

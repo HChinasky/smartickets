@@ -1,23 +1,18 @@
 <template>
-  <span>
-    <button
-        v-if="getDate"
-        :class="{active : objKey == activeKey}"
-        @click="updateActiveDate('tomorrow', objKey);">
-        {{ getNameDate(objKey) }}
-    </button>
-    <button
-        v-else
-        :class="{active : objKey == activeKey}"
-        @click="updateActiveIndex('tomorrow', objKey);">
-        {{ title }}
-    </button>
+  <span class="button-component">
+      <button
+          :class="{active : objKey == activeKey}"
+          :disabled="isLoading"
+          @click="updateActiveDate('tomorrow', objKey);">
+          {{ getNameDate(objKey) }}
+      </button>
+      <span :class="{isLoading : isLoading}"></span>
     </span>
 </template>
 
 <script>
 
-  import { mapGetters, mapActions } from "vuex";
+  import { mapActions } from "vuex";
   import moment from "moment";
 
   export default {
@@ -29,48 +24,47 @@
       'updateDate': String,
       'getDate': String,
     },
-    computed: {
-      ...mapGetters([
-        "getCityDepartmentDate",
-        "getCityArrivalDate",
-      ]),
+    data() {
+      return {
+        isLoading: false,
+      }
     },
     methods: {
       ...mapActions([
         "fetchAircrafts",
       ]),
       getNameDate(objKey) {
-        return moment(this.getDate).add(objKey, "days").format('DD MMMM')
+        return moment(objKey).format('DD MMMM')
       },
       async updateActiveDate(date, objKey) {
+        this.isLoading = true;
         this.$emit('onUpdateKey', this.objKey);
-        // const now = Date.now();
         this.$store.commit(
           this.updateDate,
           moment(this.getDate).add(objKey, "days")
         );
-        switch (date) {
-          case "tomorrow":
-            this.$store.commit(
-              this.updateDate,
-              moment(this.getDate).add(objKey, "days")
-            );
-            break;
-          case "after_tomorrow":
-            this.$store.commit(
-              this.updateDate,
-              moment(this.getDate).add(objKey, "days")
-            );
-            break;
-
-          default:
-            break;
-        }
-        await this.fetchAircrafts();
+        this.$store.commit(
+          this.updateDate,
+          moment(objKey)
+        );
+        await this.fetchAircrafts().then(() => {
+          this.isLoading = false;
+        })
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+            if (error.toString().includes("[PPCODE:104]")) {
+              this.$toasted.global.my_app_error({
+                type: "error",
+                message: this.$t("trainNotFoundMsg"),
+              });
+            } else {
+              this.$toasted.global.my_app_error({
+                message: error.message,
+              });
+            }
+          });;
       },
-      updateActiveIndex() {
-        this.$emit('onUpdateKey', this.objKey);
-      }
     }
   }
 </script>
@@ -97,11 +91,49 @@
       transition: color .2s;
       text-transform: capitalize;
       margin-left: 25px;
+      position: relative;
       
       &.active {
         font-weight: normal;
         color: #3398FF;
       }
+      &:disabled {
+        opacity: .3;
+      }
     }
+    .button-component {
+      position: relative;
+      width: 100%;
+      .isLoading {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 40%;
+        transform: translatex(-50%);
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        border: 4px solid transparent;
+        border-top: 3px solid #3398FF;
+        border-radius: 50%;
+        animation: loading 1.5s infinite linear;
+        -moz-animation: loading 1.5s infinite linear;
+        -webkit-animation: loading 1.5s infinite linear;
+      }
+    }
+  }
+  @keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+
+  @-moz-keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+
+  @-webkit-keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
   }
 </style>

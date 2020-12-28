@@ -13,11 +13,22 @@
         <swiper-slide
             v-for="baggageType in baggageTypes"
             :key="baggageType.baggageId">
+          
           <div class="card__block">
             <div class="card__content">
               <div class="card__name">
-                <div class="card__title">{{ baggageType.title }}</div>
-                <div class="card__price">{{ baggageType.price }}</div>
+                <div class="card__title">
+                  {{ baggageType.icon.title }}
+                  <a  :href="'https://skyup.aero/'+$i18n.locale+'/faq/rates'" target="_blank">
+                    
+                    <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <use
+                          :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
+                      />
+                    </svg>
+                  </a>
+                </div>
+                <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} {{ $t('UAH') }}</div>
               </div>
               <div class="card__info">
                 <div class="card__icon">
@@ -56,8 +67,17 @@
       >
         <div class="card__content">
           <div class="card__name">
-            <div class="card__title">{{ baggageType.icon.title }}</div>
-            <div class="card__price">{{ baggageType.icon.price }} грн</div>
+            <div class="card__title">
+              {{ baggageType.icon.title }}
+              <a :href="'https://skyup.aero/'+$i18n.locale+'/faq/rates'" target="_blank">
+                <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <use
+                      :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div class="card__price">{{ getPriceForOneTicket(baggageType.icon.price) }} {{ $t('UAH') }}</div>
           </div>
           <div class="card__info">
             <div class="card__icon">
@@ -72,7 +92,7 @@
                   <span
                       v-if="item.tooltip"
                       v-tooltip="{
-                      content: 'До вильоту - 1 407 грн<br>Після вильоту -  заборонено',
+                      content: $t('bookRemoveLabel'),
                       placement: 'bottom-center',
                       classes: ['info'],
                       trigger: 'hover focus click',
@@ -94,10 +114,8 @@
   import { mapActions } from "vuex";
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   export default {
-    name: "BaggageType",
-    props: {
-      "testProps": Array
-    },
+    name: "TariffType",
+    props:["backward", "aircraftTariff"],
     components: {
       Swiper,
       SwiperSlide,
@@ -106,6 +124,8 @@
       return {
         modalId: null,
         baggageTypes: null,
+        tariffDepartment: "Basic",
+        tariffArrival: "Basic",
         swiperOption: {
           slidesPerView: 'auto',
           spaceBetween: 10,
@@ -116,7 +136,6 @@
           },
           mousewheel: true
         },
-        
       }
     },
     methods: {
@@ -124,15 +143,45 @@
         "setResultId",
         "setSearchId",
         "setTicketPrice",
+        "setTicketDepartmentPrice",
+        "setTicketArrivalPrice",
         "setPersons"
       ]),
+      getPriceForOneTicket(price) {
+        return price;
+      },
       clickBtn: function (iconArr) {
         iconArr['modalId'] = this.modalId;
         this.$emit('baggageTypeData', iconArr);
         this.$modal.hide('baggageType');
-        this.setResultId(iconArr.resultId);
-        this.setSearchId(iconArr.searchId);
-        this.setTicketPrice(iconArr.price);
+        
+        if(this.modalId == 0) {
+          this.tariffDepartment = iconArr.title;
+        } else {
+          this.tariffArrival = iconArr.title;
+        }
+        this.aircraftTariff.flights.filter((aircraft) => {
+          if(aircraft.routes[1]) {
+            if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
+              this.setResultId(aircraft.resultId);
+              this.setSearchId(aircraft.searchId);
+              this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
+              if(this.modalId == 0) {
+                this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
+              } else {
+                this.setTicketArrivalPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
+              }
+            }
+          } else  {
+            if(aircraft.routes[0].fareName == this.tariffDepartment) {
+              this.setResultId(aircraft.resultId);
+              this.setSearchId(aircraft.searchId);
+              if (this.modalId == 0) {
+                this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
+              }
+            }
+          }
+        });
       },
       beforeOpen (event) {
         this.modalId = event.params.item;
@@ -162,6 +211,7 @@
       .box {
         @include row(0, 0, 0, 0, 0);
         height: 100%;
+        justify-content: center;
         .close-popup {
           display: flex;
           justify-content: flex-end;
@@ -232,11 +282,18 @@
             justify-content: space-between;
             .card__name {
               .card__title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-left: 35px;
                 font-weight: 500;
                 font-size: 28px;
                 text-transform: uppercase;
                 color: #000;
                 text-align: center;
+                a {
+                  outline: none;
+                }
               }
               .card__price {
                 font-size: 24px;
@@ -249,7 +306,7 @@
                   border-bottom: 1px solid $SECOND_FONT_COLOR;
                   max-width: 285px;
                   display: block;
-                  margin-top: 15px;
+                  margin: 15px auto;
                 }
               }
             }

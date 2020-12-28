@@ -129,25 +129,7 @@
           </div>
         </div>
 
-        <div class="footer-bot__inner" style="margin-top: 12px;">
-          <div class="footer__brand footer-brand">
-            <div class="footer-brand__logo">
-              <svg viewBox="0 0 16 16">
-                <use
-                  :xlink:href="
-                    require('@/assets/img/sprite.svg') + '#icon-trident'
-                  "
-                />
-              </svg>
-            </div>
-            <div class="footer-brand__desc">
-              <h2 class="footer-brand__title" style="margin-left: 10px;">
-                {{ $t("diiaInfo") }} diia.gov.ua
-              </h2>
-              <span class="footer-brand__subtitle"></span>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </section>
 

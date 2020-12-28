@@ -9,7 +9,7 @@
       <template v-if="!$appConfig.siteOnMaintenance">
       <div class="container">
         <div class="step-back__block">
-          <a v-back class="back-to-site__link">
+          <router-link class="back-to-site__link" to="/">
             <svg
                 width="36"
                 height="23"
@@ -24,7 +24,7 @@
               />
             </svg>
             {{ $t('backToChooseTypeTrips') }}
-          </a>
+          </router-link>
         </div>
         <div class="ts-form">
         <h2 class="ticket-search__title">{{ $t("searchSkyUpTicket") }}</h2>
@@ -35,42 +35,50 @@
                   $t("cityOfDeparture")
                 }}</label>
 
-                <SelectDepartmentAircraft ref="departmentSelect"/>
+                <SelectDepartmentAircraft ref="departmentSelect" />
               </div>
-              <div class="ts-form__row">
-                <div class="ts-form__group">
-                  <label class="ts-form__label">{{
-                    $t("departureDateShort")
-                  }}</label>
-
-                  <DatepickerDeparture
-                      :hide-help-links="true"
-                      :get-link="'getCityDepartmentDate'"
-                      :update-date="'updateCityDepartmentDate'"
-                  />
-                </div>
+              <div class="switch-btn__wrap">
                 <button
                     class="ts-form__switch mobile"
                     type="button"
                     @click="switchCities()"
                 >
-              <svg width="40" height="37" viewBox="0 0 40 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8.73998 35.3032L2.00012 28.1421L8.73998 20.981" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2.42132 28.1421L38 28.1421" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
-                <path d="M31.2601 1.73347L38 8.89457L31.2601 16.0557" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M37.5788 8.89454L2.00012 8.89453" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
-              </svg>
+                  <svg width="40" height="37" viewBox="0 0 40 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.73998 35.3032L2.00012 28.1421L8.73998 20.981" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2.42132 28.1421L38 28.1421" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M31.2601 1.73347L38 8.89457L31.2601 16.0557" stroke="#66B2FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M37.5788 8.89454L2.00012 8.89453" stroke="#66B2FF" stroke-width="3" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="ts-form__group ts-form__group--swap mobile">
+                <label class="ts-form__label">{{
+                  $t("cityOfArrival")
+                }}</label>
+                <SelectArrivalAircraft/>
+              </div>
+              <div class="ts-form__row">
+                <div class="ts-form__group desktop">
+                  <label class="ts-form__label">{{
+                    $t("departureDateShort")
+                  }}</label>
 
-            </button>
+                  <DatepickerDepartureAircraft/>
+                </div>
+                
+                <div class="ts-form__group mobile">
+                  <label class="ts-form__label">{{
+                    $t("departureDateShort")
+                  }}</label>
+
+                  <DatepickerDepartureAircraft/>
+                </div>
+                
                 <div class="ts-form__group">
                   <label class="ts-form__label">{{
                     $t("back")
                   }}</label>
-                  <DatepickerArrival
-                      :hide-help-links="true"
-                      :get-link="'getCityArrivalDate'"
-                      :update-date="'updateCityArrivalDate'"
-                  />
+                  <DatepickerArrivalAircraft />
                 </div>
               </div>
             </div>
@@ -88,7 +96,7 @@
 
             </button>
             <div class="ts-form__where-to">
-              <div class="ts-form__group ts-form__group--swap">
+              <div class="ts-form__group ts-form__group--swap desktop">
                 <label class="ts-form__label">{{
                   $t("cityOfArrival")
                 }}</label>
@@ -97,8 +105,8 @@
               
             <div class="count-passengers">
               <div class="form-group">
-                <label>{{ $t('adult') }}</label>
-                <span class="increase_btn" @click="increase('adultAge')">
+                <label>{{ $t('adults') }}</label>
+                <span class="increase_btn" @click="increase('ADT');">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -108,8 +116,11 @@
                     />
                   </svg>
                 </span>
-                <input class="passenger adults" v-model.number="adultAge" @keydown="nameKeydown($event)" type="number">
-                <span :class="{ disableDecr: adultAge === 1 }" class="decrease_btn" @click="decrease('adultAge', 1)">
+                <p class="passengers adult">{{getCountAdult}}</p>
+                <span
+                    :class="{ disableDecr: getCountAdult === 1 }"
+                    class="decrease_btn"
+                    @click="decrease('ADT')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -122,7 +133,7 @@
               </div>
               <div class="form-group">
                 <label>{{ $t('teenagers') }}</label>
-                <span class="increase_btn"  @click="increase('teenagersAge')">
+                <span class="increase_btn"  @click="increase('CHD')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -132,8 +143,11 @@
                     />
                   </svg>
                 </span>
-                <input class="passenger teenagers" v-model.number="teenagersAge" type="number">
-                <span :class="{ disableDecr: teenagersAge === 0 }" class="decrease_btn" @click="decrease('teenagersAge', 0)">
+                <p class="passengers teenager">{{getCountTeenager}}</p>
+                <span
+                    :class="{ disableDecr: getCountTeenager === 0 }"
+                    class="decrease_btn"
+                    @click="decrease('CHD')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -146,7 +160,7 @@
               </div>
               <div class="form-group">
                 <label>{{ $t('kids') }}</label>
-                <span class="increase_btn" @click="increase('kidsAge')">
+                <span class="increase_btn" @click="increase('INF');">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -156,8 +170,11 @@
                     />
                   </svg>
                 </span>
-                <input class="passenger kids" v-model.number="kidsAge" type="number">
-                <span :class="{ disableDecr: kidsAge === 0 }" class="decrease_btn" @click="decrease('kidsAge', 0)">
+                <p class="passengers teenager">{{getCountChildren}}</p>
+                <span
+                    :class="{ disableDecr: getCountChildren === 0 }"
+                    class="decrease_btn"
+                    @click="decrease('INF')">
                   <svg viewBox="0 0 18 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <use
                         :xlink:href="
@@ -172,7 +189,12 @@
             </div>
           </div>
           <div class="ts-form__submit">
-            <button class="btn btn--black" v-promise-btn @click="getData" :disabled="!getDepartmentCity || !getArrivalCity || !getCityDepartmentDate">
+            <button
+                class="btn btn--black"
+                v-promise-btn
+                @click="getData"
+                :disabled="disabledBtn"
+            >
               {{ $t("findTickets") }}
             </button>
           </div>
@@ -181,92 +203,101 @@
       </template>
     </section>
     <div ref="aircraftsView">
-      <router-view
-          :departmentTicket="departmentFlight"
-          :arrivalTicket="arrivalFlight"
-      />
+      <router-view :test="allAircrafts" v-if="allAircrafts.length !== 0"/>
     </div>
   </span>
 </template>
 
 <script>
+  import { mapMultiRowFields } from 'vuex-map-fields';
   import SelectDepartmentAircraft from "../../components/aircraft/SelectDepartmentAircraft"
   import SelectArrivalAircraft from "../../components/aircraft/SelectArrivalAircraft";
-  import DatepickerDeparture from "../../components/DatepickerDeparture";
-  import DatepickerArrival from "../../components/DatepickerArrival";
-  import { mapGetters, mapActions } from "vuex";
+  import DatepickerDepartureAircraft from "../../components/aircraft/DatepickerDepartureAircraft";
+  import DatepickerArrivalAircraft from "../../components/aircraft/DatepickerArrivalAircraft";
+  import { mapGetters, mapActions, mapMutations } from "vuex";
 
   export default {
     name: "SearchAircraftTicket",
     components: {
       SelectDepartmentAircraft,
       SelectArrivalAircraft,
-      DatepickerDeparture,
-      DatepickerArrival
-    },
-    computed: {
-      ...mapGetters([
-        "getArrivalCity",
-        "getDepartmentCity",
-        "getDepartmentCityCode",
-        "getArrivalCityCode",
-        "getCityDepartmentDate",
-        "allAircrafts"
-      ]),
+      DatepickerDepartureAircraft,
+      DatepickerArrivalAircraft
     },
     data() {
       return {
-        adultAge: 1,
         teenagersAge: 0,
         kidsAge: 0,
-        departmentFlight: [],
-        arrivalFlight: []
+      }
+    },
+    computed: {
+      ...mapMultiRowFields(['passenger']),
+      ...mapGetters([
+        "getDepartmentCityCode",
+        "getArrivalCityCode",
+        "getCityDepartmentDate",
+        "allAircrafts",
+        "getPassengersByType",
+        "getDepartmentMainCityCode",
+        "getArrivalMainCityCode"
+      ]),
+      getCountAdult() {
+        return this.getPassengersByType('ADT')
+      },
+      getCountTeenager() {
+        return this.getPassengersByType('CHD')
+      },
+      getCountChildren() {
+        return this.getPassengersByType('INF')
+      },
+      disabledBtn() {
+        if (this.getPassengersByType('ADT') == 0 || !this.getDepartmentCityCode || !this.getArrivalCityCode || !this.getCityDepartmentDate) {
+          return true
+        }
+        return false
       }
     },
     methods: {
+      ...mapMutations(["addPassengerRow", "removePassengerRow"]),
       ...mapActions([
-        "fetchCity",
+        "fetchAirports",
+        "regClient",
         "fetchAircrafts",
-        "setDepartmentCity",
-        "setArrivalCity",
         "setArrivalCityCode",
         "setDepartmentCityCode",
-        "setAdult",
-        "setTeenagers",
-        "setKids"
+        "regClient",
+        "updateClientInfo",
+        "clearPrice",
+        "setArrivalMainCityCode",
+        "setDepartmentMainCityCode",
       ]),
-      nameKeydown: function(e) {
-        if (/^\W$/.test(e.key)) {
-          e.preventDefault();
-        }
+      increase: function(typePassenger){
+        this.$store.commit("addPassengerRow", typePassenger);
       },
-      increase: function(property){
-        this[property]++;
-      },
-      decrease: function(property, startNumber){
-        if(this[property] > startNumber) {
-          this[property]--;
+      decrease: function(type){
+        if(this.getPassengersByType(type) !== 0) {
+          this.$store.commit("removePassengerRow", type);
         }
       },
       async getData() {
         
-        if (!this.getDepartmentCity) {
+        if (!this.getDepartmentCityCode) {
           this.$toasted.global.my_app_error({
             message: this.$t("selectDepartureStation"),
           });
           return false;
         }
 
-        if (!this.getArrivalCity) {
+        if (!this.getArrivalCityCode) {
           this.$toasted.global.my_app_error({
             message: this.$t("selectArrivalStation"),
           });
           return false;
         }
 
-        if (this.getArrivalCity == this.getDepartmentCity) {
+        if (this.getArrivalCityCode == this.getDepartmentCityCode) {
           this.$toasted.global.my_app_error({
-            message: this.$t("mustBeDifferentStations"),
+            message: this.$t("mustBeDifferentAirports"),
           });
           return false;
         }
@@ -278,10 +309,6 @@
           return false;
         }
         
-        this.setAdult(this.adultAge);
-        this.setTeenagers(this.teenagersAge);
-        this.setKids(this.kidsAge);
-
         
         await this.fetchAircrafts()
           .then(() => {
@@ -305,46 +332,34 @@
               });
             }
           });
-
-        let departmentFlight    = [],
-          arrivalFlight    = [];
-
-        if (this.allAircrafts) {
-          for (var i = 0; i < this.allAircrafts.flights.length; i++) {
-            for (var k = 0; k < this.allAircrafts.flights[i].routes.length; k++) {
-              if (this.allAircrafts.flights[i].routes[k].backward === 0) {
-                departmentFlight.push(this.allAircrafts.flights[i].routes[k]);
-                departmentFlight[i]["amount"] = this.allAircrafts.flights[i].amount;
-                departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
-                departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
-              } else {
-                arrivalFlight.push(this.allAircrafts.flights[i].routes[k]);
-                arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount;
-                arrivalFlight[i]["amount"] = this.allAircrafts.flights[i].amount;
-                departmentFlight[i]["resultId"] = this.allAircrafts.flights[i].resultId;
-                departmentFlight[i]["searchId"] = this.allAircrafts.flights[i].searchId;
-              }
-            }
-          }
-          this.departmentFlight = departmentFlight;
-          this.arrivalFlight = arrivalFlight;
-        }
+        this.clearPrice();
       },
 
       switchCities() {
-        const temp = this.getArrivalCity;
-        this.setArrivalCity(this.getDepartmentCity);
-        this.setDepartmentCity(temp);
-
-        const tempCode = this.getArrivalCityCode;
+        const temp = this.getArrivalCityCode;
         this.setArrivalCityCode(this.getDepartmentCityCode);
-        this.setDepartmentCityCode(tempCode);
+        this.setDepartmentCityCode(temp);
+
+        const tempMain = this.getArrivalMainCityCode;
+        this.setArrivalMainCityCode(this.getDepartmentMainCityCode);
+        this.setDepartmentMainCityCode(tempMain);
       },
     },
     mounted() {
-      this.$store.dispatch('fetchCity');
       this.$store.dispatch('fetchAirports');
     },
+    created() {
+      this.updateClientInfo();
+      this.regClient()
+        .then(() => {
+
+        })
+        .catch((error) => {
+          this.$toasted.global.my_app_error({
+            message: error.message,
+          });
+        });
+    }
   };
 </script>
 
@@ -367,6 +382,8 @@
         .back-to-site__link {
           cursor: pointer;
           display: flex;
+          color: #000;
+          text-decoration: none;
           align-items: center;
           transition: color .2s;
           &:hover {
@@ -417,8 +434,19 @@
             }
             
             .ts-form__group {
+              position: relative;
+              &.mobile {
+                display: none;
+              }
               @include respond-until(m) {
                 width: 100%;
+                &.desktop {
+                  display: none;
+                }
+                &.mobile {
+                  display: block;
+                  margin-bottom: 25px;
+                }
               }
               ::v-deep .mx-datepicker {
                 @include respond-until(l) {
@@ -457,7 +485,7 @@
               .form-group {
                 display: flex;
                 flex-direction: column;
-                max-width: 150px;
+                width: 150px;
                 position: relative;
                 @include respond-until(l) {
                   width: 120px;
@@ -491,7 +519,7 @@
                     height: 45px;
                   }
                 }
-                input.passenger {
+                .passengers {
                   border: none;
                   border-bottom: 2px solid #000;
                   outline: none;
@@ -500,6 +528,9 @@
                   font-size: 36px;
                   font-weight: 500;
                   text-align: center;
+                  margin-bottom: 0;
+                  line-height: 1.7;
+                  cursor: default;
                   &[type=number] {
                     -moz-appearance: textfield;
                   }
@@ -509,15 +540,33 @@
                     margin: 0;
                   }
                 }
+                input.passenger {
+                   border: none;
+                   border-bottom: 2px solid #000;
+                   outline: none;
+                   height: 60px;
+                   margin-top: 10px;
+                   font-size: 36px;
+                   font-weight: 500;
+                   text-align: center;
+                   &[type=number] {
+                     -moz-appearance: textfield;
+                   }
+                   &::-webkit-outer-spin-button,
+                   &::-webkit-inner-spin-button {
+                     -webkit-appearance: none;
+                     margin: 0;
+                   }
+                 }
                 &:first-child {
-                  input {
+                  .passengers {
                     background-image: url("../../assets/img/svg/adult-ticket.svg");
                     background-repeat: no-repeat;
                     background-size: 20px;
                   }
                 }
                 &:nth-child(2) {
-                  input {
+                  .passengers {
                     background-image: url("../../assets/img/svg/teenager-tickets.svg");
                     background-repeat: no-repeat;
                     background-size: 30px;
@@ -525,7 +574,7 @@
                   }
                 }
                 &:last-child {
-                  input {
+                  .passengers {
                     background-image: url("../../assets/img/svg/teenager-tickets.svg");
                     background-repeat: no-repeat;
                     background-size: 20px;
@@ -536,6 +585,7 @@
                 .decrease_btn, .decrease_btn {
                   position: absolute;
                   right: 0;
+                  cursor: pointer;
                   &.disableDecr {
                     opacity: .5;
                   }
@@ -552,6 +602,10 @@
               }
             }
           }
+          .switch-btn__wrap {
+            display: flex;
+            justify-content: center;
+          }
           .ts-form__switch {
             border: none;
             background-color: transparent;
@@ -567,7 +621,7 @@
               display: none;
               @include respond-until(m) {
                 position: relative;
-                top: 45px;
+                top: 30px;
                 display: flex;
                 justify-content: center;
                 margin: 20px 0;

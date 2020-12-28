@@ -1,65 +1,45 @@
 import "moment/locale/uk";
 import moment from "moment";
 import api from "../../api/api";
+import i18n from "../../i18n";
 
-export const dataStore = {
-  state: {
-    data: [],
-  },
-};
+const getDefaultState = () => {
+  return {
+    aircrafts: []
+  }
+}
 
-const state = {
-  aircrafts: [],
-  aircraft: {},
-  adult: null,
-  teenagers: null,
-  kids: null
-};
-
+const state = getDefaultState()
 
 const getters = {
   allAircrafts: (state) => state.aircrafts,
-  getAircraft: (state) => state.aircraft,
-  getAircraftByNumber: (state) => (number) => {
-    return state.aircrafts.find((aircraft) => aircraft.number === number);
-  },
-  getAdult: (state) => state.adult,
-  getTeenagers: (state) => state.teenagers,
-  getKids: (state) => state.kids
 };
 
 const actions = {
   async fetchAircrafts({ rootState, commit }) {
     //const { token } = rootState.auth
     const params = {
-      city_from: rootState.cities.departmentCityCode,
-      city_to: rootState.cities.arrivalCityCode,
-      dep_date: moment(rootState.cities.cityDepartmentDate).format("DD-MM-YYYY"),
-      arr_date: rootState.cities.cityArrivalDate ? moment(rootState.cities.cityArrivalDate).format("DD-MM-YYYY") : null,
-      adult: rootState.aircraft.adult,
-      child: rootState.aircraft.teenagers,
-      inf: rootState.aircraft.kids
+      payment_sid: rootState.airports.payment_sid,
+      city_from: rootState.airports.departmentMainCityCode,
+      city_to: rootState.airports.arrivalMainCityCode,
+      dep_date: moment(rootState.airports.cityDepartmentDate).format("DD-MM-YYYY"),
+      arr_date: rootState.airports.cityArrivalDate ? moment(rootState.airports.cityArrivalDate).format("DD-MM-YYYY") : null,
+      adult: rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "ADT").length,
+      child: rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "CHD").length,
+      inf:rootState.cartAircraft.passengers.filter((passenger) => passenger.type === "INF").length
     };
-
     const response = await api.fetchAircrafts(params);
 
-    if (response.data.code != 0) {
-      throw new Error(response.data.msg);
-    } else {
+    if (response.data.data.flights.length !== 0 || response.data.data.additional_flights.length !== 0) {
       commit("updateAircrafts", response.data.data);
+      return response.data.data;
+    } else {
+      commit("clearAircrafts");
+      throw new Error(i18n.t("noFlight"));
     }
   },
-
-  setAdult({ commit }, data) {
-    commit("updateAdult", data);
-  },
-
-  setTeenagers({ commit }, data) {
-    commit("updateTeenagers", data);
-  },
-
-  setKids({ commit }, data) {
-    commit("updateKids", data);
+  resetCartState ({ commit }) {
+    commit('resetState')
   },
 };
 
@@ -67,20 +47,9 @@ const mutations = {
   updateAircrafts(state, aircrafts) {
     state.aircrafts = aircrafts;
   },
-  updateAircraft(state, aircraft) {
-    state.aircraft = aircraft;
-  },
-  updateAdult(state, adult) {
-    state.adult = adult;
-  },
-  updateTeenagers(state, teenager) {
-    state.teenagers = teenager;
-  },
-  updateKids(state, kids) {
-    state.kids = kids;
-  },
-
-
+  resetState (state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 export default {

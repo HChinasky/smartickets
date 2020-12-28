@@ -887,7 +887,7 @@
     z-index: 10000;
 }
 
-.tooltip.popover[x-placement^="bottom"] {
+.tooltip:not(.header-cart).popover[x-placement^="bottom"] {
     left: 15px!important;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
     border-radius: 3px;
@@ -898,12 +898,23 @@
     min-height: auto;
 }
 
-.tooltip.popover .wrapper .popover-inner {
+.tooltip:not(.header-cart) .wrapper .popover-inner {
     width: 150px;
     height: 105px;
     background-color: #fff;
     padding: 10px;
 }
+
+.header-cart {
+  outline: none;
+}
+
+.header-cart .wrapper .popover-inner {
+  padding: 30px 22px!important;
+  border-radius: 20px!important;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
+}
+
 .tooltip.popover .wrapper .popover-inner > div {
     display: flex;
     justify-content: space-between;
@@ -996,12 +1007,12 @@
     margin-bottom: 0;
 }
 
-.tooltip[x-placement^="bottom"] {
+.tooltip:not(.header-cart)[x-placement^="bottom"] {
     margin-top: 15px;
     left: -65px!important;
 }
 
-.tooltip[x-placement^="bottom"] .tooltip-arrow {
+.tooltip:not(.header-cart)[x-placement^="bottom"] .tooltip-arrow {
     border-width: 0 10px 10px 10px;
     border-left-color: transparent !important;
     border-right-color: transparent !important;
@@ -1040,6 +1051,37 @@
     top: calc(50% - 5px);
     margin-left: 0;
     margin-right: 0;
+}
+
+.header-cart[x-placement^="bottom"] {
+  margin-top: 15px;
+}
+
+.header-cart[x-placement^="bottom"] .tooltip-arrow {
+  border-width: 0 10px 10px 10px;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-top-color: transparent !important;
+  top: -10px;
+  left: 170px!important;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+.header-cart[x-placement^="left"] {
+  margin-right: 5px;
+}
+
+.header-cart[x-placement^="left"] .tooltip-arrow {
+  border-width: 5px 0 5px 5px;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  right: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .tooltip.popover .popover-inner {

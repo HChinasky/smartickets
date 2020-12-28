@@ -2,50 +2,33 @@
   <section class="ticket" ref="aircrafts">
     <div class="container">
       <div class="ticket__inner">
-        <AircraftResult
-            :departmentTicket="departmentTicket"
-            :arrivalTicket="arrivalTicket"
-        />
+        <AircraftResult :allAircraft="test" />
       </div>
     </div>
   </section>
 </template>
 
 <script>
-  import { mapGetters } from "vuex";
   import AircraftResult from "../../components/aircraft/AircraftResult";
   export default {
     name: "Aircraft",
-    props: {
-      'departmentTicket': Array,
-      'arrivalTicket': Array
-    },
     components: {
       AircraftResult
     },
-    computed: {
-      ...mapGetters([
-        "getResultId"
-      ]),
-      checkTypeTicket() {
-        return this.getResultId;
-      }
-    },
-    methods: {
-      handler(e) {
-        this.baggageTypeIconTo = e;
+    props: ["test"],
+    watch: {
+      test: {
+        immediate: true,
+        deep: true,
+        handler(newVal) {
+          if(newVal.length !== 0)
+            this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
+        }
       },
     },
     mounted() {
-
       this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
-//this.$refs.trains.scrollIntoView();
     },
-    updated() {
-      this.$scrollTo(this.$refs.aircrafts, 1800, {easing: "ease-in-out"})
-      //this.$refs.trains.scrollIntoView();
-    }
-
   };
 </script>
 <style lang="scss" scoped>

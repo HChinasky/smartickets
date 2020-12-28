@@ -1,5 +1,12 @@
 <template>
   <section class="payment-ticket">
+    <loading
+        :active.sync="isLoading"
+        :can-cancel="false"
+        :loader="loader"
+        :color="color"
+        :is-full-page="fullPage"
+    ></loading>
     <div class="container">
       <div class="step-back__block">
         <a v-back class="back-to-site__link">
@@ -16,72 +23,91 @@
                 stroke-width="2"
             />
           </svg>
-          До оформлення
+          {{ $t('beforeRegistration') }}
         </a>
       </div>
+      <template v-if="getIsDevSkyUpLoginRequired === 'true'">
+        <div class="ticket-list__header">
+          <h3 style="margin-left: 20px;margin-top: 45px">{{ $t("forTest") }}</h3>
+        </div>
+        
+        <div class="ticket-list__item">
+          <div class="ticket-list__inner">
+            <div class="ticket-list__group">
+              <label for="client-login" class="ticket-list__label">{{
+                $t("username")
+                }}</label>
+              <input
+                  v-model="devLogin"
+                  @blur="$v.devLogin.$touch()"
+                  @change="changeDevLogin($event.target.value)"
+                  type="text"
+                  id="client-login"
+                  class="ticket-list__input passenger-login"
+              />
+              <template v-if="$v.devLogin.$error">
+                <p v-if="!$v.devLogin.required" class="errorMessage">
+                  {{ $t("requiredFieldMsg") }}
+                </p>
+              </template>
+            </div>
+            
+            <div class="ticket-list__inner">
+              <div class="ticket-list__group">
+                <label for="client-password" class="ticket-list__label">{{
+                  $t("password")
+                  }}</label>
+                <input
+                    v-model="devPassword"
+                    @blur="$v.devPassword.$touch()"
+                    @change="changeDevPassword($event.target.value)"
+                    type="password"
+                    id="client-password"
+                    class="ticket-list__input passenger-password"
+                />
+                <template v-if="$v.devPassword.$error">
+                  <p v-if="!$v.devPassword.required" class="errorMessage">
+                    {{ $t("requiredFieldMsg") }}
+                  </p>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
       <div class="row">
         <div class="col-6">
           <div class="ticket__block ticket-department">
             <div class="tickets__title">
               <h3 class="to">{{ $t('departureDateShort') }}: <span> {{cityDepartment}} - {{cityArrival}}</span></h3>
             </div>
-            <div class="additional-services__block">
+            <div
+                class="additional-services__block"
+                v-for="(passenger, index) in passengers"
+                :key="index"
+            >
               <div class="person-full-name">
-                <input
-                    class="full-name__input"
-                    type="text"
-                    v-model="lastname"
-                >
+                <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
               </div>
               <div class="person-birthday">
-                {{birthDate}}
-              </div>
-              <div class="additional-services__select">
-                <v-select
-                    class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-                    :options="additionalServices"
-                    v-model="activeAdditionalServices"
-                    placeholder="Доп. послуги"
-                    :clearable="false"
-                >
-                  <template v-slot:option="option">
-                    <span class="d-flex justify-center" style="width: 100%;">
-                      {{ option.label }}
-                    </span>
-                  </template>
-                </v-select>
+                {{ ticketDepartmentDate }}
               </div>
             </div>
           </div>
-          <div class="ticket__block ticket-arrival">
+          <div class="ticket__block ticket-arrival" v-if="getCityArrivalDate">
             <div class="tickets__title">
               <h3 class="from">{{ $t('back') }}: <span>{{cityArrival}} - {{cityDepartment}}</span></h3>
             </div>
-            <div class="additional-services__block">
+            <div
+                class="additional-services__block"
+                v-for="(passenger, index) in passengers"
+                :key="index"
+            >
               <div class="person-full-name">
-                <input
-                    class="full-name__input"
-                    type="text"
-                    v-model="lastname"
-                >
+                <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
               </div>
               <div class="person-birthday">
-                {{birthDate}}
-              </div>
-              <div class="additional-services__select">
-                <v-select
-                    class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
-                    :options="additionalServices"
-                    v-model="activeAdditionalServices"
-                    placeholder="Доп. послуги"
-                    :clearable="false"
-                >
-                  <template v-slot:option="option">
-                <span class="d-flex justify-center" style="width: 100%;">
-                  {{ option.label }}
-                </span>
-                  </template>
-                </v-select>
+                {{ ticketArrivalDate }}
               </div>
             </div>
           </div>
@@ -90,7 +116,7 @@
           <div class="payment-settings__block">
             <div class="form_part">
               <div class="form-input">
-                <label>E-mail (квитки буде надіслано на цей e-mail)</label>
+                <label>E-mail ({{ $t('ticketsBeSent') }})</label>
                 <input
                     class="ticket-list__input"
                     type="text"
@@ -108,7 +134,7 @@
                 </template>
               </div>
               <div class="form-input">
-                <label>E-mail ще раз</label>
+                <label>E-mail {{ $t('repeatIt') }}</label>
                 <input
                     id=""
                     class="ticket-list__input"
@@ -119,100 +145,121 @@
                 >
                 <template v-if="$v.repeatEmail.$error">
                   <p v-if="!$v.repeatEmail.sameAsPassword" class="errorMessage">
-                    Емейли повинні бути однаковими
+                    {{ $t('errorEmailRepeat') }}
                   </p>
                 </template>
               </div>
               <div class="form-input">
-                <label>Контактний телефон</label>
+                <label>{{ $t('phone') }}</label>
                 <input-mask
                     class="ticket-list__input"
                     v-model="phone"
                     @blur="$v.phone.$touch()"
                     @keydown.space.prevent
-                    alwaysShowMask="true"
                     mask="+380(99)999-99-99"
                 />
                 <template v-if="$v.phone.$error">
                   <p v-if="!$v.phone.required" class="errorMessage">
-                    Будь ласка вкажіть телефон
+                    {{ $t('errorEmptyPhone') }}
                   </p>
                   <p v-if="!$v.phone.minLength" class="errorMessage">
-                    Номер телефону повинен мати не менш 9 символів
+                    {{ $t('errorShortPhone') }}
                   </p>
                 </template>
               </div>
               <div class="form-input">
-                <label>Промокод (якщо маєте)</label>
+                <label>{{ $t('promoCode') }}</label>
                 <input
                     class="ticket-list__input"
                     type="text"
+                    disabled
                     v-model="promo"
                 >
-                <span class="apply-promo">Застосувати</span>
-              </div>
-            </div>
-            <div class="payment-types">
-              <span class="label">Виберіть спосіб оплати</span>
-              <div class="payment__list">
-                <button
-                    v-for="pType in paymentTypes"
-                    :key="pType.id"
-                    :class="[{active : pType.id == activePayment}, 'type-trips__btn '+pType.name]"
-                    @click="activePayment=pType.id"
-                ></button>
+                <span class="apply-promo">{{ $t('applyPromo') }}</span>
+                <span class="promo-discount__label" v-if="priceDiscount">{{ $t('promoHaveDiscount') }} {{ priceDiscount }} {{ $t('UAH') }}</span>
               </div>
             </div>
             <div class="agreement-rules">
               <button
                   :class="{active : agreementRules}"
                   @click="agreementRules = !agreementRules"
-                  class="type-trips__btn">Я ознайомлений з правилами детально
+                  class="type-trips__btn">{{ $t('agreeRules') }}
               </button>
+              <input
+                  type="checkbox"
+                  v-model.trim="agreementRules"
+                  @change="$v.agreementRules.$touch()"
+                  class="hidden-checkbox">
+              <template v-if="$v.agreementRules.$anyDirty">
+                <p class="errorMessage" v-if="!agreementRules">
+                  {{ $t("errorAgreeRules") }}
+                </p>
+              </template>
             </div>
             <div class="payment_sum">
-              <p class="total-sum">Загальна вартість: <span>1341 грн</span></p>
-              <p class="smart-tickets-tax">Оформлення SmartTicket <span>0.06 грн</span></p>
-              <button disabled class="btn btn--black">
-                Перейти до оплати
-              </button>
-              <button @click="getBookTicket" class="btn btn--black">
-                Бронировать
+              <template v-if="fullPrice !== getPrice">
+                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ fullPrice }} {{ $t('UAH') }}</span></p>
+                <p class="total-sum" v-if="fullPrice">{{ $t('discountPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+              </template>
+              <template v-else>
+                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+              </template>
+              <p class="smart-tickets-tax">{{ $t('smartTicketRegistration') }} <span>0.06 {{ $t('UAH') }}</span></p>
+              <div class="cart-total__cost cart-total__cost_skyup">
+                {{ $t("additionalFeeTxt") }}
+              </div>
+              <button
+                  @click="getBookTicket"
+                  class="btn btn--black"
+                  v-promise-btn>
+                {{ $t('gotToPay') }}
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <form ref="formRef" action method="POST" id="paymentForm">
+      <input type="hidden" ref="inputRef" value name="payment_no" />
+    </form>
   </section>
 </template>
 
 <script>
   import { mapActions, mapGetters } from "vuex";
+  import {mapMultiRowFields} from 'vuex-map-fields';
   import moment from "moment";
   import {
     required,
     sameAs,
     email,
-    minLength
+    minLength,
+    requiredIf
   } from "vuelidate/lib/validators";
   import InputMask from 'vue-input-mask';
+  import Loading from "vue-loading-overlay";
 
   export default {
     name: "Payment",
     components: {
       InputMask,
-      
+      Loading
+
     },
     data() {
-      return {toTicket: {
-          baggageType: 'baggageTypeIconTo',
-        },
-        activePayment: "",
-        paymentTypes: [{id: 1, name: "liqpay"}, {id: 2, name: "fondy"}],
+      return {
+        isLoading: false,
+        fullPage: true,
+        loader: "spinner",
+        color: "#1b73cd",
+        fullPrice: "",
+        priceDiscount: "",
+        beforeMountPriceDiscount: false,
+
+        hasBooked: false,
+        paymentTypes: [{id: 2, name: "fondy"}],
         agreementRules: false,
-        repeatEmail: '',
-        promo: '',
+        repeatEmail: "",
         activeAdditionalServices: "",
         additionalServices: [
           "Перевезення тварини у салоні",
@@ -228,49 +275,85 @@
       },
       repeatEmail: {
         required,
-        sameAsPassword: sameAs("email")
+        sameAsPassword: sameAs("email"),
       },
       phone: {
         required,
-        minLength: minLength(3)
+        minLength: minLength(17)
+      },
+      agreementRules: {
+        required
+      },
+      devLogin: {
+        required: requiredIf(function() {
+          return this.getIsDevLoginRequired;
+        }),
+      },
+      devPassword: {
+        required: requiredIf(function() {
+          return this.getIsDevLoginRequired;
+        }),
       }
     },
     computed: {
+      ...mapMultiRowFields(["passengers"]),
       ...mapGetters([
-        "getLastName",
-        "getFirstName",
-        "getBirthDay",
-        "getBirthMonth",
-        "getBirthYear",
+        "getField",
+        "getDepartmentCityCode",
+        "getCityNameByCode",
+        "getArrivalCityCode",
+        "getCityDepartmentDate",
+        "getCityArrivalDate",
+        "getTicketPrice",
+        "getPersonPhone",
         "getPersonEmail",
-        "getPersonPhone",
-        "getPersonPhone",
-        "getPersonPhone",
-        "getDepartmentCity",
-        "getCityNameById",
-        "getArrivalCity",
-        "getCityNameById",
-        "getBirthDay",
-        "getBirthMonth",
-        "getBirthYear"
+        "getTicketDepartmentPrice",
+        "getPromoCode",
+        "getDevLogin",
+        "getDevPassword",
+        "getIsDevSkyUpLoginRequired",
       ]),
+      devLogin: {
+        get() {
+          return this.getDevLogin;
+        },
+        set(value) {
+          this.updateDevLogin(value);
+        },
+      },
+      promo: {
+        get() {
+          return this.getPromoCode;
+        },
+        set(value) {
+          this.setPromoCode(value);
+        },
+      },
+      devPassword: {
+        get() {
+          return this.getDevPassword;
+        },
+        set(value) {
+          this.updateDevPassword(value);
+        },
+      },
+      getPrice() {
+        if(this.getTicketPrice) {
+          return this.getTicketPrice;
+        }
+        return this.getTicketDepartmentPrice
+      },
       cityDepartment() {
-        return this.getCityNameById(this.getDepartmentCity);
+        return this.getCityNameByCode(this.getDepartmentCityCode);
       },
       cityArrival() {
-        return this.getCityNameById(this.getArrivalCity);
+        return this.getCityNameByCode(this.getArrivalCityCode);
       },
-      birthDate() {
-        return moment(this.getBirthMonth+'-'+this.getBirthDay+'-'+this.getBirthYear).format("DD MMMM YYYY");
+      ticketDepartmentDate() {
+        return moment(this.getCityDepartmentDate).format("DD MMMM YYYY");
       },
-      lastname: {
-        get() {
-          if (this.getLastName) {
-            return this.getLastName;
-          } else {
-            return null;
-          }
-        },
+      ticketArrivalDate() {
+        return moment(this.getCityArrivalDate).format("DD MMMM YYYY");
       },
       email: {
         get() {
@@ -299,29 +382,164 @@
     },
     methods: {
       ...mapActions([
+        "startPayment",
         "bookingTicketAircraft",
         "setPersonEmail",
-        "setPersonPhone"
+        "setPersonPhone",
+        "setPromoCode",
+        "clearPromoCode",
+        "getCurrentPrice",
+        "updateDevPassword",
+        "updateDevLogin"
       ]),
-      async getBookTicket() {
-        await this.bookingTicketAircraft()
-          .then(() => {
+      changeDevLogin(value) {
+        this.updateDevLogin(value);
+      },
+      changeDevPassword(value) {
+        this.updateDevPassword(value);
+      },
+      async savePromo() {
+        await this.getCurrentPrice(this.promo).then((res) => {
+          let priceWithDiscount = res.data.data.price_with_discount,
+            priceWithoutDiscount = res.data.data.price_without_discount;
+          this.fullPrice = priceWithoutDiscount.toFixed(2);
 
-          })
-          .catch((error) => {
-            console.log(error);
-            if (error.toString().includes("[PPCODE:104]")) {
+          if(res.data.errors.length !== 0) {
+            res.data.errors.forEach((err) => {
               this.$toasted.global.my_app_error({
-                type: "error",
-                message: this.$t("trainNotFoundMsg"),
+                message: err.error,
+              });
+            })
+          } else {
+            if(priceWithDiscount !== priceWithoutDiscount) {
+              this.priceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
+              var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
+              console.log(getPercent)
+              this.$toasted.global.my_app_success({
+                message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
               });
             } else {
+              this.priceDiscount = false;
               this.$toasted.global.my_app_error({
-                message: error.message,
+                message: this.$t("errorPromoCode"),
               });
             }
-          });
+          }
+        }).catch((error) => {
+          console.log(error);
+          if (error.toString().includes("[PPCODE:104]")) {
+            this.$toasted.global.my_app_error({
+              type: "error",
+              message: this.$t("trainNotFoundMsg"),
+            });
+          } else {
+            this.$toasted.global.my_app_error({
+              message: error.message,
+            });
+          }
+        });
+      },
+      async getBookTicket() {
+        let catchErr     = "",
+          checkDevUser = "",
+          networkError = ""
+        this.$v.$touch();
+        if(!this.$v.$invalid && this.agreementRules) {
+          if(!this.hasBooked) {
+            await this.bookingTicketAircraft()
+              .then((res) => {
+                if(res.data.errors) {
+                  res.data.errors.forEach((err) => {
+                    this.$toasted.global.my_app_error({
+                      message: err.error ? err.error : err,
+                    });
+                    catchErr = err;
+                  })
+                } else if (res.data.msg) {
+                  this.$toasted.global.my_app_error({
+                    message: res.data.msg,
+                  });
+                } else {
+                  this.hasBooked = true;
+                }
+                checkDevUser = res.data.code;
+              })
+              .catch((error) => {
+                networkError = error;
+                console.log(error);
+                if (error.toString().includes("[PPCODE:104]")) {
+                  this.$toasted.global.my_app_error({
+                    type: "error",
+                    message: this.$t("trainNotFoundMsg"),
+                  });
+                } else {
+                  this.$toasted.global.my_app_error({
+                    message: error.message,
+                  });
+                }
+              });
+          }
+          if(!catchErr && checkDevUser === 0 && !networkError) {
+            await this.startPayment()
+              .then((response) => {
+                var el = document.createElement("p");
+                el.innerHTML = response;
+                var form = el.querySelector("#returnForm");
+                var payment_no = form.querySelector('input[name="payment_no"]').value;
+                this.$refs.inputRef.value = payment_no;
+                this.$refs.formRef.action = form.action;
+                this.$refs.formRef.submit();
+                //this.isLoading = false;
+              })
+              .catch((error) => {
+                this.isLoading = false;
+                this.$toasted.global.my_app_error({
+                  message: error.message,
+                });
+              });
+          }
+        }
       }
+    },
+    beforeMount() {
+      this.getCurrentPrice(this.promo).then((res) => {
+        let priceWithDiscount = res.data.data.price_with_discount,
+          priceWithoutDiscount = res.data.data.price_without_discount;
+        this.fullPrice = priceWithoutDiscount.toFixed(2);
+        if(res.data.errors.length !== 0) {
+          res.data.errors.forEach((err) => {
+            this.$toasted.global.my_app_error({
+              message: err.error,
+            });
+          })
+        } else {
+          if(priceWithDiscount !== priceWithoutDiscount) {
+            this.beforeMountPriceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
+            var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
+            
+            this.$toasted.global.my_app_success({
+              message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
+            });
+          } else {
+            this.beforeMountPriceDiscount = false;
+            this.$toasted.global.my_app_error({
+              message: this.$t("errorPromoCode"),
+            });
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+        if (error.toString().includes("[PPCODE:104]")) {
+          this.$toasted.global.my_app_error({
+            type: "error",
+            message: this.$t("trainNotFoundMsg"),
+          });
+        } else {
+          this.$toasted.global.my_app_error({
+            message: error.message,
+          });
+        }
+      });
     }
   }
 </script>
@@ -365,7 +583,7 @@
       .row {
         @include row(0, 0, 0, 0, 0, 0);
         margin-top: 80px;
-  
+        
         @include respond-until(sm) {
           margin-top: 0;
         }
@@ -385,7 +603,7 @@
         }
         
         .ticket__block {
-          &:last-child {
+          &.ticket-arrival {
             margin-top: 80px;
           }
         }
@@ -402,7 +620,7 @@
               font-size: 28px;
               color: #000;
               margin-top: 0;
-  
+              
               @include respond-until(sm) {
                 font-size: 24px;
               }
@@ -436,7 +654,7 @@
               background-position: right 5px top;
               background-size: 30px;
               
-              input {
+              .fullname {
                 border: none;
                 text-align: center;
                 outline: none;
@@ -545,7 +763,7 @@
                     font-weight: 300;
                     position: absolute;
                     right: 0;
-                    bottom: 10px;
+                    top: 28px;
                     padding: 6px 17px;
                     color: #000;
                     border: 1px solid #000;
@@ -562,6 +780,12 @@
                       color: $LINK_COLOR;
                       border-color: $LINK_COLOR;
                     }
+                  }
+                  .promo-discount__label {
+                    font-size: 14px;
+                    margin-top: 15px;
+                    font-weight: 500;
+                    color: #25a20f;
                   }
                 }
                 
@@ -593,7 +817,7 @@
               .payment__list {
                 display: flex;
                 justify-content: space-between;
-  
+                
                 @include respond-until(m) {
                   justify-content: flex-start;
                 }
@@ -654,9 +878,6 @@
                     }
                   }
                   
-                  &.liqpay {
-                    background-image: url("../../assets/img/svg/liqpay-icon.svg");
-                  }
                   
                   &.fondy {
                     background-image: url("../../assets/img/svg/fondy-icon.svg");
@@ -679,7 +900,7 @@
                 position: relative;
                 display: flex;
                 align-items: center;
-  
+                
                 @include respond-until(sm) {
                   padding-left: 45px;
                 }
@@ -713,11 +934,19 @@
                   }
                 }
               }
+              .hidden-checkbox {
+                display: none;
+              }
+              .errorMessage {
+                font-size: 14px;
+                font-weight: 100;
+                color: $DANGER_COLOR;
+              }
             }
             
             .payment_sum {
               margin-top: 60px;
-  
+              
               @include respond-until(sm) {
                 display: flex;
                 flex-direction: column;
@@ -747,7 +976,7 @@
                 }
               }
               
-              .smart-tickets-tax {
+              .smart-tickets-tax, .cart-total__cost_skyup {
                 font-size: 17px;
                 font-weight: 200;
                 color: $LABEL_COLOR;
@@ -770,6 +999,15 @@
     }
   }
   
+  .errorMessage {
+    font-size: 14px;
+    font-weight: 100;
+    color: $DANGER_COLOR;
+    
+    &:nth-child(2) {
+      top: 15px;
+    }
+  }
   .d-flex {
     display: flex;
   }

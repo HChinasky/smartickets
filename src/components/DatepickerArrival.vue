@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getArrivalDate", "getFlightArrivalDate", "getCityArrivalDate"]),
+    ...mapGetters(["getArrivalDate", "getCityArrivalDate", "getCityDepartmentDate"]),
     arrivalDate: {
       get() {
         if (this[this.getLink]) {
@@ -84,20 +84,21 @@ export default {
         }
       },
       set(value) {
-        this.$store.commit(this.updateDate, moment(value, "DD.MM.YYYY"));
+        this.$store.commit(this.updateDate, value ? moment(value, "DD.MM.YYYY") : null);
       },
     },
   },
   methods: {
     yesterday() {
-      return moment()
-        .subtract(1, "days")
-        .toDate();
+      if (this.hideHelpLinks) {
+        return moment(this.getCityDepartmentDate).subtract(1, "days").toDate();
+      } else {
+        return moment().subtract(1, "days").toDate();
+      }
     },
     twoMonth() {
-      return moment()
-        .add(60, "days")
-        .toDate();
+      let monthDisabled = this.hideHelpLinks ? 180 : 60;
+      return moment().add(monthDisabled, "days").toDate();
     },
     setDate(date) {
       const now = Date.now();

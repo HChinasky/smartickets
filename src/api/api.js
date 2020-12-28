@@ -9,21 +9,12 @@ const apiClient = axios.create({
   },
 });
 
-const apiClientTest = axios.create({
-  baseURL: "https://st-bknd.e-transport.gov.ua/FrontEnd/API/Service/",
-  withCredentials: false,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
-
 export default {
   registerClient(params) {
     return apiClient.post(
       "/Client/Register" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         lng: i18n.locale == "uk" ? "UA" : "EN",
         uuid: params.uuid,
@@ -47,8 +38,8 @@ export default {
   fetchTrains(params) {
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         req_level: "1.1",
         lng: i18n.locale == "uk" ? "UA" : "EN",
@@ -71,8 +62,8 @@ export default {
   fetchTrain(params) {
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         req_level: "1.2",
         lng: i18n.locale == "uk" ? "UA" : "EN",
@@ -88,8 +79,8 @@ export default {
   fetchWagon(params) {
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       {
         req_level: "1.3",
         lng: i18n.locale == "uk" ? "UA" : "EN",
@@ -129,8 +120,8 @@ export default {
     }
     return apiClient.post(
       "/FrontEnd/API/v1/" +
-        "?rnd=" +
-        (Math.random() * 100000 + "").split(".")[0],
+      "?rnd=" +
+      (Math.random() * 100000 + "").split(".")[0],
       request
     );
   },
@@ -199,6 +190,15 @@ export default {
       doc_num: params.doc_num,
     });
   },
+  getRefundInfoSkyUp(params) {
+    return apiClient.post("/FrontEnd/API/Service/refunds/refund-request", {
+      type: "SkyUp",
+      name: params.name,
+      surname: params.surname,
+      date: params.date,
+      doc_num: params.doc_num,
+    });
+  },
   makeRefund(token) {
     return apiClient.post("/Tickets/EndRefund", {
       refund_token: token,
@@ -212,66 +212,60 @@ export default {
   },
 
   fetchAircrafts(params) {
-    return apiClientTest.post(
-      "flights/search/",
+    return apiClient.post(
+      "/FrontEnd/API/Service/flights/search/",
       {
-              "type": "SkyUp",
-              "lng_id": 1,
-              "adt": params.adult,
-              "chd": params.child,
-              "inf": params.inf,
-              "departure": params.city_from,
-              "arrival": params.city_to,
-              "date": params.dep_date,
-              "dateback": params.arr_date
-            }
+        "type": "SkyUp",
+        "payment_sid": params.payment_sid,
+        "adt": params.adult,
+        "chd": params.child,
+        "inf": params.inf,
+        "departure": params.city_from,
+        "arrival": params.city_to,
+        "date": params.dep_date,
+        ...(params.arr_date && {"dateback": params.arr_date})
+      }
     );
   },
 
-  fetchCityAirports() {
-    return apiClientTest.post(
-      "reference/city",
+  fetchCity() {
+    return apiClient.post(
+      "/FrontEnd/API/Service/reference/city",
       {
-        value: "all",
+        "value": "all",
         "type": "SkyUp",
-        lng: i18n.locale == "uk" ? "UA" : "EN",
+        "lng": i18n.locale == "uk" ? "UA" : "EN",
       })
   },
 
   fetchAirports() {
-    return apiClientTest.post(
-      "reference/airport",
+    return apiClient.post(
+      "/FrontEnd/API/Service/reference/airport",
       {
-        value: "all",
+        "value": "all",
         "type": "SkyUp",
-        lng: i18n.locale == "uk" ? "UA" : "EN",
+        "lng": i18n.locale == "uk" ? "UA" : "EN",
       })
   },
 
   bookingTicketAircraft(params) {
-    return apiClientTest.post(
-      "flights/book",
-      {
-        "type": "SkyUp",
-        "lng_id": i18n.locale == "uk" ? "UA" : "EN",
-        "result_id": params.result_id,
-        "search_id": params.searchId,
-        "passengers": [
-          {
-            "type": "ADT",
-            "firstname": params.passenger.firstname,
-            "lastname": params.passenger.lastname,
-            "birthday": params.passenger.birthday,
-            "gender": params.passenger.gender,
-            "citizenship": params.passenger.citizenship,
-            "docnum": params.passenger.docnum,
-            "doc-expire": params.passenger.docExpire,
-          }
-        ],
-        "email": params.email,
-        "phone": params.phone,
-        "agent_email": "test.solveast@gmail.com"
-      }
+    return apiClient.post(
+      "/FrontEnd/API/Service/flights/book",
+      params
+    )
+  },
+
+  getPrice(params) {
+    return apiClient.post(
+      "/FrontEnd/API/Service/flights/get-price",
+      params
+    )
+  },
+
+  availableDate(params) {
+    return apiClient.post(
+      "/FrontEnd/API/Service/reference/flight-dates",
+      params
     )
   }
 };

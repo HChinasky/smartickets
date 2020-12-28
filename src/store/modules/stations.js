@@ -66,7 +66,6 @@ const actions = {
         label: station.name,
         text: station.name,
       }));
-      console.log(stations)
       commit("setStations", uniqBy(stations, "id"));
     }
   },

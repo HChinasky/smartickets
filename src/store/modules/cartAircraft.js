@@ -1,75 +1,99 @@
 import api from "../../api/api";
 import moment from "moment";
+var Hashes = require("jshashes");
+import { getField, updateField } from 'vuex-map-fields';
 
 const state = {
-  resultId: null,
-  searchId: null,
-  ticketPrice: null,
-  lastName: null,
-  firstName: null,
-  passportCode: null,
-  gender: null,
-  birthDay: null,
-  birthMonth: null,
-  birthYear: null,
-
-  passportDay: null,
-  passportMonth: null,
-  passportYear: null,
-
-  country: null,
-
-  personEmail: null,
-  personPhone: null
+  resultId: "",
+  searchId: "",
+  ticketPrice: "",
+  ticketDepartmentPrice: "",
+  ticketArrivalPrice: "",
+  passengers: [
+    {
+      type: "ADT",
+      firstName: "",
+      lastName: "",
+      genders: "",
+      birthDay: "",
+      birthMonth: "",
+      birthYear: "",
+      country: "",
+      passportCode: "",
+      passportDay: "",
+      passportMonth: "",
+      passportYear: "",
+    },
+  ],
+  personEmail: "",
+  personPhone: "",
+  // promoCode: "GL-GC2Q2ZT"
+  promoCode: "GL-SMART"
 };
 
 const getters = {
+  getField,
   getResultId: (state) => state.resultId,
-  getSearchId: (state) => state.searchId,
+
   getTicketPrice: (state) => state.ticketPrice,
-  getLastName: (state) => state.lastName,
-  getFirstName: (state) => state.firstName,
-  getPassportCode: (state) => state.passportCode,
-  getGender: (state) => state.gender,
-
-  getBirthDay: (state) => state.birthDay,
-  getBirthMonth: (state) => state.birthMonth,
-  getBirthYear: (state) => state.birthYear,
-
-  getPassportDay: (state) => state.passportDay,
-  getPassportMonth: (state) => state.passportMonth,
-  getPassportYear: (state) => state.passportYear,
-
-  getCountry: (state) => state.country,
+  getTicketDepartmentPrice: (state) => state.ticketDepartmentPrice,
+  getTicketArrivalPrice: (state) => state.ticketArrivalPrice,
 
   getPersonEmail: (state) => state.personEmail,
   getPersonPhone: (state) => state.personPhone,
+  getPromoCode: (state) => state.promoCode,
+  getPassengersByType: (state) => (type) => {
+    return state.passengers.filter((passengers) => passengers.type.indexOf(type) !== -1).length;
+  },
 };
 
 const actions = {
-  async bookingTicketAircraft({ rootState }) {
-    //const { token } = rootState.auth
-    const params = {
-      result_id: rootState.cartAircraft.resultId,
-      searchId: rootState.cartAircraft.searchId,
+  async bookingTicketAircraft({  rootState, rootGetters, getters }) {
+    var MD5 = new Hashes.MD5();
+    var passenger = [];
 
-      passenger: {
-        firstname: rootState.cartAircraft.firstName,
-        lastname: rootState.cartAircraft.lastName,
-        birthday: moment(rootState.cartAircraft.birthMonth+'-'+rootState.cartAircraft.birthDay+'-'+rootState.cartAircraft.birthYear).format("DD-MM-YYYY"),
-        gender: rootState.cartAircraft.gender,
-        citizenship: rootState.cartAircraft.country.code,
-        docnum: rootState.cartAircraft.personEmail,
-        docExpire: moment(rootState.cartAircraft.passportMonth+'-'+rootState.cartAircraft.passportDay+'-'+rootState.cartAircraft.passportYear).format("DD-MM-YYYY"),
-      },
-      email: rootState.cartAircraft.personEmail,
-      phone: rootState.cartAircraft.personPhone
+    rootState.cartAircraft.passengers.forEach((element, index) => {
+      passenger[index] = {
+        "type": element.type,
+        "firstname": element.firstName,
+        "lastname": element.lastName,
+        "birthday": moment(element.birthMonth+" "+element.birthDay+" "+element.birthYear).format("DD-MM-YYYY"),
+        "gender": element.genders,
+        "citizenship": element.country.code,
+        "docnum": element.passportCode,
+        "doc-expire": moment(element.passportMonth+" "+element.passportDay+" "+element.passportYear).format("DD-MM-YYYY")
+      }
+    })
+    const params = {
+      "type": "SkyUp",
+      "result_id": rootState.cartAircraft.resultId,
+      "search_id": rootState.cartAircraft.searchId,
+      "payment_sid": localStorage.getItem("payment_sid"),
+      "passengers": passenger,
+      "email": rootState.cartAircraft.personEmail,
+      "phone": rootState.cartAircraft.personPhone.replace(/[^\w\s]/gi, ''),
+      "login": rootGetters.getIsDevLoginRequired ? getters.getDevLogin : "",
+      "password": rootGetters.getIsDevLoginRequired ? MD5.hex(getters.getDevPassword) : "",
+      "promocode": rootState.cartAircraft.promoCode
+      // ...(rootState.cartAircraft.promoCode && {"promocode": rootState.cartAircraft.promoCode})
+    };
+    var response = await api.bookingTicketAircraft(params);
+    return response;
+  },
+  async getCurrentPrice({rootState, commit}, promo) {
+    const params = {
+      "type": "SkyUp",
+      "result_id": rootState.cartAircraft.resultId,
+      "promocode": promo,
     };
 
+    var response = await api.getPrice(params);
 
-    const response = await api.bookingTicketAircraft(params);
-    console.log(response);
+    if(response.data.errors.length === 0) {
+      commit("updateTicketPrice", response.data.data.price_with_discount.toFixed(2));
+    }
 
+    return response;
   },
   setResultId({ commit }, data) {
     commit("updateResultId", data);
@@ -80,52 +104,50 @@ const actions = {
   setTicketPrice({ commit }, price) {
     commit("updateTicketPrice", price);
   },
-  setLastName({ commit }, name) {
-    commit("updateLastName", name);
+  setTicketDepartmentPrice({ commit }, departmentPrice) {
+    commit("updateTicketDepartmentPrice", departmentPrice);
   },
-  setFirstName({ commit }, FirstName) {
-    commit("updateFirstName", FirstName);
+  setTicketArrivalPrice({ commit }, arrivalPrice) {
+    commit("updateTicketArrivalPrice", arrivalPrice);
   },
-  setPassportCode({ commit }, passportCode) {
-    commit("updatePassportCode", passportCode);
-  },
-  setGender({ commit }, gender) {
-    commit("updateGender", gender);
-  },
-  setBirthDay({ commit }, birthDay) {
-    commit("updateBirthDay", birthDay);
-  },
-
-  setBirthMonth({ commit }, birthMonth) {
-    commit("updateBirthMonth", birthMonth);
-  },
-
-  setBirthYear({ commit }, birthYear) {
-    commit("updateBirthYear", birthYear);
-  },
-
-  setPassportDay({ commit }, passportYear) {
-    commit("updatePassportDay", passportYear);
-  },
-  setPassportMonth({ commit }, passportMonth) {
-    commit("updatePassportMonth", passportMonth);
-  },
-  setPassportYear({ commit }, passportYear) {
-    commit("updatePassportYear", passportYear);
-  },
-
-  setCountry({ commit }, country) {
-    commit("updateCountry", country);
-  },
-
   setPersonEmail({ commit }, email) {
     commit("updatePersonEmail", email);
   },
   setPersonPhone({ commit }, phone) {
     commit("updatePersonPhone", phone);
   },
+  setPromoCode({ commit }, promo) {
+    commit("updatePromoCode", promo);
+  },
+  clearPromoCode({ commit }) {
+    commit("updatePromoCode", null);
+  },
+  clearPrice({ commit }) {
+    commit("clearTicketPrice", null);
+  },
 };
 const mutations = {
+  updateField,
+  addPassengerRow(state, typePassenger) {
+    state.passengers.push({
+      type: typePassenger,
+      firstName: "",
+      lastName: "",
+      genders: "",
+      birthDay: "",
+      birthMonth: "",
+      birthYear: "",
+      country: "",
+      passportCode: "",
+      passportDay: "",
+      passportMonth: "",
+      passportYear: "",
+    });
+  },
+  removePassengerRow(state, type) {
+    var removeIndex = state.passengers.map(function(item) { return item.type; }).indexOf(type);
+    state.passengers.splice(removeIndex, 1)
+  },
   updateResultId(state, resultId) {
     state.resultId = resultId;
   },
@@ -135,45 +157,23 @@ const mutations = {
   updateTicketPrice(state, price) {
     state.ticketPrice = price;
   },
-  updateLastName(state, lastName) {
-    state.lastName = lastName;
+  updateTicketDepartmentPrice(state, departmentPrice) {
+    state.ticketDepartmentPrice = departmentPrice;
   },
-  updateFirstName(state, firstName) {
-    state.firstName = firstName;
+  updateTicketArrivalPrice(state, arrivalPrice) {
+    state.ticketArrivalPrice = arrivalPrice;
   },
-  updatePassportCode(state, passportCode) {
-    state.passportCode = passportCode;
-  },
-  updateGender(state, gender) {
-    state.gender = gender;
-  },
-  updateBirthDay(state, birthDay) {
-    state.birthDay = birthDay;
-  },
-  updateBirthMonth(state, birthMonth) {
-    state.birthMonth = birthMonth;
-  },
-  updateBirthYear(state, birthYear) {
-    state.birthYear = birthYear;
-  },
-  updatePassportDay(state, passportDay) {
-    state.passportDay = passportDay;
-  },
-  updatePassportMonth(state, passportMonth) {
-    state.passportMonth = passportMonth;
-  },
-  updatePassportYear(state, passportYear) {
-    state.passportYear = passportYear;
-  },
-  updateCountry(state, country) {
-    state.country = country;
-  },
-
   updatePersonEmail(state, email) {
     state.personEmail = email;
   },
   updatePersonPhone(state, phone) {
     state.personPhone = phone;
+  },
+  updatePromoCode(state, promo) {
+    state.promoCode = promo;
+  },
+  clearTicketPrice(state) {
+    state.ticketPrice = null;
   },
 };
 

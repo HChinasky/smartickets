@@ -31,18 +31,16 @@
             </svg>
           </div>
           <div class="type-trips__btn">
-            <button :class="{active : tripItem.link == link[tripItem.id]}" @click="chooseTrips(tripItem.id, tripItem.link)" class="type-trips__link">{{ $t('select') }}</button>
+            <router-link :to="{ name: tripItem.link }" class="btn btn--black">{{ $t('searchTickets') }}</router-link>
           </div>
         </div>
-      </div>
-      <div class="btn-next__block">
-        <router-link :class="{disabled : !returnLink}" :to="{ name: returnLink }" class="search-ticket__link btn--black">{{ $t('next') }}</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapActions } from "vuex";
   export default {
     name: "TypeTicket",
     data() {
@@ -51,16 +49,6 @@
         tripTypes: {
           0: {
             id: 1,
-            name: 'Приміський поїзд',
-            link: 'SearchSuburbanTrain',
-            icon: {
-              id: 'icon-suburban-train',
-              width: 360,
-              height: 58
-            }
-          },
-          1: {
-            id: 2,
             name: 'Поїзд',
             link: 'SearchForm',
             icon: {
@@ -69,8 +57,8 @@
               height: 56
             }
           },
-          2: {
-            id: 3,
+          1: {
+            id: 2,
             name: 'svg',
             link: 'SearchAircraftTicket',
             icon: {
@@ -83,6 +71,10 @@
       }
     },
     methods: {
+      ...mapActions([
+        "regClient",
+        "updateClientInfo"
+      ]),
       chooseTrips(id, link) {
         this.link.indexOf(link) === -1 ? this.$set(this.link, id, link) : this.$set(this.link, id, null);
       }
@@ -97,6 +89,18 @@
         });
         return activeLink;
       }
+    },
+    created() {
+      this.updateClientInfo();
+      this.regClient()
+        .then(() => {
+
+        })
+        .catch((error) => {
+          this.$toasted.global.my_app_error({
+            message: error.message,
+          });
+        });
     }
   }
 </script>
@@ -132,7 +136,7 @@
       }
       .type-trips__cards {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         margin-top: 50px;
         @include respond-until(xs) {
           flex-wrap: wrap;
@@ -273,6 +277,9 @@
             }
           }
         }
+      }
+      .btn--black {
+        text-decoration: none;
       }
       .btn-next__block {
         display: flex;

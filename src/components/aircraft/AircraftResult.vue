@@ -1,63 +1,71 @@
 <template>
   <div>
     <div class="tickets__body">
-      <div class="ticket__block ticket-department"  v-if="departmentTicket.length !== 0">
+      <div class="ticket__block ticket-department">
         <div class="tickets__title">
           <h3 class="to">{{ $t('departureDateShort') }}:
             <span>
-            {{cityName(departmentTicket[0].departureCity)}} - {{cityName(departmentTicket[0].arrivalCity)}}
+            {{departmentCityName}} - {{arrivalCityName}}
             </span>
           </h3>
         </div>
-        <div class="change-date">
-          <swiper class="swiper" :options="swiperOptionDepartment">
-            <swiper-slide
-                class="text"
-                v-for="date in toDate" :key="date.id"
-            >
-              <select-btn
-                  :key="date.id"
-                  :obj-key="date.name"
-                  :active-key="activeToDate"
-                  :title="date.name"
-                  :update-date="'updateCityDepartmentDate'"
-                  :get-date="departmentDate"
-                  @onUpdateKey="updateActiveDate('activeToDate', date.name)"
+        <template v-if="toDate.length !== 0">
+          <div class="change-date">
+            <swiper class="swiper" :options="swiperOptionDepartment">
+              <swiper-slide
+                  class="text"
+                  v-for="(date, index) in toDate" :key="date.id"
               >
-              
-              </select-btn>
-            </swiper-slide>
-            <div class="swiper-scrollbar" slot="scrollbar"></div>
-          </swiper>
-          <div class="swiper-button-prev" slot="button-prev"></div>
-          <div class="swiper-button-next" slot="button-next"></div>
-        </div>
-        <ticket-card
-            :get-icon="baggageTypeIconFrom"
-            :tickets="departmentTicket"
-        />
+                <select-btn
+                    :key="index"
+                    :obj-key="date.departure_datetime_loc"
+                    :active-key="activeToDate"
+                    :title="date.departure_datetime_loc"
+                    :update-date="'updateCityDepartmentDate'"
+                    :get-date="departmentDate"
+                    @onUpdateKey="updateActiveDate('activeToDate', date.departure_datetime_loc)"
+                >
+                
+                </select-btn>
+              </swiper-slide>
+              <div class="swiper-scrollbar" slot="scrollbar"></div>
+            </swiper>
+            <div class="swiper-button-prev" slot="button-prev"></div>
+            <div class="swiper-button-next" slot="button-next"></div>
+          </div>
+        </template>
+        <template v-if="parseDepartmentFlights.length !== 0">
+          <ticket-card
+              :get-icon="baggageTypeIconFrom"
+              :tickets="parseDepartmentFlights"
+              :backward="returnBackward"
+          />
+        </template>
+        <template v-else>
+          <h4 class="ticketError">{{ $t('errorFindTicket') }}</h4>
+        </template>
       </div>
-      <div class="ticket__block ticket-arrival" v-if="arrivalTicket.length !== 0">
+      <div class="ticket__block ticket-arrival" v-if="parseArrivalFlights.length !== 0 || fromDate.length !== 0">
         <div class="tickets__title">
           <h3 class="from">{{ $t('back') }}:
             <span>
-              {{cityName(arrivalTicket[0].departureCity)}} - {{cityName(arrivalTicket[0].arrivalCity)}}
+              {{arrivalCityName}} - {{departmentCityName}}
             </span>
           </h3>
         </div>
-        <div class="change-date">
+        <div class="change-date" v-if="fromDate.length !== 0">
           <swiper class="swiper" :options="swiperOptionArrival">
             <swiper-slide
                 class="text"
-                v-for="date in fromDate" :key="date.id">
+                v-for="(date, index) in fromDate" :key="date.id">
               <select-btn
-                  :key="date.id"
-                  :obj-key="date.name"
+                  :key="index"
+                  :obj-key="date.departure_datetime_loc"
                   :active-key="activeFromDate"
-                  :title="date.name"
+                  :title="date.departure_datetime_loc"
                   :update-date="'updateCityArrivalDate'"
                   :get-date="arrivalDate"
-                  @onUpdateKey="updateActiveDate('activeFromDate', date.name)"
+                  @onUpdateKey="updateActiveDate('activeFromDate', date.departure_datetime_loc)"
               >
                 {{date.name}}
               </select-btn>
@@ -67,18 +75,35 @@
           <div class="swiper-button-prev" slot="button-prev"></div>
           <div class="swiper-button-next" slot="button-next"></div>
         </div>
+        <template v-if="parseArrivalFlights.length !== 0">
           <ticket-card
               :get-icon="baggageTypeIconTo"
-              :tickets="arrivalTicket"
+              :tickets="parseArrivalFlights"
+              :backward="returnBackward"
           />
+        </template>
+        <template v-else>
+          <h4 class="ticketError">{{ $t('errorFindTicket') }}</h4>
+        </template>
       </div>
-      
-      <BaggageType
+      <TariffType
           @baggageTypeData="handlerIcon"
+          :backward="returnBackward"
+          :aircraftTariff="allAircraft"
       />
     </div>
-    <div class="ts-form__submit">
-      <router-link tag="button" :disabled="!baggageTypeIconFrom || !baggageTypeIconTo" class="btn btn--black" :to="{name: 'CartAircraft'}">
+    <div class="ts-form__submit" v-if="parseDepartmentFlights.length !== 0">
+      <div class="passenger_faq">
+        <a :href="'https://skyup.aero/' + $i18n.locale + '/faq'" target="_blank">
+          <svg width="53" height="53" viewBox="0 0 53 53"  fill="none" xmlns="http://www.w3.org/2000/svg">
+            <use
+                :xlink:href="require('@/assets/img/sprite.svg') + '#icon-open-link'"
+            />
+          </svg>
+          {{ $t('passengersFAQ') }}
+        </a>
+      </div>
+      <router-link tag="button" :disabled="!validate" class="btn btn--black" :to="{name: 'CartAircraft'}">
         {{ $t('next') }}
       </router-link>
     </div>
@@ -92,33 +117,35 @@
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   import SelectBtn from '../../components/SelectBtn';
   import TicketCard from './TicketCard';
-  import BaggageType from "./BaggageType";
+  import TariffType from "./TariffType";
   import 'swiper/css/swiper.css'
   moment.locale("uk", [ukLocale]);
 
   export default {
     name: "AircraftResult",
     props: {
-      "departmentTicket": Array,
-      "arrivalTicket": Array,
       "validateDepartmentTickets": Boolean,
-      "validateArrivalTickets": Boolean
+      "validateArrivalTickets": Boolean,
+      "allAircraft": Object
     },
     components: {
       Swiper,
       SwiperSlide,
       SelectBtn,
       TicketCard,
-      BaggageType
+      TariffType
     },
     data() {
       return {
-        activeToDate: '',
-        activeFromDate: '',
-        departmentDate: '',
-        arrivalDate: '',
-        baggageTypeIconTo: null,
-        baggageTypeIconFrom: null,
+        activeToDate: "",
+        baggageTypeIcon: "",
+        activeFromDate: "",
+        departmentDate: "",
+        arrivalDate: "",
+        baggageTypeIconTo: "",
+        baggageTypeIconFrom: "",
+        departmentFlight: [],
+        arrivalFlight: [],
         swiperOptionDepartment: {
           slidesPerView: 6,
           spaceBetween: 15,
@@ -237,54 +264,131 @@
             }
           }
         },
-        toDate: [
-          {id: 0, name: '2'},
-          {id: 1, name: '4'},
-          {id: 2, name: '6'},
-          {id: 3, name: '8'},
-          {id: 4, name: '10'},
-          {id: 5, name: '12'},
-          {id: 6, name: '14'},
-        ],
-        fromDate: [
-          {id: 0, name: '2'},
-          {id: 1, name: '4'},
-          {id: 2, name: '6'},
-          {id: 3, name: '8'},
-          {id: 4, name: '10'},
-          {id: 5, name: '12'},
-          {id: 6, name: '14'},
-        ],
+        toDate: [],
+        fromDate: [],
       }
+    },
+    watch: {
+      getRelatedDepartmentDate: {
+        immediate: true,
+        handler(newValue, oldValue) {
+          if(this.toDate && this.toDate.length === 0) {
+            if (!oldValue) {
+              this.toDate = newValue.filter((airports) => !airports.backward)
+            }
+            if (oldValue && oldValue.length !== 0) {
+              this.toDate = oldValue.filter((airports) => !airports.backward)
+            }
+            
+          }
+        }
+      },
+      getRelatedArrivalDate: {
+        immediate: true,
+        handler(newValue, oldValue) {
+          if(this.fromDate.length === 0) {
+            if (this.toDate) {
+              this.fromDate = newValue.filter((airports) => airports.backward)
+            }
+            if (oldValue && oldValue.length !== 0) {
+              this.fromDate = oldValue.filter((airports) => airports.backward)
+            }
+          }
+        }
+      },
+      allAircraft: {
+        immediate: true,
+        handler() {
+          this.baggageTypeIconFrom = null
+          this.baggageTypeIconTo = null
+        }
+      },
     },
     computed: {
       ...mapGetters([
-        "allAircrafts",
-        "getDepartmentAirports",
-        "getArrivalAirports",
         "getCityNameByCode",
-        "getAirportsNameById",
         "getCityDepartmentDate",
-        "getCityArrivalDate"
+        "getCityArrivalDate",
+        "getDepartmentCityCode",
+        "getArrivalCityCode"
       ]),
+      validate() {
+        if(this.parseArrivalFlights.length !== 0) {
+          if(!this.baggageTypeIconFrom || !this.baggageTypeIconTo) {
+            return false
+          }
+        } else  {
+          if(!this.baggageTypeIconFrom) {
+            return false
+          }
+        }
+        return true
+      },
+      returnBackward() {
+        if(this.parseArrivalFlights.length !== 0) {
+          return true
+        }
+        return false
+      },
+      departmentCityName() {
+        return this.getCityNameByCode(this.getDepartmentCityCode);
+      },
+      arrivalCityName() {
+        return this.getCityNameByCode(this.getArrivalCityCode);
+      },
+      parseDepartmentFlights() {
+        let departmentFlight = [];
+        if (this.allAircraft) {
+          for (var i = 0; i < this.allAircraft.flights.length; i++) {
+            for (var k = 0; k < this.allAircraft.flights[i].routes.length; k++) {
+              if (this.allAircraft.flights[i].routes[k].backward === 0) {
+                departmentFlight.push(this.allAircraft.flights[i].routes[k]);
+
+                departmentFlight[i]["resultId"] = this.allAircraft.flights[i].resultId;
+                departmentFlight[i]["searchId"] = this.allAircraft.flights[i].searchId;
+              }
+            }
+          }
+        }
+        return departmentFlight
+      },
+      parseArrivalFlights() {
+        let arrivalFlight = [];
+        if (this.allAircraft) {
+          for (var i = 0; i < this.allAircraft.flights.length; i++) {
+            for (var k = 0; k < this.allAircraft.flights[i].routes.length; k++) {
+              if (this.allAircraft.flights[i].routes[k].backward === 1) {
+                arrivalFlight.push(this.allAircraft.flights[i].routes[k]);
+
+                arrivalFlight[i]["resultId"] = this.allAircraft.flights[i].resultId;
+                arrivalFlight[i]["searchId"] = this.allAircraft.flights[i].searchId;
+              }
+            }
+          }
+        }
+        return arrivalFlight;
+      },
+      getRelatedDepartmentDate() {
+        var depDate = [];
+        this.allAircraft.additional_flights.filter((dep_date) => {
+          if(!dep_date.backward) {
+            depDate.push(dep_date);
+          }
+        })
+        return depDate;
+      },
+      getRelatedArrivalDate() {
+        var arrDate = [];
+        this.allAircraft.additional_flights.filter((arr_date) => {
+          if(arr_date.backward) {
+            arrDate.push(arr_date);
+          }
+        })
+        return arrDate;
+      }
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
-      cloneDate() {
-        if(!this.departmentDate || !this.arrivalDate) {
-          this.departmentDate = this.getCityDepartmentDate;
-          this.arrivalDate = this.getCityArrivalDate;
-        }
-      },
-      cityName(code) {
-        if(code) {
-          return this.getCityNameByCode(code);
-        }
-      },
-      fetchData(aircraftNumber) {
-        this.fetchAircrafts(aircraftNumber);
-
-      },
       handlerIcon(iconArr) {
         if(iconArr.modalId === 0) {
           this.baggageTypeIconFrom = iconArr;
@@ -292,24 +396,10 @@
           this.baggageTypeIconTo = iconArr;
         }
       },
-      formattedDate(date) {
-        if (this.$route.meta.clientArea)
-          return moment(date).format("LL, dddd");
-        else
-          return moment(date).format("ll, dd");
-      },
-      formattedTime(date) {
-        return moment(date).format("HH:mm");
-      },
       updateActiveDate(directive, index) {
-        console.log(directive);
-        console.log(directive);
         this[directive] = index;
       },
     },
-    beforeMount() {
-      this.cloneDate();
-    }
   };
 </script>
 
@@ -368,11 +458,11 @@
           }
           @include respond-until(sm) {
             font-size: 26px;
-            margin: 0;
+            margin: 0 0 15px;
           }
           @include respond-until(xs) {
             font-size: 24px;
-            margin: 0;
+            margin: 0 0 15px;
           }
           span {
             color: $SECOND_FONT_COLOR;
@@ -473,10 +563,48 @@
     }
   }
   .ts-form__submit {
+    position: relative;
+    .passenger_faq {
+      position: absolute;
+      @include respond-until(m) {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      @include respond-until(sm) {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      @include respond-until(xs) {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      a {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 300;
+        color: $BORDER_BOTTOM_LINK_COLOR;
+        text-decoration: none;
+        outline: none;
+      }
+    }
     .btn {
       &:disabled {
         color: #fff;
       }
     }
+  }
+  .ticketError {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 300;
+    padding: 15px;
+    border: 1px dashed $BORDER_BOTTOM_LINK_COLOR;
   }
 </style>

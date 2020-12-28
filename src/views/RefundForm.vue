@@ -57,7 +57,7 @@
             <br />
             <span v-if="!isRefundSuccessful">
               <button @click="makeRefund()" class="btn btn--black">
-                {{ $t("refundTicket") }}
+                {{ $t("refundTickets") }}
               </button>
             </span>
             <span v-else>
