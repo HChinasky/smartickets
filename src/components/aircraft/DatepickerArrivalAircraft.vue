@@ -1,6 +1,7 @@
 <template>
   <span class="datepicker-wrap">
     <date-picker
+        :disabled-dates="disabledDates"
         :format="customFormatter"
         v-model="arrivalDate"
         :language="uk"
@@ -47,7 +48,7 @@
       disabledDates: {
         get() {
           var self = this,
-            availableDates = self.getAvailableDates.data;
+            availableDates = self.getAvailableDates;
           return {
             to: moment(this.getCityDepartmentDate).subtract(1, "days").toDate(),
             customPredictor: function (date) {
@@ -80,10 +81,10 @@
           arrival: this.getDepartmentCityCode,
           department: this.getArrivalCityCode
         }
-          await this.fetchAvailableDate(payload)
-            .then(() => {
-              this.loading = false
-            }).catch(() => {})
+        await this.fetchAvailableDate(payload)
+          .then(() => {
+            this.loading = false
+          }).catch(() => {})
       },
       customFormatter(date) {
         return moment(date).format('DD.MM.YYYY');
@@ -110,7 +111,7 @@
     border: none;
     padding: 10px;
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
-  
+    
     &.loading {
       &:before {
         content: "";
@@ -120,7 +121,7 @@
         left: 0;
         right: 0;
         background-color: rgba(255,255,255,.7);
-      
+        
       }
       &:after {
         content: "";
@@ -199,7 +200,7 @@
     display: block;
     background-size: contain;
   }
-
+  
   ::v-deep .ts-form__date {
     &:disabled {
       background-color: transparent;
@@ -211,12 +212,12 @@
     0% {transform: rotate(0deg);}
     100% {transform: rotate(360deg);}
   }
-
+  
   @-moz-keyframes loading {
     0% {transform: rotate(0deg);}
     100% {transform: rotate(360deg);}
   }
-
+  
   @-webkit-keyframes loading {
     0% {transform: rotate(0deg);}
     100% {transform: rotate(360deg);}

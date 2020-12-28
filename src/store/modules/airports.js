@@ -91,7 +91,7 @@ const actions = {
       "group_by_date": 1
     }
     const response = await api.availableDate(params);
-    commit("setAvailableDates", response.data);
+    commit("setAvailableDates", response.data.data);
     return response;
   },
   setDepartmentCountry({ commit }, data) {

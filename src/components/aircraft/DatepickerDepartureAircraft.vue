@@ -52,7 +52,7 @@
       disabledDates: {
         get() {
           var self = this,
-              availableDates = self.getAvailableDates.data;
+              availableDates = self.getAvailableDates;
           return {
             customPredictor: function (date) {
               if (self.getDepartmentCityCode && self.getArrivalCityCode) {
