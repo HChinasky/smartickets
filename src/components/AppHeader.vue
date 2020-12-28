@@ -56,13 +56,13 @@
                     :xlink:href="require('@/assets/img/sprite.svg') + '#icon-cart-modal'"
                 />
               </svg>
-              Кошик
+              {{ $t('cart') }}
             </div>
     
             <template slot="popover">
               <div class="header-cart__wrap">
                 <div class="header-cart-title__block">
-                  <h4 class="header-wrap__title">Вибрані квитки</h4>
+                  <h4 class="header-wrap__title">{{ $t('selectedTickets') }}</h4>
                   <img src="@/assets/img/svg/bottom-line.svg"/>
                 </div>
                 <div class="header-cart-tickets__list">
@@ -92,7 +92,7 @@
                             :xlink:href="require('@/assets/img/sprite.svg') + '#icon-cart-train'"
                         />
                       </svg>
-                      <span class="train__label">Поїзд</span>
+                      <span class="train__label">{{ $t('train') }}</span>
                     </div>
                     <div class="header-cart-ticket__remove">
                       <svg width="30" height="27" viewBox="0 0 30 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -111,7 +111,7 @@
                               :xlink:href="require('@/assets/img/sprite.svg') + '#icon-cart-metro'"
                           />
                         </svg>
-                        <span class="header-cart-additional-transport__label">Метро</span>
+                        <span class="header-cart-additional-transport__label">{{ $t('metroLabel') }}</span>
                       </div>
                     </div>
                   </div>

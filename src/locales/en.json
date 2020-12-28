@@ -12,6 +12,7 @@
     "provisionOfServices": "The procedure for the provision of services",
     "epdCheck": "ETD check",
     "cart": "Cart",
+    "selectedTickets": "Selected tickets",
     "ticketSearchOnline": "Find tickets online",
     "from": "From",
     "to": "To",
@@ -285,5 +286,6 @@
     "refundErrorSurnameSymbols": "Last name must contain only latin characters",
     "refundErrorNameSymbols": "Name must contain only latin characters",
     "refundErrorSurnameMinLength": "Last name must be at least 3 characters long",
-    "refundErrorNameMinLength": "The name must be at least 3 characters long"
+    "refundErrorNameMinLength": "The name must be at least 3 characters long",
+    "metroLabel": "Metro"
 }
