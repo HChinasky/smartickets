@@ -7194,7 +7194,7 @@ body.nav-open {
   .tooltip.info[x-placement^="bottom"] {
     left: 0!important;
   }
-  .tooltip[x-placement^="bottom"] .tooltip-arrow {
+  .tooltip:not(.header-cart)[x-placement^="bottom"] .tooltip-arrow {
       display: none;
   }
 }

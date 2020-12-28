@@ -154,14 +154,6 @@
         }
         return str;
       },
-      getPriceForOneTicket(price) {
-        if(this.allAircrafts.flights[0].routes.length > 1) {
-          return price / 2
-        } else if(this.getTicketPrice) {
-          return this.getTicketPrice
-        }
-        return this.tickets[0].amount;
-      },
       baggageTypeArr(backward) {
         var flights = {};
         var allowedListBasic = {
