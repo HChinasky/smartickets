@@ -66,7 +66,7 @@
                   <img src="@/assets/img/svg/bottom-line.svg"/>
                 </div>
                 <div class="header-cart-tickets__list" v-if="getTicketsFromCart.length !== 0">
-                  <div class="header-cart-ticket__item" v-if="getResultId">
+                  <div class="header-cart-ticket__item" v-if="getTicketsFromCart.find(e => e.type == 'SkyUp')">
                     <div class="header-cart-ticket__logo">
                       <svg width="33" height="34" viewBox="0 0 33 34">
                         <use :xlink:href="require('@/assets/img/sprite.svg') + '#icon-cart-aircraft'" />
@@ -85,7 +85,7 @@
                       </svg>
                     </div>
                   </div>
-                  <div class="header-cart-ticket__item" v-if="getCart.length !== 0">
+                  <div class="header-cart-ticket__item" v-if="getTicketsFromCart.find(e => e.type == 'Train')">
                     <div class="header-cart-ticket__logo">
                       <svg  width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <use
