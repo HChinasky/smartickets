@@ -27,7 +27,7 @@ const mutations = {
     }
   },
   removeTicketRow(state, type) {
-    var removeIndex = state.ticketsList.map(function(item) { return item.type; }).indexOf(type);
+    let removeIndex = state.ticketsList.map(function(item) { return item.type; }).indexOf(type);
     state.ticketsList.splice(removeIndex, 1)
   },
 };
