@@ -69,19 +69,23 @@ export const wagonTemplateMixin = {
         wagon_class: wagon.class.code,
         metro: metro,
       });
-      this.setTicketsList({
-        type: "Train",
-        name: "cart",
-        personValidate: false,
-        price: {
-          train: wagon.cost.value,
-          metro: this.$appConfig.services.cost.metroTicket
-        }});
+      this.getTicketsFromCart.filter((ticket) => {
+        if(ticket.type.toLowerCase() === "train" && this.getCart.length !== 0) {
+          ticket.selectSeat = true;
+          this.setTicketsList(ticket)
+        }
+      });
     },
     removeFromCart(number) {
       this.removeItemFromCart({
         place: number,
         wagon_num: parseInt(this.number),
+      });
+      this.getTicketsFromCart.filter((ticket) => {
+        if(ticket.type.toLowerCase() === "train" && this.getCart.length === 0) {
+          ticket.selectSeat = false;
+          this.setTicketsList(ticket)
+        }
       });
     },
 

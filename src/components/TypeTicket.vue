@@ -31,7 +31,7 @@
             </svg>
           </div>
           <div class="type-trips__btn">
-            <button :class="{active : getTicketsFromCart.find(e => e.type == tripItem.ticketType.type)}" @click="chooseTrips(tripItem.ticketType.ticketId, tripItem.ticketType.type, tripItem.ticketType.type)" class="type-trips__link">{{ $t('select') }}</button>
+            <button :class="{active : getTicketsFromCart.find(e => e.type == tripItem.ticketType.type)}" @click="chooseTrips(tripItem.ticketType.ticketId, tripItem.ticketType.type, tripItem.ticketType.name)" class="type-trips__link">{{ $t('select') }}</button>
           </div>
         </div>
       </div>
@@ -86,7 +86,7 @@
         let activeLink = '';
         this.getTicketsFromCart.filter(function (el) {
           if (el != null) {
-            activeLink = el
+            activeLink = el.name
           }
         });
         return activeLink;
@@ -99,10 +99,10 @@
         "updateClientInfo",
         "setTicketsList"
       ]),
-      chooseTrips(id, type) {
+      chooseTrips(id, type, nameComponent) {
         let index = this.getTicketsFromCart.map(function(item) { return item.type; }).indexOf(type);
         if(index === -1) {
-          this.setTicketsList({type: type})
+          this.setTicketsList({type: type, name: nameComponent, selectSeat: false})
         } else {
           this.removeTicketRow(type)
         }

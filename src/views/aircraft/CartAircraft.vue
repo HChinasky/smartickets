@@ -107,14 +107,14 @@
           let nextLink = {};
           this.getTicketsFromCart.filter((ticket) => {
             if(ticket.name.toLowerCase() === this.$options.name.toLowerCase()) {
-              ticket.personValidate = true;
+              ticket.selectSeat = true;
               this.setTicketsList(ticket)
             } else {
               nextLink = ticket;
             }
           });
           this.$router.push({
-            name: nextLink && !this.getTicketsFromCart.every((item) => item.personValidate === true) ? nextLink.name : 'payment',
+            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'payment',
             params: { name: 'CartAircraft' }
           });
         }

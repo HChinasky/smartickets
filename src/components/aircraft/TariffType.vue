@@ -111,7 +111,7 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
   import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
   export default {
     name: "TariffType",
@@ -138,6 +138,9 @@
           mousewheel: true
         },
       }
+    },
+    computed: {
+      ...mapGetters(["getTicketsFromCart"])
     },
     methods: {
       ...mapActions([
@@ -171,12 +174,11 @@
               if(aircraft.routes[0].fareName == this.tariffDepartment && this.checkSelectTariff.length >= 2) {
                 this.setResultId(aircraft.resultId);
                 this.setSearchId(aircraft.searchId);
-                this.setTicketsList({
-                  type: "SkyUp",
-                  link: "CartAircraft",
-                  personValidate: false,
-                  price: {
-                    aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH),
+
+                this.getTicketsFromCart.filter((ticket) => {
+                  if(ticket.type.toLowerCase() === "skyup") {
+                    ticket.selectSeat = true;
+                    this.setTicketsList(ticket)
                   }
                 });
                 this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
@@ -186,12 +188,10 @@
             if(aircraft.routes[0].fareName == this.tariffDepartment) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              this.setTicketsList({
-                type: "SkyUp",
-                name: "CartAircraft",
-                personValidate: false,
-                price: {
-                  aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH)
+              this.getTicketsFromCart.filter((ticket) => {
+                if(ticket.type.toLowerCase() === "skyup") {
+                  ticket.selectSeat = true;
+                  this.setTicketsList(ticket)
                 }
               });
               this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
