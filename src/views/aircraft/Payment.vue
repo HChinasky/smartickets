@@ -119,7 +119,7 @@
                 <label>E-mail ({{ $t('ticketsBeSent') }})</label>
                 <input
                     class="ticket-list__input"
-                    type="text"
+                    type="email"
                     @blur="$v.email.$touch()"
                     @keydown.space.prevent
                     v-model="email"
@@ -198,8 +198,8 @@
             </div>
             <div class="payment_sum">
               <template v-if="fullPrice !== getPrice">
-                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ fullPrice }} {{ $t('UAH') }}</span></p>
-                <p class="total-sum" v-if="fullPrice">{{ $t('discountPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ (+fullPrice + +getTotalPrice).toFixed(2) }} {{ $t('UAH') }}</span></p>
+                <p class="total-sum" v-if="fullPrice">{{ $t('discountPrice') }}: <span>{{(+getPrice + +getTotalPrice).toFixed(2) }} {{ $t('UAH') }}</span></p>
               </template>
               <template v-else>
                 <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
@@ -312,7 +312,9 @@
         "getDevLogin",
         "getDevPassword",
         "getIsDevSkyUpLoginRequired",
-        "getTicketsFromCart"
+        "getTicketsFromCart",
+        "getTotalPrice",
+        "getCart"
       ]),
       devLogin: {
         get() {
@@ -339,11 +341,6 @@
         },
       },
       getPrice() {
-        let totalAmount = null
-        this.getTicketsFromCart.map((ticket) => {
-          totalAmount = ticket
-        });
-        console.log(totalAmount)
         if(this.getTicketPrice) {
           return this.getTicketPrice;
         }
@@ -389,6 +386,7 @@
     methods: {
       ...mapActions([
         "startPayment",
+        "bookTickets",
         "bookingTicketAircraft",
         "setPersonEmail",
         "setPersonPhone",
@@ -484,6 +482,16 @@
                   });
                 }
               });
+            if(this.getCart.length !== 0) {
+              await this.bookTickets()
+                .then(() => {})
+                .catch((error) => {
+                  networkError = error;
+                  this.$toasted.global.my_app_error({
+                    message: error.message,
+                  });
+                });
+            }
           }
           if(!catchErr && checkDevUser === 0 && !networkError) {
             await this.startPayment()
@@ -511,7 +519,7 @@
       this.getCurrentPrice(this.promo).then((res) => {
         let priceWithDiscount = res.data.data.price_with_discount,
           priceWithoutDiscount = res.data.data.price_without_discount;
-        this.fullPrice = priceWithoutDiscount.toFixed(2);
+        this.fullPrice = priceWithoutDiscount;
         if(res.data.errors.length !== 0) {
           res.data.errors.forEach((err) => {
             this.$toasted.global.my_app_error({

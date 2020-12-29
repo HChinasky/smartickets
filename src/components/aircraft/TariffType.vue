@@ -176,7 +176,7 @@
                   link: "CartAircraft",
                   personValidate: false,
                   price: {
-                    aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2),
+                    aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH),
                   }
                 });
                 this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
@@ -191,7 +191,7 @@
                 name: "CartAircraft",
                 personValidate: false,
                 price: {
-                  aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2),
+                  aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH)
                 }
               });
               this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
