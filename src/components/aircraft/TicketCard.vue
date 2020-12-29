@@ -77,7 +77,7 @@
             <p v-else>{{ getIcon.title }}</p>
           </div>
           <div class="choose-ticket">
-            <template v-if="!getIcon">
+            <template v-if="!getIcon || !getResultId">
               <button class="btn btn--black" @click="baggageTypeArr(tickets[Object.keys(tickets)[Object.keys(tickets).length - 1]].backward);">{{ $t('select') }}</button>
             </template>
             <template v-else>
@@ -130,6 +130,7 @@
         "getTicketDepartmentPrice",
         "getTicketArrivalPrice",
         "getSecondCityNameByCode",
+        "getResultId",
       ]),
       departmentCityName() {
         return this.getCityNameByCode(this.tickets[Object.keys(this.tickets)[Object.keys(this.tickets).length - 1]].departureAirport);

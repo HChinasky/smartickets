@@ -38,8 +38,8 @@
 </template>
 
 <script>
-  import {mapMultiRowFields} from 'vuex-map-fields';
-  import { mapGetters } from "vuex";
+  import { mapMultiRowFields } from 'vuex-map-fields';
+  import { mapGetters, mapActions } from "vuex";
   import PassengerCart from '../../components/aircraft/PassengerCart';
   
   export default {
@@ -49,7 +49,8 @@
     },
     data() {
       return {
-        validationHandler: ""
+        validationHandler: "",
+        links: ""
       }
     },
     computed: {
@@ -58,6 +59,7 @@
         "getTicketPrice",
         "getTicketDepartmentPrice",
         "getField",
+        "getTicketsFromCart",
       ]),
       getPrice() {
         if(this.getTicketPrice) {
@@ -67,6 +69,7 @@
       },
     },
     methods: {
+      ...mapActions(["setTicketsList"]),
       handlerIcon($v) {
         this.validationHandler = $v;
       },
@@ -96,17 +99,23 @@
             isValid = false;
           } else if(this.validationHandler.passengers.$each[i].passportYear.$invalid) {
             isValid = false;
-          }  else if(this.validationHandler.devLogin.$invalid) {
-            isValid = false;
-          }  else if(this.validationHandler.devPassword.$invalid) {
-            isValid = false;
           } else {
             isValid = true;
           }
         }
         if(isValid) {
+          let nextLink = {};
+          this.getTicketsFromCart.filter((ticket) => {
+            if(ticket.name.toLowerCase() === this.$options.name.toLowerCase()) {
+              ticket.personValidate = true;
+              this.setTicketsList(ticket)
+            } else {
+              nextLink = ticket;
+            }
+          });
           this.$router.push({
-            name: 'payment',
+            name: nextLink && !this.getTicketsFromCart.every((item) => item.personValidate === true) ? nextLink.name : 'payment',
+            params: { name: 'CartAircraft' }
           });
         }
       }

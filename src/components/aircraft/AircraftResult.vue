@@ -306,6 +306,7 @@
     },
     computed: {
       ...mapGetters([
+        "getResultId",
         "getCityNameByCode",
         "getCityDepartmentDate",
         "getCityArrivalDate",
@@ -313,16 +314,11 @@
         "getArrivalCityCode"
       ]),
       validate() {
-        if(this.parseArrivalFlights.length !== 0) {
-          if(!this.baggageTypeIconFrom || !this.baggageTypeIconTo) {
+        if(!this.getResultId) {
+          console.log(this.getResultId)
             return false
-          }
-        } else  {
-          if(!this.baggageTypeIconFrom) {
-            return false
-          }
         }
-        return true
+        return true;
       },
       returnBackward() {
         if(this.parseArrivalFlights.length !== 0) {

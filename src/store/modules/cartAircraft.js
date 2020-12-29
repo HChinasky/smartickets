@@ -98,6 +98,9 @@ const actions = {
   setResultId({ commit }, data) {
     commit("updateResultId", data);
   },
+  clearResultId({ commit }, data) {
+    commit("clearResultId", data);
+  },
   setSearchId({ commit }, data) {
     commit("updateSearchId", data);
   },
@@ -150,6 +153,9 @@ const mutations = {
   },
   updateResultId(state, resultId) {
     state.resultId = resultId;
+  },
+  clearResultId(state) {
+    state.resultId = "";
   },
   updateSearchId(state, searchId) {
     state.searchId = searchId;

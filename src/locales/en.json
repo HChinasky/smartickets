@@ -287,5 +287,8 @@
     "refundErrorNameSymbols": "Name must contain only latin characters",
     "refundErrorSurnameMinLength": "Last name must be at least 3 characters long",
     "refundErrorNameMinLength": "The name must be at least 3 characters long",
-    "metroLabel": "Metro"
+    "metroLabel": "Metro",
+    "emptyCart": "The cart is empty",
+    "goRegistrationTicket": "Go to registration",
+    "goToBooking": "Go to booking"
 }

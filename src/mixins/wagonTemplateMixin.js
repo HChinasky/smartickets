@@ -18,13 +18,14 @@ export const wagonTemplateMixin = {
       "getIsMetroActive",
       "getMetroStationTo",
       "getMetroStationFrom",
+      "getTicketsFromCart",
     ]),
     freePlaces() {
       return this.getWagon.places;
     },
   },
   methods: {
-    ...mapActions(["addItemToCart", "removeItemFromCart"]),
+    ...mapActions(["addItemToCart", "removeItemFromCart", "setTicketsList"]),
     styles(number) {
       return {
         seat_taken: !includes(this.freePlaces, number),
@@ -58,7 +59,6 @@ export const wagonTemplateMixin = {
         price: this.$appConfig.services.cost.metroTicket,
         selected: this.getIsMetroActive,
       };
-
       this.addItemToCart({
         place: number,
         place_type,
@@ -69,6 +69,14 @@ export const wagonTemplateMixin = {
         wagon_class: wagon.class.code,
         metro: metro,
       });
+      this.setTicketsList({
+        type: "Train",
+        name: "cart",
+        personValidate: false,
+        price: {
+          train: wagon.cost.value,
+          metro: this.$appConfig.services.cost.metroTicket
+        }});
     },
     removeFromCart(number) {
       this.removeItemFromCart({

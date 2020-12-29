@@ -140,25 +140,32 @@
               </strong
             >
           </div>
-          <span v-if="!allTicketsBooked">
+          <template v-if="getTicketsFromCart.length < 2">
+            <span v-if="!allTicketsBooked">
+              <button
+                class="cart-total__submit btn btn--black test"
+                :disabled="$store.state.cart.cart.length == 0"
+                v-promise-btn
+                @click="tryBookTickets"
+              >
+                {{ $t("bookTickets") }}
+              </button>
+            </span>
+  
+            &nbsp;
             <button
+              v-if="allTicketsBooked"
               class="cart-total__submit btn btn--black"
-              :disabled="$store.state.cart.cart.length == 0"
-              v-promise-btn
-              @click="tryBookTickets"
+              @click="buyTickets()"
             >
-              {{ $t("bookTickets") }}
+              {{ $t("buyTickets") }}
             </button>
-          </span>
-
-          &nbsp;
-          <button
-            v-if="allTicketsBooked"
-            class="cart-total__submit btn btn--black"
-            @click="buyTickets()"
-          >
-            {{ $t("buyTickets") }}
-          </button>
+          </template>
+          <template v-else>
+            <button class="cart-total__submit btn btn--black" @click="goToBook">
+              {{ $t('goToBooking') }}
+            </button>
+          </template>
         </section>
       </div>
     </div>
@@ -204,6 +211,7 @@ export default {
       "getDevLogin",
       "getDevPassword",
       "getIsDevLoginRequired",
+      "getTicketsFromCart"
     ]),
     allTicketsBooked() {
       return (
@@ -277,6 +285,7 @@ export default {
       "updateEmail",
       "updateDevLogin",
       "updateDevPassword",
+      "setTicketsList",
     ]),
     changeEmail(value) {
       this.updateEmail(value);
@@ -327,7 +336,47 @@ export default {
           });
       }
     },
+    goToBook() {
+      var isValid = false;
+      var isValidAdditional = false;
 
+      this.$refs.cartItems.forEach(function(item) {
+        item.$v.$touch();
+        if (item.$v.$invalid) {
+          isValid = false;
+        } else {
+          isValid = true;
+        }
+      });
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        isValidAdditional = false;
+      } else {
+        isValidAdditional = true;
+      }
+
+      if (!isValid || !isValidAdditional) {
+        this.$toasted.global.my_app_error({
+          message: this.$t("orderErrors"),
+        });
+        return;
+      } else {
+        let nextLink = {};
+        this.getTicketsFromCart.filter((ticket) => {
+          if(ticket.name.toLowerCase() === this.$options.name.toLowerCase()) {
+            ticket.personValidate = true;
+            this.setTicketsList(ticket)
+          } else {
+            nextLink = ticket;
+          }
+        });
+        this.$router.push({
+          name: nextLink && !this.getTicketsFromCart.every((item) => item.personValidate === true) ? nextLink.name : 'payment',
+          params: { name: 'Cart' }
+        });
+      }
+    },
     buyTickets() {
       this.isLoading = true;
       this.startPayment()

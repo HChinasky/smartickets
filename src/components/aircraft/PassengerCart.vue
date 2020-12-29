@@ -141,7 +141,7 @@
             </div>
           </div>
         </div>
-        <div class="person-info__card mt-5">
+        <div class="person-info__card mt-4">
           <div class="form-list">
             <div class="form-list__group">
               <label class="ticket-list__label">{{ $t('citizenship') }}</label>
@@ -378,7 +378,7 @@
       margin-top: 60px;
     }
     .person-info__card {
-      &.mt-5 {
+      &.mt-4 {
         @include respond-until(sm) {
           margin-top: 40px;
         }

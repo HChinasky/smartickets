@@ -312,6 +312,7 @@
         "getDevLogin",
         "getDevPassword",
         "getIsDevSkyUpLoginRequired",
+        "getTicketsFromCart"
       ]),
       devLogin: {
         get() {
@@ -338,6 +339,11 @@
         },
       },
       getPrice() {
+        let totalAmount = null
+        this.getTicketsFromCart.map((ticket) => {
+          totalAmount = ticket
+        });
+        console.log(totalAmount)
         if(this.getTicketPrice) {
           return this.getTicketPrice;
         }

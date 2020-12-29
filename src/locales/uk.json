@@ -294,5 +294,8 @@
     "refundErrorNameSymbols": "Ім’я має містити тільки латинськи символи",
     "refundErrorSurnameMinLength": "Прізвище має містити не менше 3-х символів",
     "refundErrorNameMinLength": "Ім’я має містити не менше 3-х символів",
-    "metroLabel": "Метро"
+    "metroLabel": "Метро",
+    "emptyCart": "Кошик порожній",
+    "goRegistrationTicket": "Перейти до оформлення",
+    "goToBooking": "Перейти до бронювання"
 }

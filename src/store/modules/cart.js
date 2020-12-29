@@ -281,8 +281,8 @@ const actions = {
         commit("SET_REUSE_PAYMENT_SID", true); //переиспользование sid для повторного бронирования
       }
     }
-  
-    
+
+
     catch (error) {
       if (error.request) {
         throw new Error(i18n.t("serverNotResponding"));
@@ -290,7 +290,7 @@ const actions = {
         throw new Error(error.message)
       }
     }
-    
+
   },
   async startPayment({ rootState, commit }) {
     var SHA256 = new Hashes.SHA256();
@@ -303,7 +303,7 @@ const actions = {
       ),
       payment_sid: localStorage.getItem("payment_sid"),
     };
-    
+
 
     const response = await api.initPayment(params);
     if (response.data.code != 0) {
@@ -350,7 +350,7 @@ const actions = {
   async sendTicketToEmail({ rootState }, payload) {
     console.log(rootState.auth.uuid);
     const params = {
-      uuid: localStorage.getItem("uuid"),      
+      uuid: localStorage.getItem("uuid"),
       pack_num: payload.pack_num,
       trn_date: payload.trn_date,
       html: payload.html,
@@ -376,6 +376,9 @@ const actions = {
     } else {
       return response.data.data;
     }
+  },
+  clearCart({ commit }) {
+    commit("UNSET_CART", []);
   },
 };
 
@@ -464,7 +467,7 @@ const mutations = {
 
   UNSET_CART(state) {
     state.cart = [];
-    state.reusePaymentSID = false; 
+    state.reusePaymentSID = false;
   },
   /*
   REMOVE_VALIDATION_ERROR(state, { index, field }) {

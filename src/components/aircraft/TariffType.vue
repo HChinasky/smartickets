@@ -124,6 +124,7 @@
       return {
         modalId: null,
         baggageTypes: null,
+        checkSelectTariff: [],
         tariffDepartment: "Basic",
         tariffArrival: "Basic",
         swiperOption: {
@@ -145,7 +146,8 @@
         "setTicketPrice",
         "setTicketDepartmentPrice",
         "setTicketArrivalPrice",
-        "setPersons"
+        "setPersons",
+        "setTicketsList"
       ]),
       getPriceForOneTicket(price) {
         return price;
@@ -157,28 +159,42 @@
         
         if(this.modalId == 0) {
           this.tariffDepartment = iconArr.title;
+          this.checkSelectTariff.push(iconArr.title)
         } else {
           this.tariffArrival = iconArr.title;
+          this.checkSelectTariff.push(iconArr.title)
         }
         this.aircraftTariff.flights.filter((aircraft) => {
           if(aircraft.routes[1]) {
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
-              this.setResultId(aircraft.resultId);
-              this.setSearchId(aircraft.searchId);
-              this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
-              if(this.modalId == 0) {
-                this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
-              } else {
-                this.setTicketArrivalPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
+              
+              if(aircraft.routes[0].fareName == this.tariffDepartment && this.checkSelectTariff.length >= 2) {
+                this.setResultId(aircraft.resultId);
+                this.setSearchId(aircraft.searchId);
+                this.setTicketsList({
+                  type: "SkyUp",
+                  link: "CartAircraft",
+                  personValidate: false,
+                  price: {
+                    aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2),
+                  }
+                });
+                this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
               }
             }
           } else  {
             if(aircraft.routes[0].fareName == this.tariffDepartment) {
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
-              if (this.modalId == 0) {
-                this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
-              }
+              this.setTicketsList({
+                type: "SkyUp",
+                name: "CartAircraft",
+                personValidate: false,
+                price: {
+                  aircraft: parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2),
+                }
+              });
+              this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
             }
           }
         });
