@@ -153,7 +153,7 @@ export default {
       "setArrivalStation",
       "clearSelectedStations",
       "clearSelectedDates",
-      "clearSelectedTrains",
+      "clearSelectedTrains"
     ]),
     ...mapMutations(["setStations"]),
 

@@ -72,14 +72,6 @@
         "getField",
         "getTicketsFromCart",
       ]),
-      email: {
-        get() {
-          return this.getEmail;
-        },
-        set(value) {
-          this.updateEmail(value);
-        },
-      },
       getPrice() {
         if (this.getTicketPrice) {
           return this.getTicketPrice;
@@ -94,23 +86,8 @@
       },
       getValidate() {
         var isValidAdditional = false,
-            isValid           = false;
-
-        this.$refs.cartItems.forEach(function(item) {
-          item.$v.$touch();
-          if (item.$v.$invalid) {
-            isValid = false;
-          } else {
-            isValid = true;
-          }
-        });
-
-        this.$v.$touch();
-        if (this.$v.$invalid) {
-          isValidAdditional = false;
-        } else {
-          isValidAdditional = true;
-        }
+            isValid           = false,
+            isValidTrain      = false;
         for (var i = 0; i < this.passengers.length; i++) {
           this.validationHandler.passengers.$each.$touch();
           if (this.validationHandler.passengers.$each[i].lastName.$invalid) {
@@ -139,7 +116,23 @@
             isValid = true;
           }
         }
-        if (isValid || !isValidAdditional) {
+
+        this.$refs.cartItems.forEach(function(item) {
+          item.$v.$touch();
+          if (item.$v.$invalid) {
+            isValidTrain = false;
+          } else {
+            isValidTrain = true;
+          }
+        });
+
+        this.$v.$touch();
+        if (this.$v.$invalid) {
+          isValidAdditional = false;
+        } else {
+          isValidAdditional = true;
+        }
+        if (isValid && isValidTrain || isValidAdditional) {
           let nextLink = {};
           this.getTicketsFromCart.filter((ticket) => {
             if (ticket.name.toLowerCase() === this.$options.name.toLowerCase()) {
@@ -150,8 +143,8 @@
             }
           });
           this.$router.push({
-            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'GeneralCart',
-          });
+            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'payment',
+          }).catch(() => {});
         }
       }
     }

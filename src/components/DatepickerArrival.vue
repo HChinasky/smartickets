@@ -78,13 +78,14 @@ export default {
     arrivalDate: {
       get() {
         if (this[this.getLink]) {
-          return moment(this[this.getLink]).format("DD.MM.YYYY");
+          return this[this.getLink];
         } else {
           return null;
         }
       },
       set(value) {
-        this.$store.commit(this.updateDate, value ? moment(value, "DD.MM.YYYY") : null);
+        console.log(value)
+        this.$store.commit(this.updateDate, value ? value : null);
       },
     },
   },
@@ -97,20 +98,19 @@ export default {
       }
     },
     twoMonth() {
-      let monthDisabled = this.hideHelpLinks ? 180 : 60;
-      return moment().add(monthDisabled, "days").toDate();
+      return moment().add(60, "days").toDate();
     },
     setDate(date) {
       const now = Date.now();
       switch (date) {
         case "today":
-          this.$store.commit(this.updateDate, moment(now));
+          this.$store.commit(this.updateDate, moment(now).format("DD.MM.YYYY"));
           break;
         case "tomorrow":
-          this.$store.commit(this.updateDate, moment(now).add(1, "days"));
+          this.$store.commit(this.updateDate, moment(now).add(1, "days").format("DD.MM.YYYY"));
           break;
         case "after_tomorrow":
-          this.$store.commit(this.updateDate, moment(now).add(2, "days"));
+          this.$store.commit(this.updateDate, moment(now).add(2, "days").format("DD.MM.YYYY"));
           break;
 
         default:

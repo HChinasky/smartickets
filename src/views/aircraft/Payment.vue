@@ -78,6 +78,7 @@
       <div class="row">
         <div class="col-6">
           <div class="ticket__block ticket-department">
+            <h2 class="ticket-type-trips__title">SkyUp</h2>
             <div class="tickets__title">
               <h3 class="to">{{ $t('departureDateShort') }}: <span> {{cityDepartment}} - {{cityArrival}}</span></h3>
             </div>
@@ -108,6 +109,41 @@
               </div>
               <div class="person-birthday">
                 {{ ticketArrivalDate }}
+              </div>
+            </div>
+          </div>
+          <div class="ticket__block train-department" v-if="getCart.length > 0">
+            <h2 class="ticket-type-trips__title">{{ $t('train') }}</h2>
+            <div class="tickets__title">
+              <h3 class="to">{{ $t('departureDateShort') }}: <span> {{getTrain.station_from.name}} - {{getTrain.station_to.name}}</span></h3>
+            </div>
+            <div
+                class="additional-services__block"
+                v-for="(person, index) in getCart"
+                :key="index"
+            >
+              <div class="person-full-name">
+                <span class="fullname">{{ person.passenger.name }} {{ person.passenger.surname }}</span>
+              </div>
+              <div class="person-birthday">
+                {{ ticketTrainDepartmentDate }}
+              </div>
+            </div>
+          </div>
+          <div class="ticket__block train-arrival" v-if="getCart.length > 0 && getArrivalDate">
+            <div class="tickets__title">
+              <h3 class="to">{{ $t('back') }}: <span> {{getTrain.station_to.name}} - {{getTrain.station_from.name}} </span></h3>
+            </div>
+            <div
+                class="additional-services__block"
+                v-for="(person, index) in getCart"
+                :key="index"
+            >
+              <div class="person-full-name">
+                <span class="fullname">{{ person.passenger.name }} {{ person.passenger.surname }}</span>
+              </div>
+              <div class="person-birthday">
+                {{ ticketTrainArrivalDate }}
               </div>
             </div>
           </div>
@@ -314,7 +350,9 @@
         "getIsDevSkyUpLoginRequired",
         "getTicketsFromCart",
         "getTotalPrice",
-        "getCart"
+        "getCart",
+        "getTrain",
+        "getArrivalDate",
       ]),
       devLogin: {
         get() {
@@ -358,6 +396,12 @@
       ticketArrivalDate() {
         return moment(this.getCityArrivalDate).format("DD MMMM YYYY");
       },
+      ticketTrainDepartmentDate() {
+        return moment(this.getTrain.date).format("DD MMMM YYYY");
+      },
+      ticketTrainArrivalDate() {
+        return moment(this.getArrivalDate).format("DD MMMM YYYY");
+      },
       email: {
         get() {
           if (this.getPersonEmail) {
@@ -368,6 +412,7 @@
         },
         set(value) {
           this.setPersonEmail(value);
+          this.updateEmail(value);
         },
       },
       phone: {
@@ -394,7 +439,8 @@
         "clearPromoCode",
         "getCurrentPrice",
         "updateDevPassword",
-        "updateDevLogin"
+        "updateDevLogin",
+        "updateEmail"
       ]),
       changeDevLogin(value) {
         this.updateDevLogin(value);
@@ -617,8 +663,17 @@
         }
         
         .ticket__block {
-          &.ticket-arrival {
+          &.ticket-arrival, &.train-arrival {
             margin-top: 80px;
+          }
+          &.train-department {
+            margin-top: 65px;
+            border-top: 2px solid $SECOND_FONT_COLOR;
+          }
+          .ticket-type-trips__title {
+            font-size: 32px;
+            font-weight: 300;
+            color: #000;
           }
         }
         

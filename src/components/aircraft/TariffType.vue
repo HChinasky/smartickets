@@ -171,18 +171,22 @@
           if(aircraft.routes[1]) {
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
               
-              if(aircraft.routes[0].fareName == this.tariffDepartment && this.checkSelectTariff.length >= 2) {
                 this.setResultId(aircraft.resultId);
                 this.setSearchId(aircraft.searchId);
 
                 this.getTicketsFromCart.filter((ticket) => {
+                  
                   if(ticket.type.toLowerCase() === "skyup") {
                     ticket.selectSeat = true;
                     this.setTicketsList(ticket)
                   }
                 });
                 this.setTicketPrice(aircraft.amount.UAH.toFixed(2));
-              }
+                if(this.modalId == 0) {
+                  this.setTicketDepartmentPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
+                } else {
+                  this.setTicketArrivalPrice(parseFloat(aircraft.routes[this.modalId].amount.UAH).toFixed(2));
+                }
             }
           } else  {
             if(aircraft.routes[0].fareName == this.tariffDepartment) {
