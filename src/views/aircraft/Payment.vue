@@ -89,9 +89,13 @@
             >
               <div class="person-full-name">
                 <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
+                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
               </div>
-              <div class="person-birthday">
+              <div class="ticket-date">
                 {{ ticketDepartmentDate }}
+              </div>
+              <div class="ticket-price">
+                {{ getTicketDepartmentPrice }} {{ $t('UAH') }}
               </div>
             </div>
           </div>
@@ -106,9 +110,13 @@
             >
               <div class="person-full-name">
                 <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
+                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
               </div>
-              <div class="person-birthday">
+              <div class="ticket-date">
                 {{ ticketArrivalDate }}
+              </div>
+              <div class="ticket-price">
+                {{ getTicketArrivalPrice }} {{ $t('UAH') }}
               </div>
             </div>
           </div>
@@ -124,8 +132,9 @@
             >
               <div class="person-full-name">
                 <span class="fullname">{{ person.passenger.name }} {{ person.passenger.surname }}</span>
+                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
               </div>
-              <div class="person-birthday">
+              <div class="ticket-date">
                 {{ ticketTrainDepartmentDate }}
               </div>
             </div>
@@ -141,8 +150,9 @@
             >
               <div class="person-full-name">
                 <span class="fullname">{{ person.passenger.name }} {{ person.passenger.surname }}</span>
+                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
               </div>
-              <div class="person-birthday">
+              <div class="ticket-date">
                 {{ ticketTrainArrivalDate }}
               </div>
             </div>
@@ -341,6 +351,8 @@
         "getCityDepartmentDate",
         "getCityArrivalDate",
         "getTicketPrice",
+        "getTicketDepartmentPrice",
+        "getTicketArrivalPrice",
         "getPersonPhone",
         "getPersonEmail",
         "getTicketDepartmentPrice",
@@ -377,6 +389,13 @@
         set(value) {
           this.updateDevPassword(value);
         },
+      },
+      linkBack() {
+        if(this.getTicketsFromCart.length > 1) {
+          return 'GeneralCart'
+        } else {
+          return 'CartAircraft'
+        }
       },
       getPrice() {
         if(this.getTicketPrice) {
@@ -682,6 +701,7 @@
             border-radius: 5px;
             
             .person-full-name {
+              position: relative;
               font-size: 17px;
               font-weight: 500;
               display: block;
@@ -690,10 +710,6 @@
               padding-bottom: 5px;
               text-align: center;
               border-bottom: 1px solid $SECOND_FONT_COLOR;
-              background-image: url('../../assets/img/svg/edit-icon.svg');
-              background-repeat: no-repeat;
-              background-position: right 5px top;
-              background-size: 30px;
               
               .fullname {
                 border: none;
@@ -701,13 +717,29 @@
                 outline: none;
                 text-transform: uppercase;
               }
+              .person-edit-info {
+                position: absolute;
+                right: 0;
+                top: 5px;
+                width: 35px;
+                height: 28px;
+                background-image: url('../../assets/img/svg/edit-icon.svg');
+                background-repeat: no-repeat;
+                background-position: right 5px top;
+                background-size: 30px;
+              }
             }
             
-            .person-birthday {
+            .ticket-date {
               font-size: 17px;
               font-weight: 200;
               color: $LABEL_COLOR;
               padding: 10px 0;
+            }
+            .ticket-price {
+              font-size: 18px;
+              font-weight: 500;
+              color: $SECOND_FONT_COLOR;
             }
             
             .additional-services__select {
