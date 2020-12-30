@@ -454,47 +454,7 @@
       changeDevPassword(value) {
         this.updateDevPassword(value);
       },
-      async savePromo() {
-        await this.getCurrentPrice(this.promo).then((res) => {
-          let priceWithDiscount = res.data.data.price_with_discount,
-            priceWithoutDiscount = res.data.data.price_without_discount;
-          this.fullPrice = priceWithoutDiscount.toFixed(2);
-
-          if(res.data.errors.length !== 0) {
-            res.data.errors.forEach((err) => {
-              this.$toasted.global.my_app_error({
-                message: err.error,
-              });
-            })
-          } else {
-            if(priceWithDiscount !== priceWithoutDiscount) {
-              this.priceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
-              var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
-              console.log(getPercent)
-              this.$toasted.global.my_app_success({
-                message: this.$t('discountSkyUpAlert') + getPercent.toFixed(0) + "%",
-              });
-            } else {
-              this.priceDiscount = false;
-              this.$toasted.global.my_app_error({
-                message: this.$t("errorPromoCode"),
-              });
-            }
-          }
-        }).catch((error) => {
-          console.log(error);
-          if (error.toString().includes("[PPCODE:104]")) {
-            this.$toasted.global.my_app_error({
-              type: "error",
-              message: this.$t("trainNotFoundMsg"),
-            });
-          } else {
-            this.$toasted.global.my_app_error({
-              message: error.message,
-            });
-          }
-        });
-      },
+      
       async getBookTicket() {
         let catchErr     = "",
           checkDevUser = "",
