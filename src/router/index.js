@@ -108,10 +108,10 @@ const routes = [
     alias: '/train-tickets-buy.html',
   },
   {
-    path: '/general-cart',
+    path: '/registration-tickets',
     name: 'GeneralCart',
     component: GeneralCart,
-    alias: '/general-cart.html',
+    alias: '/registration-tickets.html',
   },
   {
     path: "/my-tickets",

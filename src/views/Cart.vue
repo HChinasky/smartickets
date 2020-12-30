@@ -44,7 +44,7 @@
           v-for="(ticket, index) in $store.getters.getCart"
           :key="index"
         >
-          <CartItem ref="cartItems" :ticket="ticket" :index="index"></CartItem>
+          <CartItem ref="cartItems" :ticket="ticket" :index="index" :showSeatDetails="true"></CartItem>
 
           <!--ticket__item-->
         </div>

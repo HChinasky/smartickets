@@ -186,7 +186,7 @@
           -->
         </div>
       </div>
-      <div class="ticket-list__trip-inf">
+      <div class="ticket-list__trip-inf" v-if="showSeatDetails">
         <div class="ticket-list__places-inf">
           <div class="ticket-list__places">
             <span>
@@ -297,6 +297,7 @@ export default {
   props: {
     ticket: Object,
     index: Number,
+    showSeatDetails: Boolean
   },
 
   computed: {
@@ -508,7 +509,9 @@ export default {
   background-image: url(../assets/img/svg/white-check.svg);
 }
 .errorMessage {
-  color: red;
+  font-size: 14px;
+  font-weight: 100;
+  color: #f44336;
 }
 .ticket-list__cost_smartticket {
   font-size: 1em;

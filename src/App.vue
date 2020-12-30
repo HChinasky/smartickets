@@ -95,6 +95,8 @@
           "/UserTickets.html",
           "/verify",
           "/verify.html",
+          "/registration-tickets",
+          "/registration-tickets.html",
         ];
 
         if (path != "/404") {
