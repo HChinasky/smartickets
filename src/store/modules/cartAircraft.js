@@ -3,33 +3,37 @@ import moment from "moment";
 var Hashes = require("jshashes");
 import { getField, updateField } from 'vuex-map-fields';
 
-const state = {
-  resultId: "",
-  searchId: "",
-  ticketPrice: "",
-  ticketDepartmentPrice: "",
-  ticketArrivalPrice: "",
-  passengers: [
-    {
-      type: "ADT",
-      firstName: "",
-      lastName: "",
-      genders: "",
-      birthDay: "",
-      birthMonth: "",
-      birthYear: "",
-      country: "",
-      passportCode: "",
-      passportDay: "",
-      passportMonth: "",
-      passportYear: "",
-    },
-  ],
-  personEmail: "",
-  personPhone: "",
-  promoCode: "GL-GC2Q2ZT"
-  // promoCode: "GL-SMART"
-};
+const getDefaultState = () => {
+  return {
+    resultId: "",
+    searchId: "",
+    ticketPrice: "",
+    ticketDepartmentPrice: "",
+    ticketArrivalPrice: "",
+    passengers: [
+      {
+        type: "ADT",
+        firstName: "",
+        lastName: "",
+        genders: "",
+        birthDay: "",
+        birthMonth: "",
+        birthYear: "",
+        country: "",
+        passportCode: "",
+        passportDay: "",
+        passportMonth: "",
+        passportYear: "",
+      },
+    ],
+    personEmail: "",
+    personPhone: "",
+    promoCode: "GL-GC2Q2ZT"
+    // promoCode: "GL-SMART"
+  }
+}
+
+const state = getDefaultState();
 
 const getters = {
   getField,
@@ -128,6 +132,9 @@ const actions = {
   clearPrice({ commit }) {
     commit("clearTicketPrice", null);
   },
+  resetStateCartAircraft({ commit }) {
+    commit('resetState')
+  },
 };
 const mutations = {
   updateField,
@@ -181,6 +188,9 @@ const mutations = {
   clearTicketPrice(state) {
     state.ticketPrice = null;
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 export default {

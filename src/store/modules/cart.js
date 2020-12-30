@@ -8,17 +8,21 @@ import api from "../../api/api";
 import { decode } from "js-base64";
 import i18n from "../../i18n";
 
-const state = {
-  cart: [],
-  tickets: [], //успешно оформленные билеты
-  payment_sid: null,
-  reusePaymentSID: false,
-  ticket: null,
-  validationError: false,
-  email: null,
-  devLogin: null,
-  devPassword: null,
-};
+const getDefaultState = () => {
+  return {
+    cart: [],
+    tickets: [], //успешно оформленные билеты
+    payment_sid: null,
+    reusePaymentSID: false,
+    ticket: null,
+    validationError: false,
+    email: null,
+    devLogin: null,
+    devPassword: null,
+  }
+}
+
+const state = getDefaultState();
 
 const getters = {
   getCart: (state) => state.cart,
@@ -380,6 +384,9 @@ const actions = {
   clearCart({ commit }) {
     commit("UNSET_CART", []);
   },
+  resetStateCart({ commit }) {
+    commit('resetState')
+  },
 };
 
 const mutations = {
@@ -469,6 +476,9 @@ const mutations = {
     state.cart = [];
     state.reusePaymentSID = false;
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  }
   /*
   REMOVE_VALIDATION_ERROR(state, { index, field }) {
     state.cart[index].validationErrors = without(

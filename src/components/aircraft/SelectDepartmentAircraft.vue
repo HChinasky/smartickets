@@ -53,7 +53,7 @@
           if(newValue) {
             this.$store.commit('updateCityDepartmentDate', null);
             this.$store.commit('updateCityArrivalDate', null);
-            this.resetCartState();
+            this.resetCartStateAircraft();
           }
         }
       }
@@ -107,7 +107,7 @@
         "setDepartmentCountry",
         "updateCityDepartmentDate",
         "updateCityArrivalDate",
-        "resetCartState"
+        "resetCartStateAircraft"
       ]),
       fuseSearch(options, search) {
         const fuse = new Fuse(options, {

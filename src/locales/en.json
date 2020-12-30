@@ -14,6 +14,7 @@
     "cart": "Cart",
     "selectedTickets": "Selected tickets",
     "ticketSearchOnline": "Find tickets online",
+    "ticketSearchTrain": "Search for train tickets",
     "from": "From",
     "to": "To",
     "today": "Today",
@@ -280,8 +281,9 @@
     "errorPromoCode": "Promo code is invalid",
     "mustBeDifferentAirports": "Departure and arrival stations must be different",
     "passengersFAQ": "Information for passengers",
-    "discountAlert": "You used a promo code for a discount ",
+    "discountSkyUpAlert": "You used the promo code for SkyUp at a discount ",
     "promoHaveDiscount": "This promo code provides a discount ",
+    "discountForSkyUp": "for SkyUp",
     "discountPrice": "Discounted price",
     "refundErrorSurnameSymbols": "Last name must contain only latin characters",
     "refundErrorNameSymbols": "Name must contain only latin characters",
@@ -290,5 +292,6 @@
     "metroLabel": "Metro",
     "emptyCart": "The cart is empty",
     "goRegistrationTicket": "Go to registration",
-    "goToBooking": "Go to booking"
+    "goToBooking": "Go to booking",
+    "commissionSum": "The amount does not take into account the commission"
 }

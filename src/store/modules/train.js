@@ -11,13 +11,17 @@ export const dataStore = {
   },
 };
 
-const state = {
-  trains: [],
-  train: {},
-  wagon: {},
-  selectedTab: null,
-  isDevLoginRequired: true,
-};
+const getDefaultState = () => {
+  return {
+    trains: [],
+    train: {},
+    wagon: {},
+    selectedTab: null,
+    isDevLoginRequired: true,
+  }
+}
+
+const state = getDefaultState();
 
 const getters = {
   allTrains: (state) => {
@@ -137,7 +141,7 @@ const actions = {
       const response = await api.fetchWagon({
         city_from: rootState.stations.departmentStation,
         city_to: rootState.stations.arrivalStation,
-        
+
         dep_date: moment(rootState.stations.departmentDate).format(
           "YYYY-MM-DD"
         ),
@@ -158,7 +162,7 @@ const actions = {
       }
     }
   },
-  clearSelectedTrains({ commit }) {    
+  clearSelectedTrains({ commit }) {
     commit("updateTrains", []);
   },
 
@@ -167,6 +171,9 @@ const actions = {
   },
   updateIsDevLoginRequired({ commit }, isDevLoginRequired) {
     commit("SET_DEV_LOGIN_REQUIRED", isDevLoginRequired);
+  },
+  resetStateTrain({ commit }) {
+    commit('resetState')
   },
 };
 
@@ -188,6 +195,9 @@ const mutations = {
   SET_DEV_LOGIN_REQUIRED(state, isRequired) {
     state.isDevLoginRequired = isRequired;
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 export default {

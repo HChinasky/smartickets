@@ -14,6 +14,9 @@ const actions = {
   setTicketsList ({ commit }, data) {
     commit('updateTicketsList', data)
   },
+  resetStateAllCart({ commit }) {
+    commit('resetState')
+  },
 };
 
 const mutations = {
@@ -30,6 +33,9 @@ const mutations = {
     let removeIndex = state.ticketsList.map(function(item) { return item.type; }).indexOf(type);
     state.ticketsList.splice(removeIndex, 1)
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 export default {

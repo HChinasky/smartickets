@@ -26,7 +26,7 @@
             {{ $t('backToChooseTypeTrips') }}
           </a>
         </div>
-        <h2 class="ticket-search__title">{{ $t("ticketSearchOnline") }}</h2>
+        <h2 class="ticket-search__title">{{ $t("ticketSearchTrain") }}</h2>
         <div class="ts-form">
           <div class="ts-form__inner">
             <div class="ts-form__where-from">

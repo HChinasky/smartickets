@@ -23,6 +23,9 @@
         <div class="total-amount">
           <span class="label">{{ $t('cost') }}:</span>
           <span class="price">{{ getTotalPrice }} {{ $t('UAH') }}</span>
+          <div class="cart-total__cost cart-total__commission-sum">
+            {{ $t("commissionSum") }} -  0,06 {{ $t("UAH") }}
+          </div>
         </div>
       </div>
       <div class="d-flex">
@@ -220,6 +223,11 @@
               color: $LINK_COLOR;
               font-weight: bold;
             }
+          }
+          .cart-total__commission-sum {
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 10px;
           }
         }
         

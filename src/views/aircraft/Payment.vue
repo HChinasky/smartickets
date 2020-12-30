@@ -440,7 +440,13 @@
         "getCurrentPrice",
         "updateDevPassword",
         "updateDevLogin",
-        "updateEmail"
+        "updateEmail",
+        "resetStateCart",
+        "resetCartStateAircraft",
+        "resetStateAllCart",
+        "resetStateCartAircraft",
+        "resetStateTrain",
+        "resetStateAirport",
       ]),
       changeDevLogin(value) {
         this.updateDevLogin(value);
@@ -466,7 +472,7 @@
               var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
               console.log(getPercent)
               this.$toasted.global.my_app_success({
-                message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
+                message: this.$t('discountSkyUpAlert') + getPercent.toFixed(0) + "%",
               });
             } else {
               this.priceDiscount = false;
@@ -550,6 +556,12 @@
                 this.$refs.formRef.action = form.action;
                 this.$refs.formRef.submit();
                 //this.isLoading = false;
+                this.resetStateCart()
+                this.resetCartStateAircraft()
+                this.resetStateAllCart()
+                this.resetStateCartAircraft()
+                this.resetStateTrain()
+                this.resetStateAirport()
               })
               .catch((error) => {
                 this.isLoading = false;
@@ -578,7 +590,7 @@
             var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
             
             this.$toasted.global.my_app_success({
-              message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
+              message: this.$t('discountSkyUpAlert') + getPercent.toFixed(0) + "%",
             });
           } else {
             this.beforeMountPriceDiscount = false;

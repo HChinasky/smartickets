@@ -143,7 +143,7 @@
           <template v-if="getTicketsFromCart.length < 2">
             <span v-if="!allTicketsBooked">
               <button
-                class="cart-total__submit btn btn--black test"
+                class="cart-total__submit btn btn--black"
                 :disabled="$store.state.cart.cart.length == 0"
                 v-promise-btn
                 @click="tryBookTickets"

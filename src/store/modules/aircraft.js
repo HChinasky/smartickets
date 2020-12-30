@@ -9,7 +9,7 @@ const getDefaultState = () => {
   }
 }
 
-const state = getDefaultState()
+const state = getDefaultState();
 
 const getters = {
   allAircrafts: (state) => state.aircrafts,
@@ -38,8 +38,8 @@ const actions = {
       throw new Error(i18n.t("noFlight"));
     }
   },
-  resetCartState ({ commit }) {
-    commit('resetState')
+  resetCartStateAircraft ({ commit }) {
+    commit('resetStateAircraft')
   },
 };
 
@@ -47,7 +47,7 @@ const mutations = {
   updateAircrafts(state, aircrafts) {
     state.aircrafts = aircrafts;
   },
-  resetState (state) {
+  resetStateAircraft (state) {
     Object.assign(state, getDefaultState())
   }
 };
