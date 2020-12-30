@@ -293,5 +293,6 @@
     "emptyCart": "The cart is empty",
     "goRegistrationTicket": "Go to registration",
     "goToBooking": "Go to booking",
-    "commissionSum": "The amount does not take into account the commission"
+    "commissionSum": "The amount does not take into account the commission",
+    "noRegistrationLabel": "To proceed to the registration, you must select places in the selected trips"
 }

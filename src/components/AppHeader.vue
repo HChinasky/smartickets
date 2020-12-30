@@ -114,9 +114,16 @@
                     </div>
                   </div>
                   <div class="header-cart-registration__block">
-                    <router-link :to="{ name: 'GeneralCart' }" class="header-cart-registration__link">
+                    <router-link
+                        :to="{ name: 'GeneralCart' }"
+                        class="header-cart-registration__link"
+                        v-if="getTicketsFromCart.every((item) => item.selectSeat === true)"
+                    >
                       {{ $t('goRegistrationTicket') }}
                     </router-link>
+                    <span class="header-cart-no-registration" v-else>
+                      {{ $t('noRegistrationLabel') }}
+                    </span>
                   </div>
                 </div>
                 <div class="header-cart-tickets__list" v-else>
@@ -320,5 +327,10 @@
         color: $SECOND_FONT_COLOR;
       }
     }
+  }
+  .header-cart-no-registration {
+    color: $LABEL_COLOR;
+    font-size: 12px;
+    font-weight: 100;
   }
 </style>
