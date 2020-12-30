@@ -373,7 +373,6 @@ export default {
         });
         this.$router.push({
           name: nextLink && !this.getTicketsFromCart.every((item) => item.personValidate === true) ? nextLink.name : 'payment',
-          params: { name: 'Cart' }
         });
       }
     },

@@ -103,9 +103,13 @@
           {{ $t('passengersFAQ') }}
         </a>
       </div>
-      <router-link tag="button" :disabled="!validate" class="btn btn--black" :to="{name: 'CartAircraft'}">
+      <button
+          :disabled="!validate"
+          class="btn btn--black"
+          @click="handlerLink"
+      >
         {{ $t('next') }}
-      </router-link>
+      </button>
     </div>
   </div>
 </template>
@@ -311,11 +315,12 @@
         "getCityDepartmentDate",
         "getCityArrivalDate",
         "getDepartmentCityCode",
-        "getArrivalCityCode"
+        "getArrivalCityCode",
+        "getTicketsFromCart",
+        "getTicketsFromCart"
       ]),
       validate() {
         if(!this.getResultId) {
-          console.log(this.getResultId)
             return false
         }
         return true;
@@ -385,6 +390,24 @@
     },
     methods: {
       ...mapActions(["fetchAircrafts", "fetchAirports"]),
+      handlerLink() {
+        let nextLink = {}
+        this.getTicketsFromCart.filter((ticket) => {
+          if(ticket.type.toLowerCase() !== "skyup") {
+            nextLink = ticket
+          }
+        });
+        if(this.getTicketsFromCart.length > 1) {
+          this.$router.push({
+            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'GeneralCart',
+          });
+        } else {
+          this.$router.push({
+            name: "CartAircraft"
+          });
+        }
+        return false
+      },
       handlerIcon(iconArr) {
         if(iconArr.modalId === 0) {
           this.baggageTypeIconFrom = iconArr;

@@ -114,8 +114,7 @@
             }
           });
           this.$router.push({
-            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'payment',
-            params: { name: 'CartAircraft' }
+            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'GeneralCart',
           });
         }
       }
