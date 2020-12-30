@@ -113,9 +113,15 @@
               nextLink = ticket;
             }
           });
-          this.$router.push({
-            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'GeneralCart',
-          });
+          if(this.getTicketsFromCart.length > 1) {
+            this.$router.push({
+              name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'GeneralCart',
+            });
+          } else {
+            this.$router.push({
+              name: 'payment'
+            })
+          }
         }
       }
     }
