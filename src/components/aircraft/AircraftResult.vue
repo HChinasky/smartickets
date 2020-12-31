@@ -320,10 +320,16 @@
         "getTicketsFromCart"
       ]),
       validate() {
-        if(!this.getResultId) {
+        if(this.parseArrivalFlights.length !== 0) {
+          if(!this.baggageTypeIconFrom || !this.baggageTypeIconTo || !this.getResultId) {
             return false
+          }
+        } else  {
+          if(!this.baggageTypeIconFrom || !this.getResultId) {
+            return false
+          }
         }
-        return true;
+        return true
       },
       returnBackward() {
         if(this.parseArrivalFlights.length !== 0) {
