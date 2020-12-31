@@ -139,24 +139,6 @@
               </div>
             </div>
           </div>
-          <div class="ticket__block train-arrival" v-if="getCart.length > 0 && getArrivalDate">
-            <div class="tickets__title">
-              <h3 class="to">{{ $t('back') }}: <span> {{getTrain.station_to.name}} - {{getTrain.station_from.name}} </span></h3>
-            </div>
-            <div
-                class="additional-services__block"
-                v-for="(person, index) in getCart"
-                :key="index"
-            >
-              <div class="person-full-name">
-                <span class="fullname">{{ person.passenger.name }} {{ person.passenger.surname }}</span>
-                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
-              </div>
-              <div class="ticket-date">
-                {{ ticketTrainArrivalDate }}
-              </div>
-            </div>
-          </div>
         </div>
         <div class="col-5">
           <div class="payment-settings__block">
@@ -472,8 +454,9 @@
       changeDevPassword(value) {
         this.updateDevPassword(value);
       },
-      
       async getBookTicket() {
+        
+        
         this.$v.$touch();
         if(!this.$v.$invalid && this.agreementRules) {
           if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
@@ -513,48 +496,79 @@
                 }
               });
           }
-          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+          if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
+            if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
               !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
-            await this.bookTickets()
-              .then(() => {
+              await this.bookTickets()
+                .then(() => {
 
-              })
-              .catch((error) => {
-                this.$toasted.global.my_app_error({
-                  message: error.message,
+                })
+                .catch((error) => {
+                  this.$toasted.global.my_app_error({
+                    message: error.message,
+                  });
                 });
-              });
+            }
           }
+          
           // this.$swal.fire(
           //   'Good job!',
           //   'You clicked the button!',
           //   'error'
           // )
-          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
-            this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
-            await this.startPayment()
-              .then((response) => {
-                var el = document.createElement("p");
-                el.innerHTML = response;
-                var form = el.querySelector("#returnForm");
-                var payment_no = form.querySelector('input[name="payment_no"]').value;
-                this.$refs.inputRef.value = payment_no;
-                this.$refs.formRef.action = form.action;
-                this.$refs.formRef.submit();
-                //this.isLoading = false;
-                this.resetStateCart()
-                this.resetCartStateAircraft()
-                this.resetStateAllCart()
-                this.resetStateCartAircraft()
-                this.resetStateTrain()
-                this.resetStateAirport()
-              })
-              .catch((error) => {
-                this.isLoading = false;
-                this.$toasted.global.my_app_error({
-                  message: error.message,
+          if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
+            if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+              this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+              await this.startPayment()
+                .then((response) => {
+                  var el = document.createElement("p");
+                  el.innerHTML = response;
+                  var form = el.querySelector("#returnForm");
+                  var payment_no = form.querySelector('input[name="payment_no"]').value;
+                  this.$refs.inputRef.value = payment_no;
+                  this.$refs.formRef.action = form.action;
+                  this.$refs.formRef.submit();
+                  //this.isLoading = false;
+                  this.resetStateCart()
+                  this.resetCartStateAircraft()
+                  this.resetStateAllCart()
+                  this.resetStateCartAircraft()
+                  this.resetStateTrain()
+                  this.resetStateAirport()
+                })
+                .catch((error) => {
+                  this.isLoading = false;
+                  this.$toasted.global.my_app_error({
+                    message: error.message,
+                  });
                 });
-              });
+            }
+          } else {
+            if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
+              await this.startPayment()
+                .then((response) => {
+                  var el = document.createElement("p");
+                  el.innerHTML = response;
+                  var form = el.querySelector("#returnForm");
+                  var payment_no = form.querySelector('input[name="payment_no"]').value;
+                  this.$refs.inputRef.value = payment_no;
+                  this.$refs.formRef.action = form.action;
+                  this.$refs.formRef.submit();
+                  //this.isLoading = false;
+                  this.resetStateCart()
+                  this.resetCartStateAircraft()
+                  this.resetStateAllCart()
+                  this.resetStateCartAircraft()
+                  this.resetStateTrain()
+                  this.resetStateAirport()
+                })
+                .catch((error) => {
+                  this.isLoading = false;
+                  this.$toasted.global.my_app_error({
+                    message: error.message,
+                  });
+                });
+            }
           }
         }
       }
