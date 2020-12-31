@@ -21,6 +21,7 @@ import VueScrollTo from "vue-scrollto";
 import VueAnalytics from "vue-analytics";
 import VModal from 'vue-js-modal'
 import VTooltip from 'v-tooltip'
+import VueSweetalert2 from 'vue-sweetalert2';
 
 Vue.config.productionTip = false;
 Vue.component("v-select", vSelect);
@@ -41,6 +42,7 @@ Vue.use(AsyncComputed);
 Vue.use(VueScrollTo);
 Vue.use(VModal);
 Vue.use(VTooltip);
+Vue.use(VueSweetalert2);
 
 Vue.use(VueAnalytics, {
   id: "UA-178767013-1",

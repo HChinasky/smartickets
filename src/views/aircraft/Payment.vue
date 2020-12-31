@@ -258,7 +258,7 @@
                   @click="getBookTicket"
                   class="btn btn--black"
                   v-promise-btn>
-                {{ $t('gotToPay') }}
+                {{ $t('bookingTicket') }}
               </button>
             </div>
           </div>
@@ -355,7 +355,6 @@
         "getTicketArrivalPrice",
         "getPersonPhone",
         "getPersonEmail",
-        "getTicketDepartmentPrice",
         "getPromoCode",
         "getDevLogin",
         "getDevPassword",
@@ -455,7 +454,6 @@
         "setPersonEmail",
         "setPersonPhone",
         "setPromoCode",
-        "clearPromoCode",
         "getCurrentPrice",
         "updateDevPassword",
         "updateDevLogin",
@@ -466,6 +464,7 @@
         "resetStateCartAircraft",
         "resetStateTrain",
         "resetStateAirport",
+        "setTicketsList",
       ]),
       changeDevLogin(value) {
         this.updateDevLogin(value);
@@ -475,12 +474,9 @@
       },
       
       async getBookTicket() {
-        let catchErr     = "",
-          checkDevUser = "",
-          networkError = ""
         this.$v.$touch();
         if(!this.$v.$invalid && this.agreementRules) {
-          if(!this.hasBooked) {
+          if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
             await this.bookingTicketAircraft()
               .then((res) => {
                 if(res.data.errors) {
@@ -488,19 +484,22 @@
                     this.$toasted.global.my_app_error({
                       message: err.error ? err.error : err,
                     });
-                    catchErr = err;
                   })
-                } else if (res.data.msg) {
+                }
+                if (res.data.code !== 0) {
                   this.$toasted.global.my_app_error({
                     message: res.data.msg,
                   });
                 } else {
-                  this.hasBooked = true;
+                  this.getTicketsFromCart.filter((ticket) => {
+                    if(ticket.type.toLowerCase() === "skyup") {
+                      ticket.bookedSkyUp = true;
+                      this.setTicketsList(ticket)
+                    }
+                  });
                 }
-                checkDevUser = res.data.code;
               })
               .catch((error) => {
-                networkError = error;
                 console.log(error);
                 if (error.toString().includes("[PPCODE:104]")) {
                   this.$toasted.global.my_app_error({
@@ -513,18 +512,26 @@
                   });
                 }
               });
-            if(this.getCart.length !== 0) {
-              await this.bookTickets()
-                .then(() => {})
-                .catch((error) => {
-                  networkError = error;
-                  this.$toasted.global.my_app_error({
-                    message: error.message,
-                  });
-                });
-            }
           }
-          if(!catchErr && checkDevUser === 0 && !networkError) {
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+              !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            await this.bookTickets()
+              .then(() => {
+
+              })
+              .catch((error) => {
+                this.$toasted.global.my_app_error({
+                  message: error.message,
+                });
+              });
+          }
+          // this.$swal.fire(
+          //   'Good job!',
+          //   'You clicked the button!',
+          //   'error'
+          // )
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
             await this.startPayment()
               .then((response) => {
                 var el = document.createElement("p");

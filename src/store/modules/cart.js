@@ -275,6 +275,12 @@ const actions = {
 
           if (item.code == 0) {
             commit("SET_BOOKED", index);
+            rootGetters.getTicketsFromCart.filter((ticket) => {
+              if(ticket.type.toLowerCase() === "train") {
+                ticket.bookedTrain = true;
+                commit('updateTicketsList', ticket, {root: true});
+              }
+            });
           } else {
             commit("UNSET_BOOKED", index);
           }

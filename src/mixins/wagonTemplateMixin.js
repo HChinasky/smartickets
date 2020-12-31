@@ -72,6 +72,7 @@ export const wagonTemplateMixin = {
       this.getTicketsFromCart.filter((ticket) => {
         if(ticket.type.toLowerCase() === "train" && this.getCart.length !== 0) {
           ticket.selectSeat = true;
+          ticket.bookedTrain = false;
           this.setTicketsList(ticket)
         }
       });

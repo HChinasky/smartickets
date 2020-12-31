@@ -178,6 +178,7 @@
                   
                   if(ticket.type.toLowerCase() === "skyup") {
                     ticket.selectSeat = true;
+                    ticket.bookedSkyUp = false;
                     this.setTicketsList(ticket)
                   }
                 });
@@ -195,6 +196,7 @@
               this.getTicketsFromCart.filter((ticket) => {
                 if(ticket.type.toLowerCase() === "skyup") {
                   ticket.selectSeat = true;
+                  ticket.bookedSkyUp = false;
                   this.setTicketsList(ticket)
                 }
               });
