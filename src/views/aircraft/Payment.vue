@@ -77,7 +77,7 @@
       </template>
       <div class="row">
         <div class="col-6">
-          <div class="ticket__block ticket-department">
+          <div class="ticket__block ticket-department" v-if="getResultId">
             <h2 class="ticket-type-trips__title">SkyUp</h2>
             <div class="tickets__title">
               <h3 class="to">{{ $t('departureDateShort') }}: <span> {{cityDepartment}} - {{cityArrival}}</span></h3>
@@ -99,7 +99,7 @@
               </div>
             </div>
           </div>
-          <div class="ticket__block ticket-arrival" v-if="getCityArrivalDate">
+          <div class="ticket__block ticket-arrival" v-if="getCityArrivalDate && getResultId">
             <div class="tickets__title">
               <h3 class="from">{{ $t('back') }}: <span>{{cityArrival}} - {{cityDepartment}}</span></h3>
             </div>
@@ -346,6 +346,7 @@
         "getCart",
         "getTrain",
         "getArrivalDate",
+        "getResultId",
       ]),
       devLogin: {
         get() {

@@ -173,10 +173,11 @@
     },
     methods: {
       ...mapMutations(["removeTicketRow"]),
-      ...mapActions(["clearResultId", "clearCart"]),
+      ...mapActions(["clearResultId", "clearCart", "resetStateCartAircraft"]),
       removeTicket(type) {
         if(type == "SkyUp") {
           this.clearResultId()
+          this.resetStateCartAircraft()
         } else {
           this.clearCart()
         }
