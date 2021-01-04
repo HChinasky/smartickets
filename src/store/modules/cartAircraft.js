@@ -133,7 +133,7 @@ const actions = {
     commit("clearTicketPrice", null);
   },
   resetStateCartAircraft({ commit }) {
-    commit('resetState')
+    commit('resetStateAircraft')
   },
 };
 const mutations = {
@@ -188,7 +188,7 @@ const mutations = {
   clearTicketPrice(state) {
     state.ticketPrice = null;
   },
-  resetState(state) {
+  resetStateAircraft(state) {
     Object.assign(state, getDefaultState())
   }
 };
