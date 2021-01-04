@@ -283,6 +283,7 @@
         fullPrice: "",
         priceDiscount: "",
         beforeMountPriceDiscount: false,
+        errorsList: [],
 
         hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
@@ -400,9 +401,6 @@
       ticketTrainDepartmentDate() {
         return moment(this.getTrain.date).format("DD MMMM YYYY");
       },
-      ticketTrainArrivalDate() {
-        return moment(this.getArrivalDate).format("DD MMMM YYYY");
-      },
       email: {
         get() {
           if (this.getPersonEmail) {
@@ -456,8 +454,6 @@
         this.updateDevPassword(value);
       },
       async getBookTicket() {
-        
-        
         this.$v.$touch();
         if(!this.$v.$invalid && this.agreementRules) {
           if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
@@ -465,16 +461,11 @@
               .then((res) => {
                 if(res.data.errors) {
                   res.data.errors.forEach((err) => {
-                    this.$toasted.global.my_app_error({
-                      message: err.error ? err.error : err,
-                    });
+                    this.errorsList.push(err.error ? err.error : err)
                   })
                 }
-                if (res.data.code !== 0) {
-                  this.$toasted.global.my_app_error({
-                    message: res.data.msg,
-                  });
-                } else {
+                if (res.data.code === 0) {
+                  this.errorsList = [];
                   this.getTicketsFromCart.filter((ticket) => {
                     if(ticket.type.toLowerCase() === "skyup") {
                       ticket.bookedSkyUp = true;
@@ -484,7 +475,6 @@
                 }
               })
               .catch((error) => {
-                console.log(error);
                 if (error.toString().includes("[PPCODE:104]")) {
                   this.$toasted.global.my_app_error({
                     type: "error",
@@ -498,12 +488,9 @@
               });
           }
           if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
-            if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
-              !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            if(!this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
               await this.bookTickets()
-                .then(() => {
-
-                })
+                .then(() => {})
                 .catch((error) => {
                   this.$toasted.global.my_app_error({
                     message: error.message,
@@ -511,67 +498,141 @@
                 });
             }
           }
-          
-          // this.$swal.fire(
-          //   'Good job!',
-          //   'You clicked the button!',
-          //   'error'
-          // )
-          if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
-            if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
-              this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
-              await this.startPayment()
-                .then((response) => {
-                  var el = document.createElement("p");
-                  el.innerHTML = response;
-                  var form = el.querySelector("#returnForm");
-                  var payment_no = form.querySelector('input[name="payment_no"]').value;
-                  this.$refs.inputRef.value = payment_no;
-                  this.$refs.formRef.action = form.action;
-                  this.$refs.formRef.submit();
-                  //this.isLoading = false;
-                  this.resetStateCart()
-                  this.resetCartStateAircraft()
-                  this.resetStateAllCart()
-                  this.resetStateCartAircraft()
-                  this.resetStateTrain()
-                  this.resetStateAirport()
-                })
-                .catch((error) => {
-                  this.isLoading = false;
-                  this.$toasted.global.my_app_error({
-                    message: error.message,
-                  });
-                });
-            }
+          this.afterBooked()
+        }
+      },
+      afterBooked() {
+        const swal = this.$swal.mixin({
+          customClass: {
+            confirmButton: 'btn-book-repeat',
+            denyButton: 'btn-payment',
+            cancelButton: 'btn-cancel'
+          },
+          buttonsStyling: false
+        });
+        let title  = "",
+            text   = "",
+            showPaymentBtn = true,
+            ticketBooking = true,
+            iconType = "warning",
+            bookedLabel = true;
+        if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
+          if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketsNotBookedTitle");
+            text = this.$t("ticketNotBookedDesc");
+            showPaymentBtn = false;
+            iconType = "error";
+          }
+          if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketNotBookedTitleSecond");
+            text = this.$t("ticketNotBookedDescSecond");
+                        text += `<ul class="errors-list">
+                        <li>`+this.errorsList.map((error) => {
+                          if(error == "Passport expired") {
+                            return this.$t("errPassport");
+                          } else if (error == "Adult age is incorrect") {
+                            return this.$t("errAge");
+                          }
+                        })+`
+                      </li>
+                     </ul>`;
+            text += "<span class=\"support-text\">* "+this.$t("editErrorReg")+"</span>"
+            text += "<span class=\"support-text\">** "+this.$t("goToPayUZ")+"</span>"
+            bookedLabel = this.errorsList !== 0 ? true : false;
+            iconType = "warning";
+          }
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketNotBookedTitleSecond");
+            text = this.$t("ticketNotBookedDescTrain")
+            iconType = "warning";
+          }
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketBookedSkyUpTitle");
+            text = this.$t("ticketBookedSkyUpDesc");
+            iconType = "success";
+            ticketBooking = false;
+          }
+        } else {
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
+            title = this.$t("ticketBookedSkyUpTitle");
+            text = this.$t("ticketBookedTrainDesc");
+            iconType = "success";
+            ticketBooking = false;
           } else {
-            if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
-              await this.startPayment()
-                .then((response) => {
-                  var el = document.createElement("p");
-                  el.innerHTML = response;
-                  var form = el.querySelector("#returnForm");
-                  var payment_no = form.querySelector('input[name="payment_no"]').value;
-                  this.$refs.inputRef.value = payment_no;
-                  this.$refs.formRef.action = form.action;
-                  this.$refs.formRef.submit();
-                  //this.isLoading = false;
-                  this.resetStateCart()
-                  this.resetCartStateAircraft()
-                  this.resetStateAllCart()
-                  this.resetStateCartAircraft()
-                  this.resetStateTrain()
-                  this.resetStateAirport()
-                })
-                .catch((error) => {
-                  this.isLoading = false;
-                  this.$toasted.global.my_app_error({
-                    message: error.message,
-                  });
-                });
-            }
+            title = this.$t("ticketNotBookedTitle");
+            text = this.$t("ticketNotBookedDescSecond");
+            text += `<ul class="errors-list">
+                        <li>`+this.errorsList.map((error) => {
+                          if(error == "Passport expired") {
+                            return this.$t("errPassport");
+                          } else if (error == "Adult age is incorrect") {
+                            return this.$t("errAge");
+                          }
+                        })+`
+                      </li>
+                     </ul>`
+            iconType = "warning";
+            showPaymentBtn = false;
+            bookedLabel = this.errorsList !== 0 ? true : false;
           }
         }
+        swal.fire({
+          icon: iconType,
+          title: title,
+          html: text,
+          width: 620,
+          confirmButtonText: bookedLabel ? this.$t("returnToRegistration") : this.$t("rebookTicket"),
+          denyButtonText: this.$t("goToPay"),
+          cancelButtonText: this.$t("continueShopping"),
+          showConfirmButton: ticketBooking,
+          showDenyButton: showPaymentBtn,
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          preDeny: () => {
+            return this.paymentInit();
+          },
+          preConfirm: () => {
+            return bookedLabel ? this.$router.push({name: this.linkBack}) : this.getBookTicket()
+          },
+          allowOutsideClick: () => !swal.isLoading()
+        }).then((result) => {
+          if (result.isConfirmed && !bookedLabel) {
+            swal.fire({
+              title: this.$t("ticketBookedSkyUpTitle"),
+              text: this.$t("ticketBookedSkyUpDesc"),
+              width: 620,
+              icon: "success"
+            })
+          }
+        })
+      },
+      async paymentInit() {
+        await this.startPayment()
+          .then((response) => {
+            var el = document.createElement("p");
+            el.innerHTML = response;
+            var form = el.querySelector("#returnForm");
+            var payment_no = form.querySelector('input[name="payment_no"]').value;
+            this.$refs.inputRef.value = payment_no;
+            this.$refs.formRef.action = form.action;
+            this.$refs.formRef.submit();
+            this.resetStateCart()
+            this.resetCartStateAircraft()
+            this.resetStateAllCart()
+            this.resetStateCartAircraft()
+            this.resetStateTrain()
+            this.resetStateAirport()
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.$toasted.global.my_app_error({
+              message: error.message,
+            });
+          });
       }
     },
     beforeMount() {

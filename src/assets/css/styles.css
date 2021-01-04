@@ -1123,3 +1123,48 @@ info .tooltip-arrow {
 }
 
 /* ./tooltip */
+.errors-list {
+  list-style: none;
+}
+
+.errors-list li {
+  color: #f44336;
+}
+
+.btn-payment {
+  font-size: 12px;
+  margin-right: 5px;
+  padding: 5px 10px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+.btn-book-repeat {
+  font-size: 12px;
+  margin-right: 5px;
+  padding: 5px 10px;
+  background-color: #66b2ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+.btn-cancel {
+  font-size: 12px;
+  padding: 5px 10px;
+  color: #6E6E6E;
+  background-color: transparent;
+  border: 1px solid #6E6E6E;
+  border-radius: 5px;
+  outline: none;
+}
+.support-text {
+  font-size: 9px;
+  color: #6E6E6E;
+  margin-left: 5px;
+  text-align: left;
+  display: block;
+}
+
