@@ -1,7 +1,7 @@
 <template>
   <span>
     <date-picker
-        :disabled-dates="disabledDates"
+        :disabled-dates="disabledDates()"
         :format="customFormatter"
         v-model="departureDate"
         :language="uk"
@@ -49,22 +49,6 @@
         "getArrivalCityCode",
         "getDepartmentCityCode",
       ]),
-      disabledDates: {
-        get() {
-          var self = this,
-              availableDates = self.getAvailableDates;
-          return {
-            customPredictor: function (date) {
-              if (self.getDepartmentCityCode && self.getArrivalCityCode) {
-                const getAvailableDate = availableDates.filter((department) => moment(department.departure_datetime_loc).format('DD.MM.YYYY') === moment(date).format('DD.MM.YYYY'))
-                if (getAvailableDate.length === 0) {
-                  return true
-                }
-              }
-            }
-          }
-        }
-      },
       departureDate: {
         get() {
           return moment(this.getCityDepartmentDate).format('MM.DD.YYYY');
@@ -76,6 +60,34 @@
     },
     methods: {
       ...mapActions(["fetchAvailableDate"]),
+      disabledDates() {
+        let availabilityDays = {};
+        for(let values of this.getAvailableDates) {
+          availabilityDays[moment(values.departure_datetime_loc).format("YYYY")] = {}
+        }
+        for(let values of this.getAvailableDates) {
+          availabilityDays[moment(values.departure_datetime_loc).format("YYYY")][moment(values.departure_datetime_loc).format("M")] = []
+        }
+        for(let values of this.getAvailableDates) {
+          availabilityDays[moment(values.departure_datetime_loc).format("YYYY")][moment(values.departure_datetime_loc).format("M")].push(moment(values.departure_datetime_loc).format('DD'))
+        }
+        return {
+          customPredictor: function(date) {
+            var months = availabilityDays[date.getFullYear()];
+            if(months){
+              let days = months[date.getMonth() + 1];
+              if(days) {
+                for(var i=0; i<days.length; i++){
+                  if(days[i] == (date.getDate())){
+                    return false;
+                  }
+                }
+              }
+            }
+            return true
+          }
+        }
+      },
       async datepickerOpenedFunction() {
         this.loading = true
         let payload = {
