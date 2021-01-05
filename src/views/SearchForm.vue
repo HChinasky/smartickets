@@ -255,15 +255,13 @@ export default {
     this.updateClientInfo();
     this.regClient()
       .then(() => {
-        if (this.getStations.length == 0) {
-          this.fetchStations()
-            .then(() => {})
-            .catch((error) => {
-              this.$toasted.global.my_app_error({
-                message: error.message,
-              });
+        this.fetchStations()
+          .then(() => {})
+          .catch((error) => {
+            this.$toasted.global.my_app_error({
+              message: error.message,
             });
-        }
+          });
       })
       .catch((error) => {
         this.$toasted.global.my_app_error({
