@@ -195,17 +195,17 @@
                   </p>
                 </template>
               </div>
-              <div class="form-input">
-                <label>{{ $t('promoCode') }}</label>
-                <input
-                    class="ticket-list__input"
-                    type="text"
-                    disabled
-                    v-model="promo"
-                >
-                <span class="apply-promo">{{ $t('applyPromo') }}</span>
-                <span class="promo-discount__label" v-if="priceDiscount">{{ $t('promoHaveDiscount') }} {{ priceDiscount }} {{ $t('UAH') }}</span>
-              </div>
+<!--              <div class="form-input">-->
+<!--                <label>{{ $t('promoCode') }}</label>-->
+<!--                <input-->
+<!--                    class="ticket-list__input"-->
+<!--                    type="text"-->
+<!--                    disabled-->
+<!--                    v-model="promo"-->
+<!--                >-->
+<!--                <span class="apply-promo">{{ $t('applyPromo') }}</span>-->
+<!--                <span class="promo-discount__label" v-if="priceDiscount">{{ $t('promoHaveDiscount') }} {{ priceDiscount }} {{ $t('UAH') }}</span>-->
+<!--              </div>-->
             </div>
             <div class="agreement-rules">
               <button
@@ -637,30 +637,8 @@
     },
     beforeMount() {
       this.getCurrentPrice(this.promo).then((res) => {
-        let priceWithDiscount = res.data.data.price_with_discount,
-          priceWithoutDiscount = res.data.data.price_without_discount;
+        let priceWithoutDiscount = res.data.data.price_without_discount;
         this.fullPrice = priceWithoutDiscount;
-        if(res.data.errors.length !== 0) {
-          res.data.errors.forEach((err) => {
-            this.$toasted.global.my_app_error({
-              message: err.error,
-            });
-          })
-        } else {
-          if(priceWithDiscount !== priceWithoutDiscount) {
-            this.beforeMountPriceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
-            var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
-            
-            this.$toasted.global.my_app_success({
-              message: this.$t('discountSkyUpAlert') + getPercent.toFixed(0) + "%",
-            });
-          } else {
-            this.beforeMountPriceDiscount = false;
-            this.$toasted.global.my_app_error({
-              message: this.$t("errorPromoCode"),
-            });
-          }
-        }
       }).catch((error) => {
         console.log(error);
         if (error.toString().includes("[PPCODE:104]")) {

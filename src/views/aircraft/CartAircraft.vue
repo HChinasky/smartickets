@@ -23,8 +23,18 @@
       <passengerCart @checkinput="handlerIcon" />
       <div class="d-flex">
         <div class="total-amount">
-          <span class="label">{{ $t('cost') }}:</span>
+          <span class="label">{{ $t('discountPrice') }}:</span>
           <span class="price">{{ getPrice }} {{ $t('UAH') }}</span>
+        </div>
+        <div class="total-amount">
+          <template v-if="fullPrice !== getPrice">
+            <span class="label">{{ $t('totalPrice') }}:</span>
+            <span class="price">{{ (+fullPrice).toFixed(2) }} {{ $t('UAH') }}</span>
+          </template>
+          <template v-else>
+            <span class="label">{{ $t('totalPrice') }}:</span>
+            <span class="price">{{ getPrice }}</span>
+          </template>
         </div>
         <button
             class="cart-submit btn btn--black"
@@ -50,7 +60,9 @@
     data() {
       return {
         validationHandler: "",
-        links: ""
+        links: "",
+        promo: "GL-GC2Q2ZT",
+        fullPrice: "",
       }
     },
     computed: {
@@ -69,7 +81,7 @@
       },
     },
     methods: {
-      ...mapActions(["setTicketsList"]),
+      ...mapActions(["setTicketsList", "getCurrentPrice"]),
       handlerIcon($v) {
         this.validationHandler = $v;
       },
@@ -124,6 +136,46 @@
           }
         }
       }
+    },
+    beforeMount() {
+      this.getCurrentPrice(this.promo).then((res) => {
+        let priceWithDiscount = res.data.data.price_with_discount,
+          priceWithoutDiscount = res.data.data.price_without_discount;
+        this.fullPrice = priceWithoutDiscount;
+        if(res.data.errors.length !== 0) {
+          res.data.errors.forEach((err) => {
+            this.$toasted.global.my_app_error({
+              message: err.error,
+            });
+          })
+        } else {
+          if(priceWithDiscount !== priceWithoutDiscount) {
+            this.beforeMountPriceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
+            var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
+
+            this.$toasted.global.my_app_success({
+              message: this.$t('discountSkyUpAlert') + getPercent.toFixed(0) + "%",
+            });
+          } else {
+            this.beforeMountPriceDiscount = false;
+            this.$toasted.global.my_app_error({
+              message: this.$t("errorPromoCode"),
+            });
+          }
+        }
+      }).catch((error) => {
+        console.log(error);
+        if (error.toString().includes("[PPCODE:104]")) {
+          this.$toasted.global.my_app_error({
+            type: "error",
+            message: this.$t("trainNotFoundMsg"),
+          });
+        } else {
+          this.$toasted.global.my_app_error({
+            message: error.message,
+          });
+        }
+      });
     }
   }
 </script>
@@ -171,7 +223,7 @@
           align-items: center;
         }
         .total-amount {
-          width: 310px;
+          width: 460px;
           margin-top: 50px;
           @include respond-until(sm) {
             margin-top: 30px;
