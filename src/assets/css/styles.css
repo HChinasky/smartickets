@@ -1177,3 +1177,36 @@ info .tooltip-arrow {
   font-weight: 100;
   color: #000;
 }
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+.justify-content-center {
+  justify-content: center;
+}
+.swal2-content .d-flex {
+  border-bottom: 1px dashed #66b2ff;
+}
+
+.swal2-content .d-flex p {
+  width: 50%;
+  margin: 10px 0;
+}
+
+.swal2-content .d-flex p span {
+  font-size: 14px;
+}
+
+.total-sum-popup {
+  display: flex;
+}
+
+.total-sum-popup span {
+  color: #1B73CD;
+  font-weight: 600;
+  margin-left: 5px;
+}

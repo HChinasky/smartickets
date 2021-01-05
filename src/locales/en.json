@@ -305,12 +305,17 @@
     "errAge": "Age is incorrect",
     "ticketBookedSkyUpTitle": "Congratulations! You have booked tickets",
     "ticketBookedSkyUpDesc": "You have booked tickets for SkyUp, Ukrzaliznytsia. <br> You can go to the payment by following the link below.",
-    "ticketBookedTrainDesc": "You have booked tickets on SkyUp, <br> The reservation is valid for 24 hours, <br> You can go to the payment by following the link below",
+    "ticketBookedTrainDesc": "You have booked tickets on SkyUp. <br> You can go to the payment by following the link below",
     "ticketNotBookedTitle": "Warning! Failed to book a ticket!",
     "returnToRegistration": "Return to registration",
     "rebookTicket": "Re-book the ticket",
     "goToPay": "Go to payment",
     "continueShopping": "Continue shopping",
     "editErrorReg": "Correct registration errors if you want to buy a SkyUp ticket",
-    "goToPayUZ": "If you want to buy a ticket only from Ukrzaliznytsia, press \"Go to payment\""
+    "goToPayUZ": "If you want to buy a ticket only from Ukrzaliznytsia, press \"Go to payment\"",
+    "countTickets": "Number of tickets:",
+    "priceLabel": "Price",
+    "amountPaid": "Amount to be paid",
+    "typeTariff": "Tariff type",
+    "toBack": "there, back"
 }

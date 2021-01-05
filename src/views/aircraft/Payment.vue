@@ -351,6 +351,8 @@
         "getTrain",
         "getArrivalDate",
         "getResultId",
+        "getFromTariffType",
+        "getToTariffType"
       ]),
       devLogin: {
         get() {
@@ -414,7 +416,6 @@
         },
         set(value) {
           this.setPersonEmail(value);
-          this.updateEmail(value);
         },
       },
       phone: {
@@ -500,6 +501,7 @@
                   });
                 });
             }
+            this.updateEmail(this.getPersonEmail);
           }
           this.afterBooked()
         }
@@ -518,7 +520,18 @@
             showPaymentBtn = true,
             ticketBooking = true,
             iconType = "warning",
-            bookedLabel = true;
+            bookedLabel = true,
+            
+            trainCountTickets = this.getCart.length,
+            trainPlaces = [],
+          
+            countSkyUpTickets = this.getCityArrivalDate ? 2 : 1,
+            amountTrain = this.getTotalPrice,
+            totalAmount = this.fullPrice !== this.getPrice ? +this.getPrice + +this.getTotalPrice : '',
+            tariffTypeArrival = this.getToTariffType && this.getToTariffType + `(` + this.getTicketArrivalPrice + ` ` + this.$t('UAH') + `)`;
+        
+        this.getCart.forEach((element) => trainPlaces.push(element.train.place));
+        
         if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
           if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
             !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
@@ -549,21 +562,45 @@
           if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
             !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
             title = this.$t("ticketNotBookedTitleSecond");
-            text = this.$t("ticketNotBookedDescTrain")
+            text = this.$t("ticketNotBookedDescTrain");
             iconType = "warning";
           }
           if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
             this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
             title = this.$t("ticketBookedSkyUpTitle");
-            text = this.$t("ticketBookedSkyUpDesc");
+            text          += "<h4>SkyUp:</h4>"
+            text          += `<div class="d-flex align-items-center"><p>` + this.$t("countTickets") + `</p><p>` + countSkyUpTickets + `</p></div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("typeTariff") + ` <span>(` + this.$t("toBack") + `)</span>:</p>
+                                <p>` + this.getFromTariffType + `(` + this.getTicketDepartmentPrice + ` ` + this.$t('UAH') + `) ` + tariffTypeArrival + `</p>
+                              </div>`;
+            text          += "<h4>" + this.$t('UkrzaliznytsiaShort') + ":</h4>"
+            text          += `<div class="d-flex align-items-center"><p>` + this.$t("countTickets") + `</p><p>` + trainCountTickets + `</p></div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("place") + `</span>:</p>
+                                <p>` + trainPlaces + `</p>
+                              </div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("priceLabel") + `:</p><p> ` + amountTrain + ` ` + this.$t('UAH') + `</p>
+                              </div>`
+            text          += `<div class="total-sum-popup align-items-center justify-content-center"><p>`+this.$t("discountPrice")+`:</p><span>` + totalAmount + ` ` + this.$t('UAH') + `</span></div>`;
             iconType = "success";
             ticketBooking = false;
           }
         } else {
           if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
-            title = this.$t("ticketBookedSkyUpTitle");
-            text = this.$t("ticketBookedTrainDesc");
-            iconType = "success";
+            title         = this.$t("ticketBookedSkyUpTitle");
+            text          = "<p>" + this.$t("ticketBookedTrainDescPartFirst") + "</p>";
+            text          += "<h4>SkyUp:</h4>"
+            text          += `<div class="d-flex align-items-center"><p>` + this.$t("countTickets") + `</p><p>` + countSkyUpTickets + `</p></div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("typeTariff") + ` <span>(` + this.$t("toBack") + `)</span>:</p>
+                                <p>` + this.getFromTariffType + `(` + this.getTicketDepartmentPrice + ` ` + this.$t('UAH') + `) ` + tariffTypeArrival + `</p>
+                              </div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("discountPrice") + `:</p><p> ` + this.getTicketPrice + ` ` + this.$t('UAH') + `</p>
+                              </div>`
+            iconType      = "success";
             ticketBooking = false;
           } else {
             title = this.$t("ticketNotBookedTitle");

@@ -10,6 +10,8 @@ const getDefaultState = () => {
     ticketPrice: "",
     ticketDepartmentPrice: "",
     ticketArrivalPrice: "",
+    fromTariffType: "",
+    toTariffType: "",
     passengers: [
       {
         type: "ADT",
@@ -42,6 +44,8 @@ const getters = {
   getTicketPrice: (state) => state.ticketPrice,
   getTicketDepartmentPrice: (state) => state.ticketDepartmentPrice,
   getTicketArrivalPrice: (state) => state.ticketArrivalPrice,
+  getFromTariffType: (state) => state.fromTariffType,
+  getToTariffType: (state) => state.toTariffType,
 
   getPersonEmail: (state) => state.personEmail,
   getPersonPhone: (state) => state.personPhone,
@@ -126,6 +130,12 @@ const actions = {
   setPromoCode({ commit }, promo) {
     commit("updatePromoCode", promo);
   },
+  setFromTariffType({ commit }, fromTariffType) {
+    commit("updateFromTariffType", fromTariffType);
+  },
+  setToTariffType({ commit }, toTariffType) {
+    commit("updateToTariffType", toTariffType);
+  },
   clearPromoCode({ commit }) {
     commit("updatePromoCode", null);
   },
@@ -184,6 +194,12 @@ const mutations = {
   },
   updatePromoCode(state, promo) {
     state.promoCode = promo;
+  },
+  updateFromTariffType(state, fromTariffType) {
+    state.fromTariffType = fromTariffType;
+  },
+  updateToTariffType(state, toTariffType) {
+    state.toTariffType = toTariffType;
   },
   clearTicketPrice(state) {
     state.ticketPrice = null;

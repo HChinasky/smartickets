@@ -150,7 +150,9 @@
         "setTicketDepartmentPrice",
         "setTicketArrivalPrice",
         "setPersons",
-        "setTicketsList"
+        "setTicketsList",
+        "setFromTariffType",
+        "setToTariffType"
       ]),
       getPriceForOneTicket(price) {
         return price;
@@ -171,6 +173,8 @@
           if(aircraft.routes[1]) {
             if (aircraft.routes[0].fareName == this.tariffDepartment && aircraft.routes[1].fareName == this.tariffArrival) {
               
+              this.setFromTariffType(aircraft.routes[0].fareName)
+              this.setToTariffType(aircraft.routes[1].fareName)
                 this.setResultId(aircraft.resultId);
                 this.setSearchId(aircraft.searchId);
 
@@ -191,6 +195,7 @@
             }
           } else  {
             if(aircraft.routes[0].fareName == this.tariffDepartment) {
+              this.setFromTariffType(aircraft.routes[0].fareName)
               this.setResultId(aircraft.resultId);
               this.setSearchId(aircraft.searchId);
               this.getTicketsFromCart.filter((ticket) => {
