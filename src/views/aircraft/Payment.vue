@@ -137,6 +137,9 @@
               <div class="ticket-date">
                 {{ ticketTrainDepartmentDate }}
               </div>
+              <div class="ticket-price">
+                {{ getTotalPrice }} {{ $t('UAH') }}
+              </div>
             </div>
           </div>
         </div>
