@@ -245,7 +245,7 @@
 
   const alpha = helpers.regex(
     "alpha",
-    /^[A-Za-z']+$/i
+    /^[A-Za-z-\-']+$/i
   );
   export default {
     name: "adultCart",
