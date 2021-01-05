@@ -304,7 +304,7 @@
     "errPassport": "The passport has expired",
     "errAge": "Age is incorrect",
     "ticketBookedSkyUpTitle": "Congratulations! You have booked tickets",
-    "ticketBookedSkyUpDesc": "You have booked tickets for SkyUp, UZ <br> The reservation is valid for: <br> Ukrzaliznytsia - 30 minutes <br> SkyUp - 24 hours <br> You can go to the payment by following the link below",
+    "ticketBookedSkyUpDesc": "You have booked tickets for SkyUp, Ukrzaliznytsia <br> The reservation is valid for: <br> Ukrzaliznytsia - 30 minutes <br> SkyUp - 24 hours <br> You can go to the payment by following the link below",
     "ticketBookedTrainDesc": "You have booked tickets on SkyUp, <br> The reservation is valid for 24 hours, <br> You can go to the payment by following the link below",
     "ticketNotBookedTitle": "Warning! Failed to book a ticket!",
     "returnToRegistration": "Return to registration",

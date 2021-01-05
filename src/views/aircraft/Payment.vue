@@ -590,7 +590,7 @@
           cancelButtonText: this.$t("continueShopping"),
           showConfirmButton: ticketBooking,
           showDenyButton: showPaymentBtn,
-          showCancelButton: true,
+          showCancelButton: false,
           showLoaderOnConfirm: true,
           preDeny: () => {
             return this.paymentInit();

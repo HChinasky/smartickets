@@ -257,6 +257,9 @@ const actions = {
     if (getters.getReusePaymentSID) {
       params.payment_sid = getters.getPaymentSID;
     }
+    if(getters.getTicketsFromCart.length > 1) {
+      params.payment_sid = localStorage.getItem("payment_sid")
+    }
 
     sign_str += rootState.auth.token;
     params.sign = SHA256.hex(sign_str);
