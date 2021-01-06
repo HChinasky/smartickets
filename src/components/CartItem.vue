@@ -19,6 +19,7 @@
           <input
             v-model.trim="surname"
             class="ticket-list__input"
+            :class="{ 'input--error': $v.surname.$error}"
             type="text"
             :disabled="ticket.booked"
             @blur="$v.surname.$touch()"
@@ -47,6 +48,7 @@
           <input
             v-model.trim="name"
             class="ticket-list__input"
+            :class="{ 'input--error': $v.name.$error}"
             type="text"
             :disabled="ticket.booked"
             @blur="$v.name.$touch()"
@@ -186,7 +188,7 @@
           -->
         </div>
       </div>
-      <div class="ticket-list__trip-inf">
+      <div class="ticket-list__trip-inf" v-if="showPlaceDetails">
         <div class="ticket-list__places-inf">
           <div class="ticket-list__places">
             <span>
@@ -297,6 +299,7 @@ export default {
   props: {
     ticket: Object,
     index: Number,
+    showPlaceDetails: Boolean
   },
 
   computed: {
@@ -508,7 +511,9 @@ export default {
   background-image: url(../assets/img/svg/white-check.svg);
 }
 .errorMessage {
-  color: red;
+  font-size: 14px;
+  font-weight: 100;
+  color: #f44336;
 }
 .ticket-list__cost_smartticket {
   font-size: 1em;

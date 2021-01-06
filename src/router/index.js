@@ -27,6 +27,7 @@ import Payment from "../views/aircraft/Payment";
 import SearchTicket from "../views/suburbanTrain/SearchTicket";
 import SuburbanTrains from "../views/suburbanTrain/SuburbanTrains";
 import TrainTicketsBuy from "../views/suburbanTrain/TrainTicketsBuy";
+import GeneralCart from "../views/generalCart/Cart";
 Vue.use(VueRouter);
 
 const routes = [
@@ -105,6 +106,12 @@ const routes = [
     name: 'TrainTicketsBuy',
     component: TrainTicketsBuy,
     alias: '/train-tickets-buy.html',
+  },
+  {
+    path: '/registration-tickets',
+    name: 'GeneralCart',
+    component: GeneralCart,
+    alias: '/registration-tickets.html',
   },
   {
     path: "/my-tickets",

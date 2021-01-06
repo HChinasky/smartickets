@@ -2,26 +2,28 @@ import api from "../../api/api";
 import i18n from "../../i18n";
 import moment from "moment";
 
-const state = {
-  airports: [],
-  availableDates: {
-    data:[{}]
-  },
-  departmentCityCode: null,
-  arrivalCityCode: null,
+const getDefaultState = () => {
+  return {
+    airports: [],
+    availableDates: [{}],
+    departmentCityCode: null,
+    arrivalCityCode: null,
 
 
-  departmentCountry: null,
-  arrivalCountry: null,
+    departmentCountry: null,
+    arrivalCountry: null,
 
-  departmentMainCityCode: null,
-  arrivalMainCityCode: null,
+    departmentMainCityCode: null,
+    arrivalMainCityCode: null,
 
-  cityDepartmentDate: null,
-  cityArrivalDate: null,
+    cityDepartmentDate: null,
+    cityArrivalDate: null,
 
-  isDevSkyUpLoginRequired: null
-};
+    isDevSkyUpLoginRequired: null
+  }
+}
+
+const state = getDefaultState();
 
 const getters = {
   getAirports: (state) => state.airports,
@@ -112,6 +114,9 @@ const actions = {
   setArrivalCityCode({ commit }, data) {
     commit("updateArrivalCityCode", data);
   },
+  resetStateAirport({ commit }) {
+    commit('resetState')
+  },
 }
 
 const mutations = {
@@ -155,6 +160,9 @@ const mutations = {
   SET_DEV_SKYUP_LOGIN_REQUIRED(state, isRequired) {
     state.isDevSkyUpLoginRequired = isRequired;
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 export default {

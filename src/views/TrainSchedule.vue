@@ -149,9 +149,7 @@
 
       <div class="result">
         <div class="result__info">
-          <span class="result__item result__label"
-            >{{ $t("totalPrice") }}:</span
-          >
+          <span class="result__item result__label">{{ $t("totalPrice") }}:</span>
           <span class="result__item result__amount">
             {{
               getCart.length > 0
@@ -161,18 +159,16 @@
             {{ $t("UAH") }}</span
           >
         </div>
-
-        <router-link
+        <button
           class="btn btn--black result__btn"
-          type="button"
-          :to="{ name: $route.meta.clientArea ? 'cart-checkout' : 'cart' }"
           tag="button"
+          @click="handlerLink"
           :disabled="
             isCartEmpty ||
               ($store.getters.getIsMetroActive &&
                 $store.getters.getSelectedMetroStation === null)
           "
-          >{{ $t("toCartBtn") }}</router-link>
+          >{{ $t("toCartBtn") }}</button>
       </div>
     </div>
   </section>
@@ -253,6 +249,7 @@ export default {
       "getTotalPrice",
       "getKyivStations",
       "getSelectedTab",
+      "getTicketsFromCart"
     ]),
 
     selected: {
@@ -285,6 +282,25 @@ export default {
   },
   methods: {
     ...mapActions(["fetchWagon", "updateSelectedTab"]),
+    handlerLink() {
+      let nextLink = {}
+      this.getTicketsFromCart.filter((ticket) => {
+        if(ticket.type.toLowerCase() !== "train") {
+          nextLink = ticket
+        }
+      });
+
+      if(this.getTicketsFromCart.length > 1) {
+        this.$router.push({
+          name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'GeneralCart',
+        });
+      } else {
+        this.$router.push({
+          name:  'cart',
+        });
+      }
+      return false
+    },
     fetchData() {
       this.fetchWagon({
         train_num: this.$route.params.trainNumber,

@@ -31,26 +31,32 @@
             </svg>
           </div>
           <div class="type-trips__btn">
-            <router-link :to="{ name: tripItem.link }" class="btn btn--black">{{ $t('searchTickets') }}</router-link>
+            <button :class="{active : getTicketsFromCart.find(e => e.type == tripItem.ticketType.type)}" @click="chooseTrips(tripItem.ticketType.ticketId, tripItem.ticketType.type, tripItem.ticketType.name)" class="type-trips__link">{{ $t('select') }}</button>
           </div>
         </div>
+      </div>
+      <div class="btn-next__block">
+        <router-link :class="{disabled : !returnLink}" :to="{ name: returnLink }" class="search-ticket__link btn--black">{{ $t('next') }}</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapActions } from "vuex";
+  import { mapActions, mapMutations, mapGetters } from "vuex";
   export default {
     name: "TypeTicket",
     data() {
       return {
-        link: [],
         tripTypes: {
           0: {
-            id: 1,
             name: 'Поїзд',
-            link: 'SearchForm',
+            ticketType: {
+              ticketId: 0,
+              type: "Train",
+              name: 'SearchForm',
+              personValidate: false,
+            },
             icon: {
               id: 'icon-type-train',
               width: 345,
@@ -58,9 +64,13 @@
             }
           },
           1: {
-            id: 2,
             name: 'svg',
-            link: 'SearchAircraftTicket',
+            ticketType: {
+              ticketId: 1,
+              type: "SkyUp",
+              name: 'SearchAircraftTicket',
+              personValidate: false,
+            },
             icon: {
               id: 'icon-type-aircraft',
               width: 367,
@@ -70,24 +80,32 @@
         }
       }
     },
-    methods: {
-      ...mapActions([
-        "regClient",
-        "updateClientInfo"
-      ]),
-      chooseTrips(id, link) {
-        this.link.indexOf(link) === -1 ? this.$set(this.link, id, link) : this.$set(this.link, id, null);
-      }
-    },
     computed: {
+      ...mapGetters(["getTicketsFromCart"]),
       returnLink() {
-        var activeLink = '';
-        this.link.filter(function (el) {
+        let activeLink = '';
+        this.getTicketsFromCart.filter(function (el) {
           if (el != null) {
-            activeLink = el
+            activeLink = el.name
           }
         });
         return activeLink;
+      }
+    },
+    methods: {
+      ...mapMutations(["removeTicketRow"]),
+      ...mapActions([
+        "regClient",
+        "updateClientInfo",
+        "setTicketsList"
+      ]),
+      chooseTrips(id, type, nameComponent) {
+        let index = this.getTicketsFromCart.map(function(item) { return item.type; }).indexOf(type);
+        if(index === -1) {
+          this.setTicketsList({type: type, name: nameComponent, selectSeat: false})
+        } else {
+          this.removeTicketRow(type)
+        }
       }
     },
     created() {
@@ -277,9 +295,6 @@
             }
           }
         }
-      }
-      .btn--black {
-        text-decoration: none;
       }
       .btn-next__block {
         display: flex;

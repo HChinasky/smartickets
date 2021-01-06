@@ -77,7 +77,8 @@
       </template>
       <div class="row">
         <div class="col-6">
-          <div class="ticket__block ticket-department">
+          <div class="ticket__block ticket-department" v-if="getResultId">
+            <h2 class="ticket-type-trips__title">SkyUp</h2>
             <div class="tickets__title">
               <h3 class="to">{{ $t('departureDateShort') }}: <span> {{cityDepartment}} - {{cityArrival}}</span></h3>
             </div>
@@ -88,13 +89,17 @@
             >
               <div class="person-full-name">
                 <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
+                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
               </div>
-              <div class="person-birthday">
+              <div class="ticket-date">
                 {{ ticketDepartmentDate }}
+              </div>
+              <div class="ticket-price">
+                {{ getTicketDepartmentPrice }} {{ $t('UAH') }}
               </div>
             </div>
           </div>
-          <div class="ticket__block ticket-arrival" v-if="getCityArrivalDate">
+          <div class="ticket__block ticket-arrival" v-if="getCityArrivalDate && getResultId">
             <div class="tickets__title">
               <h3 class="from">{{ $t('back') }}: <span>{{cityArrival}} - {{cityDepartment}}</span></h3>
             </div>
@@ -105,9 +110,35 @@
             >
               <div class="person-full-name">
                 <span class="fullname">{{ passenger.firstName }} {{ passenger.lastName }}</span>
+                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
               </div>
-              <div class="person-birthday">
+              <div class="ticket-date">
                 {{ ticketArrivalDate }}
+              </div>
+              <div class="ticket-price">
+                {{ getTicketArrivalPrice }} {{ $t('UAH') }}
+              </div>
+            </div>
+          </div>
+          <div class="ticket__block train-department" v-if="getCart.length > 0">
+            <h2 class="ticket-type-trips__title">{{ $t('train') }}</h2>
+            <div class="tickets__title">
+              <h3 class="to">{{ $t('departureDateShort') }}: <span> {{getTrain.station_from.name}} - {{getTrain.station_to.name}}</span></h3>
+            </div>
+            <div
+                class="additional-services__block"
+                v-for="(person, index) in getCart"
+                :key="index"
+            >
+              <div class="person-full-name">
+                <span class="fullname">{{ person.passenger.name }} {{ person.passenger.surname }}</span>
+                <router-link :to="{name: linkBack}" class="person-edit-info"></router-link>
+              </div>
+              <div class="ticket-date">
+                {{ ticketTrainDepartmentDate }}
+              </div>
+              <div class="ticket-price">
+                {{ getTotalPrice }} {{ $t('UAH') }}
               </div>
             </div>
           </div>
@@ -119,7 +150,7 @@
                 <label>E-mail ({{ $t('ticketsBeSent') }})</label>
                 <input
                     class="ticket-list__input"
-                    type="text"
+                    type="email"
                     @blur="$v.email.$touch()"
                     @keydown.space.prevent
                     v-model="email"
@@ -167,17 +198,17 @@
                   </p>
                 </template>
               </div>
-              <div class="form-input">
-                <label>{{ $t('promoCode') }}</label>
-                <input
-                    class="ticket-list__input"
-                    type="text"
-                    disabled
-                    v-model="promo"
-                >
-                <span class="apply-promo">{{ $t('applyPromo') }}</span>
-                <span class="promo-discount__label" v-if="priceDiscount">{{ $t('promoHaveDiscount') }} {{ priceDiscount }} {{ $t('UAH') }}</span>
-              </div>
+<!--              <div class="form-input">-->
+<!--                <label>{{ $t('promoCode') }}</label>-->
+<!--                <input-->
+<!--                    class="ticket-list__input"-->
+<!--                    type="text"-->
+<!--                    disabled-->
+<!--                    v-model="promo"-->
+<!--                >-->
+<!--                <span class="apply-promo">{{ $t('applyPromo') }}</span>-->
+<!--                <span class="promo-discount__label" v-if="priceDiscount">{{ $t('promoHaveDiscount') }} {{ priceDiscount }} {{ $t('UAH') }}</span>-->
+<!--              </div>-->
             </div>
             <div class="agreement-rules">
               <button
@@ -198,8 +229,8 @@
             </div>
             <div class="payment_sum">
               <template v-if="fullPrice !== getPrice">
-                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ fullPrice }} {{ $t('UAH') }}</span></p>
-                <p class="total-sum" v-if="fullPrice">{{ $t('discountPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
+                <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ (+fullPrice + +getTotalPrice).toFixed(2) }} {{ $t('UAH') }}</span></p>
+                <p class="total-sum" v-if="fullPrice">{{ $t('discountPrice') }}: <span>{{(+getPrice + +getTotalPrice).toFixed(2) }} {{ $t('UAH') }}</span></p>
               </template>
               <template v-else>
                 <p class="total-sum">{{ $t('totalPrice') }}: <span>{{ getPrice }} {{ $t('UAH') }}</span></p>
@@ -212,7 +243,7 @@
                   @click="getBookTicket"
                   class="btn btn--black"
                   v-promise-btn>
-                {{ $t('gotToPay') }}
+                {{ $t('bookingTicket') }}
               </button>
             </div>
           </div>
@@ -255,6 +286,7 @@
         fullPrice: "",
         priceDiscount: "",
         beforeMountPriceDiscount: false,
+        errorsList: [],
 
         hasBooked: false,
         paymentTypes: [{id: 2, name: "fondy"}],
@@ -305,13 +337,22 @@
         "getCityDepartmentDate",
         "getCityArrivalDate",
         "getTicketPrice",
+        "getTicketDepartmentPrice",
+        "getTicketArrivalPrice",
         "getPersonPhone",
         "getPersonEmail",
-        "getTicketDepartmentPrice",
         "getPromoCode",
         "getDevLogin",
         "getDevPassword",
         "getIsDevSkyUpLoginRequired",
+        "getTicketsFromCart",
+        "getTotalPrice",
+        "getCart",
+        "getTrain",
+        "getArrivalDate",
+        "getResultId",
+        "getFromTariffType",
+        "getToTariffType"
       ]),
       devLogin: {
         get() {
@@ -337,6 +378,13 @@
           this.updateDevPassword(value);
         },
       },
+      linkBack() {
+        if(this.getTicketsFromCart.length > 1) {
+          return 'GeneralCart'
+        } else {
+          return 'CartAircraft'
+        }
+      },
       getPrice() {
         if(this.getTicketPrice) {
           return this.getTicketPrice;
@@ -354,6 +402,9 @@
       },
       ticketArrivalDate() {
         return moment(this.getCityArrivalDate).format("DD MMMM YYYY");
+      },
+      ticketTrainDepartmentDate() {
+        return moment(this.getTrain.date).format("DD MMMM YYYY");
       },
       email: {
         get() {
@@ -383,14 +434,22 @@
     methods: {
       ...mapActions([
         "startPayment",
+        "bookTickets",
         "bookingTicketAircraft",
         "setPersonEmail",
         "setPersonPhone",
         "setPromoCode",
-        "clearPromoCode",
         "getCurrentPrice",
         "updateDevPassword",
-        "updateDevLogin"
+        "updateDevLogin",
+        "updateEmail",
+        "resetStateCart",
+        "resetCartStateAircraft",
+        "resetStateAllCart",
+        "resetStateCartAircraft",
+        "resetStateTrain",
+        "resetStateAirport",
+        "setTicketsList",
       ]),
       changeDevLogin(value) {
         this.updateDevLogin(value);
@@ -398,75 +457,29 @@
       changeDevPassword(value) {
         this.updateDevPassword(value);
       },
-      async savePromo() {
-        await this.getCurrentPrice(this.promo).then((res) => {
-          let priceWithDiscount = res.data.data.price_with_discount,
-            priceWithoutDiscount = res.data.data.price_without_discount;
-          this.fullPrice = priceWithoutDiscount.toFixed(2);
-
-          if(res.data.errors.length !== 0) {
-            res.data.errors.forEach((err) => {
-              this.$toasted.global.my_app_error({
-                message: err.error,
-              });
-            })
-          } else {
-            if(priceWithDiscount !== priceWithoutDiscount) {
-              this.priceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
-              var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
-              console.log(getPercent)
-              this.$toasted.global.my_app_success({
-                message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
-              });
-            } else {
-              this.priceDiscount = false;
-              this.$toasted.global.my_app_error({
-                message: this.$t("errorPromoCode"),
-              });
-            }
-          }
-        }).catch((error) => {
-          console.log(error);
-          if (error.toString().includes("[PPCODE:104]")) {
-            this.$toasted.global.my_app_error({
-              type: "error",
-              message: this.$t("trainNotFoundMsg"),
-            });
-          } else {
-            this.$toasted.global.my_app_error({
-              message: error.message,
-            });
-          }
-        });
-      },
       async getBookTicket() {
-        let catchErr     = "",
-          checkDevUser = "",
-          networkError = ""
+        this.updateEmail(this.getPersonEmail);
         this.$v.$touch();
         if(!this.$v.$invalid && this.agreementRules) {
-          if(!this.hasBooked) {
+          if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
             await this.bookingTicketAircraft()
               .then((res) => {
                 if(res.data.errors) {
                   res.data.errors.forEach((err) => {
-                    this.$toasted.global.my_app_error({
-                      message: err.error ? err.error : err,
-                    });
-                    catchErr = err;
+                    this.errorsList.push(err.error ? err.error : err)
                   })
-                } else if (res.data.msg) {
-                  this.$toasted.global.my_app_error({
-                    message: res.data.msg,
-                  });
-                } else {
-                  this.hasBooked = true;
                 }
-                checkDevUser = res.data.code;
+                if (res.data.code === 0) {
+                  this.errorsList = [];
+                  this.getTicketsFromCart.filter((ticket) => {
+                    if(ticket.type.toLowerCase() === "skyup") {
+                      ticket.bookedSkyUp = true;
+                      this.setTicketsList(ticket)
+                    }
+                  });
+                }
               })
               .catch((error) => {
-                networkError = error;
-                console.log(error);
                 if (error.toString().includes("[PPCODE:104]")) {
                   this.$toasted.global.my_app_error({
                     type: "error",
@@ -479,54 +492,193 @@
                 }
               });
           }
-          if(!catchErr && checkDevUser === 0 && !networkError) {
-            await this.startPayment()
-              .then((response) => {
-                var el = document.createElement("p");
-                el.innerHTML = response;
-                var form = el.querySelector("#returnForm");
-                var payment_no = form.querySelector('input[name="payment_no"]').value;
-                this.$refs.inputRef.value = payment_no;
-                this.$refs.formRef.action = form.action;
-                this.$refs.formRef.submit();
-                //this.isLoading = false;
-              })
-              .catch((error) => {
-                this.isLoading = false;
-                this.$toasted.global.my_app_error({
-                  message: error.message,
+          if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
+            if(!this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+              await this.bookTickets()
+                .then(() => {})
+                .catch((error) => {
+                  this.$toasted.global.my_app_error({
+                    message: error.message,
+                  });
                 });
-              });
+            }
+          }
+          this.afterBooked()
+        }
+      },
+      afterBooked() {
+        const swal = this.$swal.mixin({
+          customClass: {
+            confirmButton: 'btn-book-repeat',
+            denyButton: 'btn-payment',
+            cancelButton: 'btn-cancel'
+          },
+          buttonsStyling: false
+        });
+        let title  = "",
+            text   = "",
+            showPaymentBtn = true,
+            ticketBooking = true,
+            iconType = "warning",
+            bookedLabel = true,
+            
+            trainCountTickets = this.getCart.length,
+            trainPlaces = [],
+          
+            countSkyUpTickets = this.getCityArrivalDate ? 2 : 1,
+            amountTrain = this.getTotalPrice,
+            totalAmount = this.fullPrice !== this.getPrice ? +this.getPrice + +this.getTotalPrice : '',
+            tariffTypeArrival = this.getToTariffType && this.getToTariffType + `(` + this.getTicketArrivalPrice + ` ` + this.$t('UAH') + `)`;
+        
+        this.getCart.forEach((element) => trainPlaces.push(element.train.place));
+        
+        if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
+          if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketsNotBookedTitle");
+            text = this.$t("ticketNotBookedDesc");
+            showPaymentBtn = false;
+            iconType = "error";
+          }
+          if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketNotBookedTitleSecond");
+            text = this.$t("ticketNotBookedDescSecond");
+                        text += `<ul class="errors-list">
+                        <li>`+this.errorsList.map((error) => {
+                          if(error == "Passport expired") {
+                            return this.$t("errPassport");
+                          } else if (error == "Adult age is incorrect") {
+                            return this.$t("errAge");
+                          }
+                        })+`
+                      </li>
+                     </ul>`;
+            text += "<span class=\"support-text\">* "+this.$t("editErrorReg")+"</span>"
+            text += "<span class=\"support-text\">** "+this.$t("goToPayUZ")+"</span>"
+            bookedLabel = this.errorsList !== 0 ? true : false;
+            iconType = "warning";
+          }
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            !this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketNotBookedTitleSecond");
+            text = this.$t("ticketNotBookedDescTrain");
+            iconType = "warning";
+          }
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
+            this.getTicketsFromCart.find((item) => item.bookedTrain === true)?.bookedTrain) {
+            title = this.$t("ticketBookedSkyUpTitle");
+            text          += "<h4>SkyUp:</h4>"
+            text          += `<div class="d-flex align-items-center"><p>` + this.$t("countTickets") + `</p><p>` + countSkyUpTickets + `</p></div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("typeTariff") + ` <span>(` + this.$t("toBack") + `)</span>:</p>
+                                <p>` + this.getFromTariffType + `(` + this.getTicketDepartmentPrice + ` ` + this.$t('UAH') + `) ` + tariffTypeArrival + `</p>
+                              </div>`;
+            text          += "<h4>" + this.$t('UkrzaliznytsiaShort') + ":</h4>"
+            text          += `<div class="d-flex align-items-center"><p>` + this.$t("countTickets") + `</p><p>` + trainCountTickets + `</p></div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("place") + `</span>:</p>
+                                <p>` + trainPlaces + `</p>
+                              </div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("priceLabel") + `:</p><p> ` + amountTrain + ` ` + this.$t('UAH') + `</p>
+                              </div>`
+            text          += `<div class="total-sum-popup align-items-center justify-content-center"><p>`+this.$t("discountPrice")+`:</p><span>` + totalAmount + ` ` + this.$t('UAH') + `</span></div>`;
+            iconType = "success";
+            ticketBooking = false;
+          }
+        } else {
+          if(this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
+            title         = this.$t("ticketBookedSkyUpTitle");
+            text          = "<p>" + this.$t("ticketBookedTrainDescPartFirst") + "</p>";
+            text          += "<h4>SkyUp:</h4>"
+            text          += `<div class="d-flex align-items-center"><p>` + this.$t("countTickets") + `</p><p>` + countSkyUpTickets + `</p></div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("typeTariff") + ` <span>(` + this.$t("toBack") + `)</span>:</p>
+                                <p>` + this.getFromTariffType + `(` + this.getTicketDepartmentPrice + ` ` + this.$t('UAH') + `) ` + tariffTypeArrival + `</p>
+                              </div>`;
+            text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("discountPrice") + `:</p><p> ` + this.getTicketPrice + ` ` + this.$t('UAH') + `</p>
+                              </div>`
+            iconType      = "success";
+            ticketBooking = false;
+          } else {
+            title = this.$t("ticketNotBookedTitle");
+            text = this.$t("ticketNotBookedDescSecond");
+            text += `<ul class="errors-list">
+                        <li>`+this.errorsList.map((error) => {
+                          if(error == "Passport expired") {
+                            return this.$t("errPassport");
+                          } else if (error == "Adult age is incorrect") {
+                            return this.$t("errAge");
+                          }
+                        })+`
+                      </li>
+                     </ul>`
+            iconType = "warning";
+            showPaymentBtn = false;
+            bookedLabel = this.errorsList !== 0 ? true : false;
           }
         }
+        swal.fire({
+          icon: iconType,
+          title: title,
+          html: text,
+          width: 620,
+          confirmButtonText: bookedLabel ? this.$t("returnToRegistration") : this.$t("rebookTicket"),
+          denyButtonText: this.$t("goToPay"),
+          cancelButtonText: this.$t("continueShopping"),
+          showConfirmButton: ticketBooking,
+          showDenyButton: showPaymentBtn,
+          showCancelButton: false,
+          showLoaderOnConfirm: true,
+          preDeny: () => {
+            return this.paymentInit();
+          },
+          preConfirm: () => {
+            return bookedLabel ? this.$router.push({name: this.linkBack}) : this.getBookTicket()
+          },
+          allowOutsideClick: () => !swal.isLoading()
+        }).then((result) => {
+          if (result.isConfirmed && !bookedLabel) {
+            swal.fire({
+              title: this.$t("ticketBookedSkyUpTitle"),
+              text: this.$t("ticketBookedSkyUpDesc"),
+              width: 620,
+              icon: "success"
+            })
+          }
+        })
+      },
+      async paymentInit() {
+        await this.startPayment()
+          .then((response) => {
+            var el = document.createElement("p");
+            el.innerHTML = response;
+            var form = el.querySelector("#returnForm");
+            var payment_no = form.querySelector('input[name="payment_no"]').value;
+            this.$refs.inputRef.value = payment_no;
+            this.$refs.formRef.action = form.action;
+            this.$refs.formRef.submit();
+            this.resetStateCart()
+            this.resetCartStateAircraft()
+            this.resetStateAllCart()
+            this.resetStateCartAircraft()
+            this.resetStateTrain()
+            this.resetStateAirport()
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.$toasted.global.my_app_error({
+              message: error.message,
+            });
+          });
       }
     },
     beforeMount() {
       this.getCurrentPrice(this.promo).then((res) => {
-        let priceWithDiscount = res.data.data.price_with_discount,
-          priceWithoutDiscount = res.data.data.price_without_discount;
-        this.fullPrice = priceWithoutDiscount.toFixed(2);
-        if(res.data.errors.length !== 0) {
-          res.data.errors.forEach((err) => {
-            this.$toasted.global.my_app_error({
-              message: err.error,
-            });
-          })
-        } else {
-          if(priceWithDiscount !== priceWithoutDiscount) {
-            this.beforeMountPriceDiscount = (priceWithoutDiscount - priceWithDiscount).toFixed(2);
-            var getPercent = Math.floor(((priceWithoutDiscount - priceWithDiscount) / priceWithDiscount) * 100);
-            
-            this.$toasted.global.my_app_success({
-              message: this.$t('discountAlert') + getPercent.toFixed(0) + "%",
-            });
-          } else {
-            this.beforeMountPriceDiscount = false;
-            this.$toasted.global.my_app_error({
-              message: this.$t("errorPromoCode"),
-            });
-          }
-        }
+        let priceWithoutDiscount = res.data.data.price_without_discount;
+        this.fullPrice = priceWithoutDiscount;
       }).catch((error) => {
         console.log(error);
         if (error.toString().includes("[PPCODE:104]")) {
@@ -603,8 +755,17 @@
         }
         
         .ticket__block {
-          &.ticket-arrival {
+          &.ticket-arrival, &.train-arrival {
             margin-top: 80px;
+          }
+          &.train-department {
+            margin-top: 65px;
+            border-top: 2px solid $SECOND_FONT_COLOR;
+          }
+          .ticket-type-trips__title {
+            font-size: 32px;
+            font-weight: 300;
+            color: #000;
           }
         }
         
@@ -641,6 +802,7 @@
             border-radius: 5px;
             
             .person-full-name {
+              position: relative;
               font-size: 17px;
               font-weight: 500;
               display: block;
@@ -649,10 +811,6 @@
               padding-bottom: 5px;
               text-align: center;
               border-bottom: 1px solid $SECOND_FONT_COLOR;
-              background-image: url('../../assets/img/svg/edit-icon.svg');
-              background-repeat: no-repeat;
-              background-position: right 5px top;
-              background-size: 30px;
               
               .fullname {
                 border: none;
@@ -660,13 +818,29 @@
                 outline: none;
                 text-transform: uppercase;
               }
+              .person-edit-info {
+                position: absolute;
+                right: 0;
+                top: 5px;
+                width: 35px;
+                height: 28px;
+                background-image: url('../../assets/img/svg/edit-icon.svg');
+                background-repeat: no-repeat;
+                background-position: right 5px top;
+                background-size: 30px;
+              }
             }
             
-            .person-birthday {
+            .ticket-date {
               font-size: 17px;
               font-weight: 200;
               color: $LABEL_COLOR;
               padding: 10px 0;
+            }
+            .ticket-price {
+              font-size: 18px;
+              font-weight: 500;
+              color: $SECOND_FONT_COLOR;
             }
             
             .additional-services__select {

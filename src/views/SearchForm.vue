@@ -26,7 +26,7 @@
             {{ $t('backToChooseTypeTrips') }}
           </a>
         </div>
-        <h2 class="ticket-search__title">{{ $t("ticketSearchOnline") }}</h2>
+        <h2 class="ticket-search__title">{{ $t("ticketSearchTrain") }}</h2>
         <div class="ts-form">
           <div class="ts-form__inner">
             <div class="ts-form__where-from">
@@ -153,7 +153,7 @@ export default {
       "setArrivalStation",
       "clearSelectedStations",
       "clearSelectedDates",
-      "clearSelectedTrains",
+      "clearSelectedTrains"
     ]),
     ...mapMutations(["setStations"]),
 
@@ -255,15 +255,13 @@ export default {
     this.updateClientInfo();
     this.regClient()
       .then(() => {
-        if (this.getStations.length == 0) {
-          this.fetchStations()
-            .then(() => {})
-            .catch((error) => {
-              this.$toasted.global.my_app_error({
-                message: error.message,
-              });
+        this.fetchStations()
+          .then(() => {})
+          .catch((error) => {
+            this.$toasted.global.my_app_error({
+              message: error.message,
             });
-        }
+          });
       })
       .catch((error) => {
         this.$toasted.global.my_app_error({

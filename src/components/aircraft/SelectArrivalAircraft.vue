@@ -2,12 +2,14 @@
   <span>
     <v-select
         class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+        :class="{loading : loading}"
         v-model="selected"
         :options="paginated"
         :filter="fuseSearch"
         :clearable="false"
         :limit="limit"
-        :placeholder="$t('flyTo')"
+        :placeholder="!loading ? $t('flyTo') : $t('loading') "
+        :disabled="loading"
         @open="onOpen"
         @close="onClose"
     >
@@ -28,6 +30,11 @@
   import { mapGetters, mapActions } from "vuex";
   export default {
     name: "SelectArrivalAircraft",
+    props: {
+      loading: {
+        Boolean
+      }
+    },
     data: () => ({
       observer: null,
       limit: 10,
@@ -43,7 +50,7 @@
           if(newValue) {
             this.$store.commit('updateCityDepartmentDate', null);
             this.$store.commit('updateCityArrivalDate', null);
-            this.resetCartState();
+            this.resetCartStateAircraft();
           }
         }
       }
@@ -72,7 +79,7 @@
           if(value.city_code) {
             this.setArrivalMainCityCode(value.city_code)
           }
-      },
+        },
       },
       findRelated() {
         if(this.getDepartmentCityCode) {
@@ -80,7 +87,7 @@
         } else {
           return this.getAirports;
         }
-        
+
       },
       paginated() {
         return this.findRelated.slice(0, this.limit);
@@ -96,7 +103,7 @@
         "setArrivalCountry",
         "updateCityDepartmentDate",
         "updateCityArrivalDate",
-        "resetCartState"
+        "resetCartStateAircraft"
       ]),
 
       fuseSearch(options, search) {
@@ -133,16 +140,16 @@
   };
 </script>
 
-<style scoped>
-  .dropdown-input >>> .vs__dropdown-toggle {
+<style lang="scss" scoped>
+  .dropdown-input ::v-deep  .vs__dropdown-toggle {
     border: none;
   }
-  .dropdown-input >>> .vs__selected {
+  .dropdown-input ::v-deep  .vs__selected {
     margin-left: 0px;
     padding-left: 0px;
   }
   
-  .dropdown-input >>> .vs__open-indicator {
+  .dropdown-input ::v-deep  .vs__open-indicator {
     fill: black;
     cursor: pointer;
   }
@@ -161,5 +168,45 @@
   .code {
     font-size: 12px;
     margin-left: 5px;
+  }
+  
+  .ts-form__input {
+    &.vs--disabled {
+      ::v-deep .vs__dropdown-toggle {
+        background-color: transparent;
+        .vs__search {
+          background-color: transparent;
+        }
+        .vs__actions {
+          display: none;
+        }
+      }
+    }
+    &.loading {
+      border-bottom: 2px solid rgba(0,0,0,.3);
+      
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: 9;
+        top: 10px;
+        right: 20px;
+        transform: translateX(-50%);
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        border: 4px solid transparent;
+        border-top: 3px solid #3398FF;
+        border-radius: 50%;
+        animation: loading 1.5s infinite linear;
+        -moz-animation: loading 1.5s infinite linear;
+        -webkit-animation: loading 1.5s infinite linear;
+      }
+    }
+  }
+  @keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
   }
 </style>

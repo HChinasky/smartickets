@@ -1123,3 +1123,90 @@ info .tooltip-arrow {
 }
 
 /* ./tooltip */
+.errors-list {
+  list-style: none;
+}
+
+.errors-list li {
+  color: #f44336;
+}
+
+.btn-payment {
+  font-size: 14px;
+  margin-right: 5px;
+  padding: 5px 10px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+.btn-book-repeat {
+  font-size: 14px;
+  margin-right: 5px;
+  padding: 5px 10px;
+  background-color: #66b2ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+.btn-cancel {
+  font-size: 14px;
+  padding: 5px 10px;
+  color: #6E6E6E;
+  background-color: transparent;
+  border: 1px solid #6E6E6E;
+  border-radius: 5px;
+  outline: none;
+}
+.support-text {
+  font-size: 12px;
+  color: #6E6E6E;
+  margin-left: 5px;
+  text-align: left;
+  display: block;
+}
+
+.swal2-header .swal2-title {
+  color: #000;
+}
+
+.swal2-html-container {
+  font-size: 16px;
+  font-weight: 100;
+  color: #000;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+.justify-content-center {
+  justify-content: center;
+}
+.swal2-content .d-flex {
+  border-bottom: 1px dashed #66b2ff;
+}
+
+.swal2-content .d-flex p {
+  width: 50%;
+  margin: 10px 0;
+}
+
+.swal2-content .d-flex p span {
+  font-size: 14px;
+}
+
+.total-sum-popup {
+  display: flex;
+}
+
+.total-sum-popup span {
+  color: #1B73CD;
+  font-weight: 600;
+  margin-left: 5px;
+}

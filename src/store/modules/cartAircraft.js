@@ -3,33 +3,39 @@ import moment from "moment";
 var Hashes = require("jshashes");
 import { getField, updateField } from 'vuex-map-fields';
 
-const state = {
-  resultId: "",
-  searchId: "",
-  ticketPrice: "",
-  ticketDepartmentPrice: "",
-  ticketArrivalPrice: "",
-  passengers: [
-    {
-      type: "ADT",
-      firstName: "",
-      lastName: "",
-      genders: "",
-      birthDay: "",
-      birthMonth: "",
-      birthYear: "",
-      country: "",
-      passportCode: "",
-      passportDay: "",
-      passportMonth: "",
-      passportYear: "",
-    },
-  ],
-  personEmail: "",
-  personPhone: "",
-  // promoCode: "GL-GC2Q2ZT"
-  promoCode: "GL-SMART"
-};
+const getDefaultState = () => {
+  return {
+    resultId: "",
+    searchId: "",
+    ticketPrice: "",
+    ticketDepartmentPrice: "",
+    ticketArrivalPrice: "",
+    fromTariffType: "",
+    toTariffType: "",
+    passengers: [
+      {
+        type: "ADT",
+        firstName: "",
+        lastName: "",
+        genders: "",
+        birthDay: "",
+        birthMonth: "",
+        birthYear: "",
+        country: "",
+        passportCode: "",
+        passportDay: "",
+        passportMonth: "",
+        passportYear: "",
+      },
+    ],
+    personEmail: "",
+    personPhone: "",
+    promoCode: "GL-GC2Q2ZT"
+    // promoCode: "GL-SMART"
+  }
+}
+
+const state = getDefaultState();
 
 const getters = {
   getField,
@@ -38,6 +44,8 @@ const getters = {
   getTicketPrice: (state) => state.ticketPrice,
   getTicketDepartmentPrice: (state) => state.ticketDepartmentPrice,
   getTicketArrivalPrice: (state) => state.ticketArrivalPrice,
+  getFromTariffType: (state) => state.fromTariffType,
+  getToTariffType: (state) => state.toTariffType,
 
   getPersonEmail: (state) => state.personEmail,
   getPersonPhone: (state) => state.personPhone,
@@ -98,6 +106,9 @@ const actions = {
   setResultId({ commit }, data) {
     commit("updateResultId", data);
   },
+  clearResultId({ commit }, data) {
+    commit("clearResultId", data);
+  },
   setSearchId({ commit }, data) {
     commit("updateSearchId", data);
   },
@@ -119,11 +130,20 @@ const actions = {
   setPromoCode({ commit }, promo) {
     commit("updatePromoCode", promo);
   },
+  setFromTariffType({ commit }, fromTariffType) {
+    commit("updateFromTariffType", fromTariffType);
+  },
+  setToTariffType({ commit }, toTariffType) {
+    commit("updateToTariffType", toTariffType);
+  },
   clearPromoCode({ commit }) {
     commit("updatePromoCode", null);
   },
   clearPrice({ commit }) {
     commit("clearTicketPrice", null);
+  },
+  resetStateCartAircraft({ commit }) {
+    commit('resetStateAircraft')
   },
 };
 const mutations = {
@@ -151,6 +171,9 @@ const mutations = {
   updateResultId(state, resultId) {
     state.resultId = resultId;
   },
+  clearResultId(state) {
+    state.resultId = "";
+  },
   updateSearchId(state, searchId) {
     state.searchId = searchId;
   },
@@ -172,9 +195,18 @@ const mutations = {
   updatePromoCode(state, promo) {
     state.promoCode = promo;
   },
+  updateFromTariffType(state, fromTariffType) {
+    state.fromTariffType = fromTariffType;
+  },
+  updateToTariffType(state, toTariffType) {
+    state.toTariffType = toTariffType;
+  },
   clearTicketPrice(state) {
     state.ticketPrice = null;
   },
+  resetStateAircraft(state) {
+    Object.assign(state, getDefaultState())
+  }
 };
 
 export default {

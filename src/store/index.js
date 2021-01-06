@@ -7,6 +7,7 @@ import airports from "./modules/airports";
 import train from "./modules/train";
 import aircraft from "./modules/aircraft";
 import cartAircraft from "./modules/cartAircraft";
+import allCart from "./modules/allCart";
 import cart from "./modules/cart";
 import metro from "./modules/metro";
 import * as notification from "./modules/notification";
@@ -20,7 +21,7 @@ const dataState = createPersistedState({
   //paths: ['stations', 'train', 'cart', 'metro', 'notification', "auth"],
   //paths: ['stations', 'train', 'cart', 'notification', "auth"],
 
-  paths: ["stations", "airports", "cartAircraft", "train", "aircraft", "cart", 'notification', "auth", "metro.stations"],
+  paths: ["stations", "airports", "cartAircraft", "allCart", "train", "aircraft", "cart", 'notification', "auth", "metro.stations"],
 
 });
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     stations,
     airports,
     cartAircraft,
+    allCart,
     train,
     aircraft,
     cart,

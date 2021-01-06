@@ -8,17 +8,21 @@ import api from "../../api/api";
 import { decode } from "js-base64";
 import i18n from "../../i18n";
 
-const state = {
-  cart: [],
-  tickets: [], //успешно оформленные билеты
-  payment_sid: null,
-  reusePaymentSID: false,
-  ticket: null,
-  validationError: false,
-  email: null,
-  devLogin: null,
-  devPassword: null,
-};
+const getDefaultState = () => {
+  return {
+    cart: [],
+    tickets: [], //успешно оформленные билеты
+    payment_sid: null,
+    reusePaymentSID: false,
+    ticket: null,
+    validationError: false,
+    email: null,
+    devLogin: null,
+    devPassword: null,
+  }
+}
+
+const state = getDefaultState();
 
 const getters = {
   getCart: (state) => state.cart,
@@ -253,6 +257,9 @@ const actions = {
     if (getters.getReusePaymentSID) {
       params.payment_sid = getters.getPaymentSID;
     }
+    if(getters.getTicketsFromCart.length > 1) {
+      params.payment_sid = localStorage.getItem("payment_sid")
+    }
 
     sign_str += rootState.auth.token;
     params.sign = SHA256.hex(sign_str);
@@ -271,6 +278,12 @@ const actions = {
 
           if (item.code == 0) {
             commit("SET_BOOKED", index);
+            rootGetters.getTicketsFromCart.filter((ticket) => {
+              if(ticket.type.toLowerCase() === "train") {
+                ticket.bookedTrain = true;
+                commit('updateTicketsList', ticket, {root: true});
+              }
+            });
           } else {
             commit("UNSET_BOOKED", index);
           }
@@ -281,8 +294,8 @@ const actions = {
         commit("SET_REUSE_PAYMENT_SID", true); //переиспользование sid для повторного бронирования
       }
     }
-  
-    
+
+
     catch (error) {
       if (error.request) {
         throw new Error(i18n.t("serverNotResponding"));
@@ -290,7 +303,7 @@ const actions = {
         throw new Error(error.message)
       }
     }
-    
+
   },
   async startPayment({ rootState, commit }) {
     var SHA256 = new Hashes.SHA256();
@@ -303,7 +316,7 @@ const actions = {
       ),
       payment_sid: localStorage.getItem("payment_sid"),
     };
-    
+
 
     const response = await api.initPayment(params);
     if (response.data.code != 0) {
@@ -350,7 +363,7 @@ const actions = {
   async sendTicketToEmail({ rootState }, payload) {
     console.log(rootState.auth.uuid);
     const params = {
-      uuid: localStorage.getItem("uuid"),      
+      uuid: localStorage.getItem("uuid"),
       pack_num: payload.pack_num,
       trn_date: payload.trn_date,
       html: payload.html,
@@ -376,6 +389,12 @@ const actions = {
     } else {
       return response.data.data;
     }
+  },
+  clearCart({ commit }) {
+    commit("UNSET_CART", []);
+  },
+  resetStateCart({ commit }) {
+    commit('resetState')
   },
 };
 
@@ -464,8 +483,11 @@ const mutations = {
 
   UNSET_CART(state) {
     state.cart = [];
-    state.reusePaymentSID = false; 
+    state.reusePaymentSID = false;
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  }
   /*
   REMOVE_VALIDATION_ERROR(state, { index, field }) {
     state.cart[index].validationErrors = without(

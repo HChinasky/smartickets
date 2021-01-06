@@ -1,26 +1,8 @@
 <template>
   <section class="card-aircraft">
     <div class="container">
-      <div class="step-back__block">
-        <router-link class="back-to-site__link" :to="{name : 'SearchAircraftTicket'}">
-          <svg
-              width="36"
-              height="23"
-              viewBox="0 0 36 23"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-                d="M36 11.5L2 11.5M2 11.5L13.4815 22M2 11.5L13.4815 0.999998"
-                stroke="#3398ff"
-                stroke-width="2"
-            />
-          </svg>
-          {{ $t('toSearchPage') }}
-        </router-link>
-      </div>
-      <h1>{{ $t('whoFlies') }}</h1>
-      <passengerCart @checkinput="handlerIcon" />
+      <h2>SkyUp</h2>
+      <passengerCart @checkinput="handlerIcon"/>
       <div class="d-flex">
         <template v-if="fullPrice !== getPrice">
           <div class="total-amount">
@@ -42,6 +24,29 @@
             <span class="price">{{ getPrice }}</span>
           </div>
         </template>
+      </div>
+      <template v-if="getCart.length !== 0">
+        <div class="border-bottom"></div>
+        <h2>{{ $t('train') }}</h2>
+        <div
+            class="ticket-list"
+            v-for="(ticket, index) in getCart"
+            :key="index"
+        >
+          <CartItem ref="cartItems" :ticket="ticket" :index="index" :showPlaceDetails="false"></CartItem>
+        
+        </div>
+        <div class="d-flex">
+          <div class="total-amount">
+            <span class="label">{{ $t('cost') }}:</span>
+            <span class="price">{{ getTotalPrice }} {{ $t('UAH') }}</span>
+            <div class="cart-total__cost cart-total__commission-sum">
+              {{ $t("commissionSum") }} -  0,06 {{ $t("UAH") }}
+            </div>
+          </div>
+        </div>
+      </template>
+      <div class="d-flex">
         <button
             class="cart-submit btn btn--black"
             @click="getValidate"
@@ -54,33 +59,44 @@
 </template>
 
 <script>
-  import { mapMultiRowFields } from 'vuex-map-fields';
-  import { mapGetters, mapActions } from "vuex";
+  import {mapMultiRowFields} from 'vuex-map-fields';
+  import {mapGetters, mapActions} from "vuex";
+  import {required, email} from "vuelidate/lib/validators";
   import PassengerCart from '../../components/aircraft/PassengerCart';
-  
+  import CartItem from "../../components/CartItem";
+
   export default {
     name: "CartAircraft",
     components: {
-      PassengerCart
+      PassengerCart,
+      CartItem
     },
     data() {
       return {
         validationHandler: "",
-        links: "",
         promo: "GL-GC2Q2ZT",
         fullPrice: "",
+      }
+    },
+    validations: {
+      email: {
+        required,
+        email,
       }
     },
     computed: {
       ...mapMultiRowFields(["passengers"]),
       ...mapGetters([
+        "getTotalPrice",
+        "getCart",
+        "getEmail",
         "getTicketPrice",
         "getTicketDepartmentPrice",
         "getField",
         "getTicketsFromCart",
       ]),
       getPrice() {
-        if(this.getTicketPrice) {
+        if (this.getTicketPrice) {
           return this.getTicketPrice;
         }
         return this.getTicketDepartmentPrice
@@ -91,55 +107,73 @@
       handlerIcon($v) {
         this.validationHandler = $v;
       },
+      
       getValidate() {
-        var isValid = false;
-        for(var i=0; i<this.passengers.length;i++) {
+        let isValidAdditional = false,
+          isValid             = false,
+          isValidTrain        = false;
+        for (var i = 0; i < this.passengers.length; i++) {
           this.validationHandler.passengers.$each.$touch();
-          if(this.validationHandler.passengers.$each[i].lastName.$invalid) {
+          if (this.validationHandler.passengers.$each[i].lastName.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].firstName.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].firstName.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].birthDay.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].birthDay.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].birthMonth.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].birthMonth.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].birthYear.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].birthYear.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].genders.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].genders.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].country.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].country.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].passportCode.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].passportCode.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].passportDay.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].passportDay.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].passportMonth.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].passportMonth.$invalid) {
             isValid = false;
-          } else if(this.validationHandler.passengers.$each[i].passportYear.$invalid) {
+          } else if (this.validationHandler.passengers.$each[i].passportYear.$invalid) {
             isValid = false;
           } else {
             isValid = true;
           }
         }
-        if(isValid) {
+        
+        this.$nextTick(() => {
+          let domRect = document.querySelector('.input--error');
+          this.$scrollTo(domRect, 1800, {easing: "ease-in-out"});
+        });
+        
+        this.$refs.cartItems.forEach(function(item) {
+          item.$v.$touch();
+          if (item.$v.$invalid) {
+            isValidTrain = false;
+          } else {
+            isValidTrain = true;
+          }
+        });
+
+        this.$v.$touch();
+        if (this.$v.$invalid) {
+          isValidAdditional = false;
+        } else {
+          isValidAdditional = true;
+        }
+        if (isValid && isValidTrain || isValidAdditional) {
           let nextLink = {};
           this.getTicketsFromCart.filter((ticket) => {
-            if(ticket.name.toLowerCase() === this.$options.name.toLowerCase()) {
+            if (ticket.name.toLowerCase() === this.$options.name.toLowerCase()) {
               ticket.selectSeat = true;
               this.setTicketsList(ticket)
             } else {
               nextLink = ticket;
             }
           });
-          if(this.getTicketsFromCart.length > 1) {
-            this.$router.push({
-              name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'GeneralCart',
-            });
-          } else {
-            this.$router.push({
-              name: 'payment'
-            })
-          }
+          this.$router.push({
+            name: nextLink && !this.getTicketsFromCart.every((item) => item.selectSeat === true) ? nextLink.name : 'payment',
+          }).catch(() => {});
         }
       }
     },
@@ -194,9 +228,15 @@
   .card-aircraft {
     background-color: #fff;
     padding: 20px 0 150px 0;
+    
     .container {
+      .border-bottom {
+        padding-top: 25px;
+        border-bottom: 1px solid #ececec;
+      }
       .step-back__block {
         margin-bottom: 40px;
+        
         .back-to-site__link {
           cursor: pointer;
           display: flex;
@@ -204,15 +244,18 @@
           text-decoration: none;
           align-items: center;
           transition: color .2s;
+          
           &:hover {
             color: $SECOND_FONT_COLOR;
           }
+          
           svg {
             margin-right: 20px;
           }
         }
       }
-      h1 {
+      
+      h2 {
         font-weight: normal;
         font-size: 48px;
         color: #000;
@@ -220,7 +263,7 @@
           font-size: 26px;
         }
       }
-  
+      
       > .d-flex {
         display: flex;
         flex-direction: column;
@@ -228,6 +271,7 @@
         @include respond-until(sm) {
           align-items: center;
         }
+        
         .total-amount {
           max-width: 300px;
           width: 100%;
@@ -238,6 +282,7 @@
           @include respond-until(sm) {
             margin-top: 30px;
           }
+          
           span {
             font-weight: 300;
             font-size: 22px;
@@ -248,7 +293,13 @@
               font-weight: bold;
             }
           }
+          .cart-total__commission-sum {
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 10px;
+          }
         }
+        
         .cart-submit {
           width: 310px;
           height: 65px;
@@ -260,6 +311,7 @@
           @include respond-until(sm) {
             margin-top: 25px;
           }
+          
           &:disabled {
             color: #fff;
           }
