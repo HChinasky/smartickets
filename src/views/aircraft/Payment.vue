@@ -458,6 +458,7 @@
         this.updateDevPassword(value);
       },
       async getBookTicket() {
+        this.updateEmail(this.getPersonEmail);
         this.$v.$touch();
         if(!this.$v.$invalid && this.agreementRules) {
           if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp) {
@@ -501,7 +502,6 @@
                   });
                 });
             }
-            this.updateEmail(this.getPersonEmail);
           }
           this.afterBooked()
         }
