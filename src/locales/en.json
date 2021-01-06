@@ -317,5 +317,6 @@
     "priceLabel": "Price",
     "amountPaid": "Amount to be paid",
     "typeTariff": "Tariff type",
-    "toBack": "there, back"
+    "toBack": "there, back",
+    "loading": "Loading available airports..."
 }

@@ -2,12 +2,14 @@
   <span>
     <v-select
         class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+        :class="{loading : loading}"
         v-model="selected"
         :options="paginated"
         :filter="fuseSearch"
         :clearable="false"
         :limit="limit"
-        :placeholder="$t('flyFrom')"
+        :placeholder="!loading ? $t('flyFrom') : $t('loading') "
+        :disabled="loading"
         @open="onOpen"
         @close="onClose"
     >
@@ -32,6 +34,11 @@
     name: "SelectDepartmentAircraft",
     component: {
       Fuse
+    },
+    props: {
+      loading: {
+        Boolean
+      }
     },
     data() {
       return {
@@ -185,5 +192,43 @@
     font-size: 12px;
     margin-left: 5px;
   }
+  .ts-form__input {
+    &.vs--disabled {
+      ::v-deep .vs__dropdown-toggle {
+        background-color: transparent;
+        .vs__search {
+          background-color: transparent;
+        }
+        .vs__actions {
+          display: none;
+        }
+      }
+    }
+    &.loading {
+      border-bottom: 2px solid rgba(0,0,0,.3);
 
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: 9;
+        top: 10px;
+        right: 20px;
+        transform: translateX(-50%);
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        border: 4px solid transparent;
+        border-top: 3px solid #3398FF;
+        border-radius: 50%;
+        animation: loading 1.5s infinite linear;
+        -moz-animation: loading 1.5s infinite linear;
+        -webkit-animation: loading 1.5s infinite linear;
+      }
+    }
+  }
+  @keyframes loading {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
 </style>

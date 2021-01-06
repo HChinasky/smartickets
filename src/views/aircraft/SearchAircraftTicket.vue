@@ -35,7 +35,7 @@
                   $t("cityOfDeparture")
                 }}</label>
 
-                <SelectDepartmentAircraft ref="departmentSelect" />
+                <SelectDepartmentAircraft ref="departmentSelect" :loading="loading" />
               </div>
               <div class="switch-btn__wrap">
                 <button
@@ -55,7 +55,7 @@
                 <label class="ts-form__label">{{
                   $t("cityOfArrival")
                 }}</label>
-                <SelectArrivalAircraft/>
+                <SelectArrivalAircraft :loading="loading" />
               </div>
               <div class="ts-form__row">
                 <div class="ts-form__group desktop">
@@ -100,7 +100,7 @@
                 <label class="ts-form__label">{{
                   $t("cityOfArrival")
                 }}</label>
-                <SelectArrivalAircraft/>
+                <SelectArrivalAircraft :loading="loading" />
               </div>
               
             <div class="count-passengers">
@@ -228,6 +228,7 @@
       return {
         teenagersAge: 0,
         kidsAge: 0,
+        loading: true
       }
     },
     computed: {
@@ -345,10 +346,8 @@
         this.setDepartmentMainCityCode(tempMain);
       },
     },
-    mounted() {
-      this.$store.dispatch('fetchAirports');
-    },
     created() {
+      this.fetchAirports().then(() => this.loading = false)
       this.updateClientInfo();
       this.regClient()
         .then(() => {

@@ -208,14 +208,4 @@
     0% {transform: rotate(0deg);}
     100% {transform: rotate(360deg);}
   }
-
-  @-moz-keyframes loading {
-    0% {transform: rotate(0deg);}
-    100% {transform: rotate(360deg);}
-  }
-
-  @-webkit-keyframes loading {
-    0% {transform: rotate(0deg);}
-    100% {transform: rotate(360deg);}
-  }
 </style>
