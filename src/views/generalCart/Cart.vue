@@ -275,6 +275,7 @@
         .total-amount {
           max-width: 300px;
           width: 100%;
+          margin-top: 10px;
           &:first-child {
             margin-top: 50px;
           }
