@@ -20,6 +20,7 @@
             <label class="ticket-list__label">{{ $t('lastname') }} ({{ $t('latin') }})</label>
             <input
                 class="ticket-list__input"
+                :class="{ 'input--error': $v.passengers.$each[index].lastName.$error}"
                 type="text"
                 v-model="passenger.lastName"
                 @blur="$v.passengers.$each[index].lastName.$touch()"
@@ -41,6 +42,7 @@
             <label class="ticket-list__label">{{ $t('firstname') }} ({{ $t('latin') }})</label>
             <input
                 class="ticket-list__input"
+                :class="{ 'input--error': $v.passengers.$each[index].firstName.$error}"
                 type="text"
                 v-model="passenger.firstName"
                 @blur="$v.passengers.$each[index].firstName.$touch()"
@@ -63,6 +65,7 @@
             <div class="form-list__group ts-form__select">
               <v-select
                   class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                  :class="{ 'input--error': $v.passengers.$each[index].birthDay.$error}"
                   :options="days(passenger.birthMonth, passenger.birthYear)"
                   v-model="passenger.birthDay"
                   @blur="$v.passengers.$each[index].birthDay.$touch()"
@@ -73,6 +76,7 @@
             <div class="form-list__group ts-form__select">
               <v-select
                   class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                  :class="{ 'input--error': $v.passengers.$each[index].birthMonth.$error}"
                   :options="months()"
                   v-model="passenger.birthMonth"
                   @blur="$v.passengers.$each[index].birthMonth.$touch()"
@@ -83,6 +87,7 @@
             <div class="form-list__group ts-form__select">
               <v-select
                   class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                  :class="{ 'input--error': $v.passengers.$each[index].birthYear.$error}"
                   :options="years()"
                   v-model="passenger.birthYear"
                   @blur="$v.passengers.$each[index].birthYear.$touch()"
@@ -113,6 +118,7 @@
                 <div class="form-group">
                   <input
                       type="radio"
+                      :class="{ 'input--error': $v.passengers.$each[index].genders.$error}"
                       :id="[`male-${index}`]"
                       v-model="passenger.genders"
                       @blur="$v.passengers.$each[index].genders.$touch()"
@@ -123,6 +129,7 @@
                 <div class="form-group">
                   <input
                       type="radio"
+                      :class="{ 'input--error': $v.passengers.$each[index].genders.$error}"
                       :id="[`female-${index}`]"
                       v-model="passenger.genders"
                       @blur="$v.passengers.$each[index].genders.$touch()"
@@ -147,6 +154,7 @@
               <label class="ticket-list__label">{{ $t('citizenship') }}</label>
               <v-select
                   class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                  :class="{ 'input--error': $v.passengers.$each[index].country.$error}"
                   :options="options"
                   v-model="passenger.country"
                   @blur="$v.passengers.$each[index].country.$touch()"
@@ -162,6 +170,7 @@
               <label class="ticket-list__label">{{ $t('passportCode') }}</label>
               <input
                   class="ticket-list__input"
+                  :class="{ 'input--error': $v.passengers.$each[index].passportCode.$error}"
                   type="text"
                   v-model="passenger.passportCode"
                   @blur="$v.passengers.$each[index].passportCode.$touch()"
@@ -181,6 +190,7 @@
               <div class="form-list__group ts-form__select">
                 <v-select
                     class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                    :class="{ 'input--error': $v.passengers.$each[index].passportDay.$error}"
                     :options="days(passenger.passportMonth, passenger.passportYear)"
                     v-model="passenger.passportDay"
                     @blur="$v.passengers.$each[index].passportDay.$touch()"
@@ -191,6 +201,7 @@
               <div class="form-list__group ts-form__select">
                 <v-select
                     class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                    :class="{ 'input--error': $v.passengers.$each[index].passportMonth.$error}"
                     :options="months()"
                     v-model="passenger.passportMonth"
                     @blur="$v.passengers.$each[index].passportMonth.$touch()"
@@ -201,6 +212,7 @@
               <div class="form-list__group ts-form__select">
                 <v-select
                     class="ts-form__input ts-form__input--swap ts-form__input-dropdown dropdown-input v-select"
+                    :class="{ 'input--error': $v.passengers.$each[index].passportYear.$error}"
                     :options="betweenYears()"
                     v-model="passenger.passportYear"
                     @blur="$v.passengers.$each[index].passportYear.$touch()"

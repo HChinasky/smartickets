@@ -99,10 +99,11 @@
       handlerIcon($v) {
         this.validationHandler = $v;
       },
+      
       getValidate() {
-        var isValidAdditional = false,
-          isValid           = false,
-          isValidTrain      = false;
+        let isValidAdditional = false,
+          isValid             = false,
+          isValidTrain        = false;
         for (var i = 0; i < this.passengers.length; i++) {
           this.validationHandler.passengers.$each.$touch();
           if (this.validationHandler.passengers.$each[i].lastName.$invalid) {
@@ -131,7 +132,12 @@
             isValid = true;
           }
         }
-
+        
+        this.$nextTick(() => {
+          let domRect = document.querySelector('.input--error');
+          this.$scrollTo(domRect, 1800, {easing: "ease-in-out"});
+        });
+        
         this.$refs.cartItems.forEach(function(item) {
           item.$v.$touch();
           if (item.$v.$invalid) {

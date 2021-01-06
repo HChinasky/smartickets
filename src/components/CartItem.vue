@@ -19,6 +19,7 @@
           <input
             v-model.trim="surname"
             class="ticket-list__input"
+            :class="{ 'input--error': $v.surname.$error}"
             type="text"
             :disabled="ticket.booked"
             @blur="$v.surname.$touch()"
@@ -47,6 +48,7 @@
           <input
             v-model.trim="name"
             class="ticket-list__input"
+            :class="{ 'input--error': $v.name.$error}"
             type="text"
             :disabled="ticket.booked"
             @blur="$v.name.$touch()"
