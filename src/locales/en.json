@@ -318,5 +318,7 @@
     "amountPaid": "Amount to be paid",
     "typeTariff": "Tariff type",
     "toBack": "there, back",
-    "loading": "Loading available airports..."
+    "loading": "Loading available airports...",
+    "discount": "Discount",
+    "totalPriceSecond": "Total"
 }

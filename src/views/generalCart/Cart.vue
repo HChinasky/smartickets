@@ -4,20 +4,26 @@
       <h2>SkyUp</h2>
       <passengerCart @checkinput="handlerIcon"/>
       <div class="d-flex">
-        <div class="total-amount">
-          <span class="label">{{ $t('discountPrice') }}:</span>
-          <span class="price">{{ getPrice }} {{ $t('UAH') }}</span>
-        </div>
-        <div class="total-amount">
-          <template v-if="fullPrice !== getPrice">
-            <span class="label">{{ $t('totalPrice') }}:</span>
+        <template v-if="fullPrice !== getPrice">
+          <div class="total-amount">
+            <span class="label">{{ $t('cost') }}:</span>
             <span class="price">{{ (+fullPrice).toFixed(2) }} {{ $t('UAH') }}</span>
-          </template>
-          <template v-else>
-            <span class="label">{{ $t('totalPrice') }}:</span>
+          </div>
+          <div class="total-amount">
+            <span class="label">{{ $t('discount') }}:</span>
+            <span class="price">-{{(+fullPrice - +getPrice).toFixed(2) }} {{ $t('UAH') }}</span>
+          </div>
+          <div class="total-amount">
+            <span class="label">{{ $t('totalPriceSecond') }}:</span>
+            <span class="price">{{ getPrice }} {{ $t('UAH') }}</span>
+          </div>
+        </template>
+        <template v-else>
+          <div class="total-amount">
+            <span class="label">{{ $t('cost') }}:</span>
             <span class="price">{{ getPrice }}</span>
-          </template>
-        </div>
+          </div>
+        </template>
       </div>
       <template v-if="getCart.length !== 0">
         <div class="border-bottom"></div>
@@ -267,7 +273,8 @@
         }
         
         .total-amount {
-          width: 460px;
+          max-width: 300px;
+          width: 100%;
           &:first-child {
             margin-top: 50px;
           }
@@ -278,7 +285,6 @@
           span {
             font-weight: 300;
             font-size: 22px;
-            
             &.price {
               font-size: 26px;
               margin-left: 10px;

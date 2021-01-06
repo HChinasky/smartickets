@@ -22,20 +22,26 @@
       <h1>{{ $t('whoFlies') }}</h1>
       <passengerCart @checkinput="handlerIcon" />
       <div class="d-flex">
-        <div class="total-amount">
-          <span class="label">{{ $t('discountPrice') }}:</span>
-          <span class="price">{{ getPrice }} {{ $t('UAH') }}</span>
-        </div>
-        <div class="total-amount">
-          <template v-if="fullPrice !== getPrice">
-            <span class="label">{{ $t('totalPrice') }}:</span>
+        <template v-if="fullPrice !== getPrice">
+          <div class="total-amount">
+            <span class="label">{{ $t('cost') }}:</span>
             <span class="price">{{ (+fullPrice).toFixed(2) }} {{ $t('UAH') }}</span>
-          </template>
-          <template v-else>
-            <span class="label">{{ $t('totalPrice') }}:</span>
+          </div>
+          <div class="total-amount">
+            <span class="label">{{ $t('discount') }}:</span>
+            <span class="price">-{{(+fullPrice - +getPrice).toFixed(2) }} {{ $t('UAH') }}</span>
+          </div>
+          <div class="total-amount">
+            <span class="label">{{ $t('totalPriceSecond') }}:</span>
+            <span class="price">{{ getPrice }} {{ $t('UAH') }}</span>
+          </div>
+        </template>
+        <template v-else>
+          <div class="total-amount">
+            <span class="label">{{ $t('cost') }}:</span>
             <span class="price">{{ getPrice }}</span>
-          </template>
-        </div>
+          </div>
+        </template>
         <button
             class="cart-submit btn btn--black"
             @click="getValidate"
@@ -223,17 +229,17 @@
           align-items: center;
         }
         .total-amount {
-          width: 460px;
-          margin-top: 50px;
+          max-width: 300px;
+          width: 100%;
+          &:first-child {
+            margin-top: 50px;
+          }
           @include respond-until(sm) {
             margin-top: 30px;
           }
           span {
             font-weight: 300;
             font-size: 22px;
-            &.label {
-          
-            }
             &.price {
               font-size: 26px;
               margin-left: 10px;
