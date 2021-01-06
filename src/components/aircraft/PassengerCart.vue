@@ -234,6 +234,7 @@
 
 <script>
   import {mapMultiRowFields} from 'vuex-map-fields';
+  // import moment from "moment";
   import countries from '../../assets/country';
   import {
     required,
@@ -327,7 +328,7 @@
       months() {
         var xs = [];
         for (var i = 1; i <= 12; i++) {
-          xs.push(i);
+          xs.push(("0" + i).slice(-2));
         }
         return xs;
       },
@@ -337,7 +338,7 @@
         const date = new Date(year, month - 1),
           days = [];
         while (date.getMonth() === month - 1) {
-          days.push(new Date(date).getDate());
+          days.push(("0" + new Date(date).getDate()).slice(-2));
           date.setDate(date.getDate() + 1);
         }
         return days;
