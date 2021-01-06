@@ -19,25 +19,27 @@
           </template>
         </div>
       </div>
-      <div class="border-bottom"></div>
-      <h2>{{ $t('train') }}</h2>
-      <div
-          class="ticket-list"
-          v-for="(ticket, index) in getCart"
-          :key="index"
-      >
-        <CartItem ref="cartItems" :ticket="ticket" :index="index" :showSeatDetails="false"></CartItem>
-      
-      </div>
-      <div class="d-flex">
-        <div class="total-amount">
-          <span class="label">{{ $t('cost') }}:</span>
-          <span class="price">{{ getTotalPrice }} {{ $t('UAH') }}</span>
-          <div class="cart-total__cost cart-total__commission-sum">
-            {{ $t("commissionSum") }} -  0,06 {{ $t("UAH") }}
+      <template v-if="getCart.length !== 0">
+        <div class="border-bottom"></div>
+        <h2>{{ $t('train') }}</h2>
+        <div
+            class="ticket-list"
+            v-for="(ticket, index) in getCart"
+            :key="index"
+        >
+          <CartItem ref="cartItems" :ticket="ticket" :index="index" :showPlaceDetails="false"></CartItem>
+        
+        </div>
+        <div class="d-flex">
+          <div class="total-amount">
+            <span class="label">{{ $t('cost') }}:</span>
+            <span class="price">{{ getTotalPrice }} {{ $t('UAH') }}</span>
+            <div class="cart-total__cost cart-total__commission-sum">
+              {{ $t("commissionSum") }} -  0,06 {{ $t("UAH") }}
+            </div>
           </div>
         </div>
-      </div>
+      </template>
       <div class="d-flex">
         <button
             class="cart-submit btn btn--black"
