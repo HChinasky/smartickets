@@ -26,18 +26,19 @@
             </div>
             <div class="client-tickets__link">
               <button
-                @click="dwnTicket(item.pack_num, item.pay_time, item.html_data)"
+                @click="dwnTicket(item.pack_num, item.pay_time, item)"
               >
                 {{ $t("downloadTicket") }}
               </button>
             </div>
             <div class="client-tickets__link">
               <button
-                @click="sendToEmail(item.pack_num, item.pay_time, item.html_data)"
+                @click="sendToEmail(item.pack_num, item.pay_time, item)"
               >
                 {{ $t("sendTicketToEmail") }}
               </button>
             </div>
+            {{removeSecondHead}}
             <div class="client-tickets__link">
               <a
                 :href="
@@ -100,7 +101,7 @@ export default {
           ",height=800,top=50,left=" +
           width
       );
-      win.document.body.innerHTML = item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html))) : this.templateFormat(item.html_data);
+      win.document.body.innerHTML = item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html))) : item.html_data.map((html) => decode(html));
     },
     
     removeSecondHeader(html) {
@@ -108,91 +109,39 @@ export default {
         .createRange()
         .createContextualFragment(decode(html)),
       lastHeader = fragment.querySelector(".ticket-container:last-child [class=ticket__header]"),
-      lastSmartTicketInfo = fragment.querySelector(".ticket-container:last-child [class=ticket-description__block]");
+      lastSmartTicketInfo = fragment.querySelector(".ticket-container:last-child [class=ticket-description__block]"),
+      body = fragment;
+      console.log(body);
       
 
       if(lastHeader && lastSmartTicketInfo) {
         lastHeader.innerHTML = "";
         lastSmartTicketInfo.innerHTML = "";
+        lastHeader.classList.add("mt-20")
+        lastHeader.classList.add("mt-20")
       }
       return encode(
         [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
       );
     },
-
-    templateFormat(html) {
+    
+    removeSecondHead(html) {
       var fragment = document
         .createRange()
-        .createContextualFragment(decode(html));
-
-      fragment.getElementById("text_info").innerHTML = fragment
-        .getElementById("text_info")
-        .innerHTML.trim()
-        .slice(1, -1);
-
-      var textInfoHTML = fragment.getElementById("text_info").innerHTML;
-      var linesCount = textInfoHTML.match(/br/g).length + 1;
-      var margin = 0;
-      switch (linesCount) {
-        case 2:
-          margin = 0;
-          break;
-        case 3:
-          margin = 110;
-          break;
-        case 4:
-          margin = 55;
-          break;
-        default:
-          break;
-      }
-
-      var elem = fragment.querySelector("#ticketTableFooter");
-      elem.style.marginBottom = `${margin}px`;
-
-      fragment.getElementById("text_info").innerHTML = fragment.getElementById(
-        "text_info"
-      ).innerText;
-
-      fragment.getElementById("get_wagon_num").innerHTML = this.addFirstZero(
-        fragment.getElementById("get_wagon_num").innerText,
-        2
-      );
-      fragment.getElementById("get_place").innerHTML = this.addFirstZero(
-        fragment.getElementById("get_place").innerText,
-        3
-      );
-
-      let uuid = fragment.getElementById("get_uuid").innerHTML;
-      let first_uuid = uuid.substring(0, uuid.length - 14);
-      let second_uuid = uuid.substring(uuid.length - 14, uuid.length);
-
-      fragment.getElementById("get_uuid").innerHTML =
-        first_uuid + "<b style='font-size:20px;'>" + second_uuid + "</b>";
-
-      let special_num = fragment.getElementById("get_special_num").innerHTML;
-      let first_special_num = special_num.substring(0, special_num.length - 14);
-      let second_special_num = special_num.substring(
-        special_num.length - 14,
-        special_num.length
-      );
-
-      fragment.getElementById("get_special_num").innerHTML =
-        first_special_num +
-        "<b style='font-size:20px;'>" +
-        second_special_num +
-        "</b>";
-
-      if (fragment.getElementById("wagon_class").value != "")
-        fragment.getElementById("get_wagon_class").innerHTML =
-          "/" + fragment.getElementById("wagon_class").value + " КЛ";
-
+        .createContextualFragment(decode(html)),
+         body = fragment.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+      console.log(body)
+      
       return encode(
         [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
       );
     },
-    async dwnTicket(pack_num, trn_date, html_data) {
-      var html = html_data;
+    
+    async dwnTicket(pack_num, trn_date, item) {
+      var htmlArr = [],
+          html = "";
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr))) : item.html_data.map((htmlArr) => decode(htmlArr)))
+      html = encode(htmlArr.join());
       const response = await this.downloadTicket({
         pack_num,
         trn_date,
@@ -204,9 +153,11 @@ export default {
       this.$refs.dwn.download = fileName;
       this.$refs.dwn.click();
     },
-    async sendToEmail(pack_num, trn_date, html_data) {
+    async sendToEmail(pack_num, trn_date, item) {
       this.isLoading = true;
-      var html = html_data;
+      var htmlArr = [], html = "";
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr))) : item.html_data.map((htmlArr) => decode(htmlArr)))
+      html = encode(htmlArr.join());
       const response = await this.sendTicketToEmail({
         pack_num,
         trn_date,

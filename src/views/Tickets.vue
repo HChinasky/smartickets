@@ -28,7 +28,7 @@
 
             <div class="client-tickets__link">
               <button
-                @click="dwnTicket(item.pack_num, item.pay_time, item.html_data)"
+                @click="dwnTicket(item.pack_num, item.pay_time, item)"
               >
                 {{ $t("downloadTicket") }}
               </button>
@@ -36,7 +36,7 @@
             <div class="client-tickets__link">
               <button
                 @click="
-                  sendToEmail(item.pack_num, item.pay_time, item.html_data)
+                  sendToEmail(item.pack_num, item.pay_time, item)
                 "
               >
                 {{ $t("sendTicketToEmail") }}
@@ -65,8 +65,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { decode } from "js-base64";
+import { mapActions } from "vuex";
+import { encode, decode } from "js-base64";
+import api from "../api/api";
 import Loading from "vue-loading-overlay";
 
 export default {
@@ -76,20 +77,15 @@ export default {
   },
   data() {
     return {
+      tickets: null,
       isLoading: false,
       fullPage: true,
       loader: "spinner",
       color: "#1b73cd",
     };
   },
-  computed: {
-    ...mapGetters(["getTickets"]),
-    tickets() {
-      return this.getTickets;
-    },
-  },
   methods: {
-    ...mapActions(["downloadTicket", "sendTicketToEmail"]),
+    ...mapActions(["downloadTicket", "sendTicketToEmail", "fetchUserTickets"]),
 
     addFirstZero(str, max) {
       let result = "";
@@ -109,11 +105,30 @@ export default {
           ",height=800,top=50,left=" +
           width
       );
-      win.document.body.innerHTML = decode(item.html_data);
+      win.document.body.innerHTML = item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html))) : item.html_data.map((html) => decode(html));
     },
 
-    async dwnTicket(pack_num, trn_date, html_data) {
-      var html = html_data;
+    removeSecondHeader(html) {
+      var fragment = document
+          .createRange()
+          .createContextualFragment(decode(html)),
+        lastHeader = fragment.querySelector(".ticket-container:last-child [class=ticket__header]"),
+        lastSmartTicketInfo = fragment.querySelector(".ticket-container:last-child [class=ticket-description__block]");
+
+
+      if(lastHeader && lastSmartTicketInfo) {
+        lastHeader.innerHTML = "";
+        lastSmartTicketInfo.innerHTML = "";
+      }
+      return encode(
+        [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
+      );
+    },
+    
+    async dwnTicket(pack_num, trn_date, item) {
+      var htmlArr = [], html = "";
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => this.removeSecondHeader(htmlArr)) : item.html_data.map((htmlArr) => htmlArr))
+      html = encode(htmlArr.join());
       const response = await this.downloadTicket({ pack_num, trn_date, html });
       const source = "data:application/pdf;base64," + response.pdf;
       const fileName = "SmartTicket_" + response.file_name + ".pdf";
@@ -121,9 +136,11 @@ export default {
       this.$refs.dwn.download = fileName;
       this.$refs.dwn.click();
     },
-    async sendToEmail(pack_num, trn_date, html_data) {
+    async sendToEmail(pack_num, trn_date, item) {
       this.isLoading = true;
-      var html = html_data;
+      var htmlArr = [], html = "";
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => this.removeSecondHeader(htmlArr)) : item.html_data.map((htmlArr) => htmlArr))
+      html = encode(htmlArr.join());
       const response = await this.sendTicketToEmail({
         pack_num,
         trn_date,
@@ -140,6 +157,35 @@ export default {
         });
       }
     },
+  },
+  async created() {
+    await api.fetchUserTicket(
+      this.$route.query.pack_num,
+      this.$route.query.trn_date
+    ).then((response) => {
+      if (response.data.code != 0) {
+        throw new Error(response.data.msg);
+      } else {
+        let infoArr = {},
+          htmlData = [];
+        for (const key in response.data.tickets) {
+          htmlData.push(response.data.tickets[key][0].html_data);
+          infoArr = [{
+            fio: response.data.tickets[key][0].fio,
+            pay_time: response.data.tickets[key][0].pay_time,
+            pack_num: response.data.tickets[key][0].pack_num,
+            payment_no: response.data.tickets[key][0].payment_no,
+            html_data: htmlData,
+            ticketLength: Object.keys(response.data.tickets).length
+          }];
+        }
+        this.tickets = infoArr;
+      }
+    }).catch((error) => {
+      this.$toasted.global.my_app_error({
+        message: error,
+      });
+    })
   },
 };
 </script>
