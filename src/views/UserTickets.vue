@@ -62,7 +62,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { decode } from "js-base64";
+import { encode, decode } from "js-base64";
 import api from "../api/api";
 import Loading from "vue-loading-overlay";
 
@@ -100,9 +100,97 @@ export default {
           ",height=800,top=50,left=" +
           width
       );
-      win.document.body.innerHTML = decode(item.html_data);
+      win.document.body.innerHTML = item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html))) : this.templateFormat(item.html_data);
+    },
+    
+    removeSecondHeader(html) {
+      var fragment = document
+        .createRange()
+        .createContextualFragment(decode(html)),
+      lastHeader = fragment.querySelector(".ticket-container:last-child [class=ticket__header]"),
+      lastSmartTicketInfo = fragment.querySelector(".ticket-container:last-child [class=ticket-description__block]");
+      
+
+      if(lastHeader && lastSmartTicketInfo) {
+        lastHeader.innerHTML = "";
+        lastSmartTicketInfo.innerHTML = "";
+      }
+      return encode(
+        [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
+      );
     },
 
+    templateFormat(html) {
+      var fragment = document
+        .createRange()
+        .createContextualFragment(decode(html));
+
+      fragment.getElementById("text_info").innerHTML = fragment
+        .getElementById("text_info")
+        .innerHTML.trim()
+        .slice(1, -1);
+
+      var textInfoHTML = fragment.getElementById("text_info").innerHTML;
+      var linesCount = textInfoHTML.match(/br/g).length + 1;
+      var margin = 0;
+      switch (linesCount) {
+        case 2:
+          margin = 0;
+          break;
+        case 3:
+          margin = 110;
+          break;
+        case 4:
+          margin = 55;
+          break;
+        default:
+          break;
+      }
+
+      var elem = fragment.querySelector("#ticketTableFooter");
+      elem.style.marginBottom = `${margin}px`;
+
+      fragment.getElementById("text_info").innerHTML = fragment.getElementById(
+        "text_info"
+      ).innerText;
+
+      fragment.getElementById("get_wagon_num").innerHTML = this.addFirstZero(
+        fragment.getElementById("get_wagon_num").innerText,
+        2
+      );
+      fragment.getElementById("get_place").innerHTML = this.addFirstZero(
+        fragment.getElementById("get_place").innerText,
+        3
+      );
+
+      let uuid = fragment.getElementById("get_uuid").innerHTML;
+      let first_uuid = uuid.substring(0, uuid.length - 14);
+      let second_uuid = uuid.substring(uuid.length - 14, uuid.length);
+
+      fragment.getElementById("get_uuid").innerHTML =
+        first_uuid + "<b style='font-size:20px;'>" + second_uuid + "</b>";
+
+      let special_num = fragment.getElementById("get_special_num").innerHTML;
+      let first_special_num = special_num.substring(0, special_num.length - 14);
+      let second_special_num = special_num.substring(
+        special_num.length - 14,
+        special_num.length
+      );
+
+      fragment.getElementById("get_special_num").innerHTML =
+        first_special_num +
+        "<b style='font-size:20px;'>" +
+        second_special_num +
+        "</b>";
+
+      if (fragment.getElementById("wagon_class").value != "")
+        fragment.getElementById("get_wagon_class").innerHTML =
+          "/" + fragment.getElementById("wagon_class").value + " КЛ";
+
+      return encode(
+        [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
+      );
+    },
     async dwnTicket(pack_num, trn_date, html_data) {
       var html = html_data;
       const response = await this.downloadTicket({
@@ -139,21 +227,33 @@ export default {
     },
   },
   async created() {
-    try {
-      const response = await api.fetchUserTicket(
-        this.$route.query.pack_num,
-        this.$route.query.trn_date
-      );
+    await api.fetchUserTicket(
+      this.$route.query.pack_num,
+      this.$route.query.trn_date
+    ).then((response) => {
       if (response.data.code != 0) {
         throw new Error(response.data.msg);
       } else {
-        this.tickets = response.data.tickets;
+        let infoArr = {},
+          htmlData = [];
+        for (const key in response.data.tickets) {
+          htmlData.push(response.data.tickets[key][0].html_data);
+          infoArr = [{
+            fio: response.data.tickets[key][0].fio,
+            pay_time: response.data.tickets[key][0].pay_time,
+            pack_num: response.data.tickets[key][0].pack_num,
+            payment_no: response.data.tickets[key][0].payment_no,
+            html_data: htmlData,
+            ticketLength: Object.keys(response.data.tickets).length
+          }];
+        }
+        this.tickets = infoArr;
       }
-    } catch (error) {
+    }).catch((error) => {
       this.$toasted.global.my_app_error({
         message: error,
       });
-    }
+    })
   },
 };
 </script>
