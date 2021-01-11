@@ -144,9 +144,6 @@
         ></TrainScheme>
       </div>
 
-      <MetroNotification v-if="showMetro" />
-      <Metro v-if="showMetro" />
-
       <div class="result">
         <div class="result__info">
           <span class="result__item result__label">{{ $t("totalPrice") }}:</span>
@@ -180,8 +177,6 @@ import sum from "lodash/sum";
 import moment from "moment";
 import vuescroll from "vuescroll";
 import TrainScheme from "../components/TrainScheme";
-import MetroNotification from "../components/MetroNotification";
-import Metro from "../components/Metro";
 import Loading from "vue-loading-overlay";
 
 export default {
@@ -190,8 +185,6 @@ export default {
   components: {
     vuescroll,
     TrainScheme,
-    MetroNotification,
-    Metro,
     Loading,
   },
 
@@ -403,6 +396,6 @@ a {
 }
 
 .schedule-block .schedule--dashed-line::after {
-  background-image: url("../assets/img/svg/line-dashed.svg");
+  /*background-image: url("../assets/img/svg/line-dashed.svg");*/
 }
 </style>
