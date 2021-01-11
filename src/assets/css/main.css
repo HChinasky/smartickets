@@ -6160,6 +6160,7 @@ body.nav-open {
   border: none;
   border-bottom: 2px solid #000;
   font-size: 2rem;
+  color: #000;
 }
 .ts-form__submit {
   text-align: center;
