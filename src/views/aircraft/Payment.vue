@@ -169,7 +169,7 @@
                 <input
                     id=""
                     class="ticket-list__input"
-                    type="text"
+                    type="email"
                     @blur="$v.repeatEmail.$touch()"
                     @keydown.space.prevent
                     v-model="repeatEmail"
@@ -443,7 +443,6 @@
         "updateDevPassword",
         "updateDevLogin",
         "updateEmail",
-        "resetStateCart",
         "resetCartStateAircraft",
         "resetStateAllCart",
         "resetStateCartAircraft",
@@ -524,13 +523,15 @@
             
             trainCountTickets = this.getCart.length,
             trainPlaces = [],
+            trainWagon = [],
           
             countSkyUpTickets = this.getCityArrivalDate ? 2 : 1,
             amountTrain = this.getTotalPrice,
-            totalAmount = this.fullPrice !== this.getPrice ? +this.getPrice + +this.getTotalPrice : '',
+            totalAmount = this.fullPrice !== this.getPrice ? (+this.getPrice + +this.getTotalPrice).toFixed(2) : '',
             tariffTypeArrival = this.getToTariffType && this.getToTariffType + `(` + this.getTicketArrivalPrice + ` ` + this.$t('UAH') + `)`;
         
         this.getCart.forEach((element) => trainPlaces.push(element.train.place));
+        this.getCart.forEach((element) => trainWagon.push(element.train.wagon_num));
         
         if(this.getTicketsFromCart.filter((item) => item.type == "Train").length !== 0) {
           if(!this.getTicketsFromCart.find((item) => item.bookedSkyUp === true)?.bookedSkyUp &&
@@ -577,13 +578,17 @@
             text          += "<h4>" + this.$t('UkrzaliznytsiaShort') + ":</h4>"
             text          += `<div class="d-flex align-items-center"><p>` + this.$t("countTickets") + `</p><p>` + trainCountTickets + `</p></div>`;
             text          += `<div class="d-flex align-items-center">
+                                <p>` + this.$t("wagon") + `</span>:</p>
+                                <p>` + trainWagon + `</p>
+                              </div>`;
+            text          += `<div class="d-flex align-items-center">
                                 <p>` + this.$t("place") + `</span>:</p>
                                 <p>` + trainPlaces + `</p>
                               </div>`;
             text          += `<div class="d-flex align-items-center">
                                 <p>` + this.$t("priceLabel") + `:</p><p> ` + amountTrain + ` ` + this.$t('UAH') + `</p>
                               </div>`
-            text          += `<div class="total-sum-popup align-items-center justify-content-center"><p>`+this.$t("discountPrice")+`:</p><span>` + totalAmount + ` ` + this.$t('UAH') + `</span></div>`;
+            text          += `<div class="total-sum-popup align-items-center justify-content-center"><p>`+this.$t("discountPrice")+`:</p><span>` + +totalAmount + ` ` + this.$t('UAH') + `</span></div>`;
             iconType = "success";
             ticketBooking = false;
           }
@@ -660,7 +665,6 @@
             this.$refs.inputRef.value = payment_no;
             this.$refs.formRef.action = form.action;
             this.$refs.formRef.submit();
-            this.resetStateCart()
             this.resetCartStateAircraft()
             this.resetStateAllCart()
             this.resetStateCartAircraft()

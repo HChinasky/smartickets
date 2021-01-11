@@ -31,12 +31,6 @@
         </div>
         <SuburbanTrainResult :buyTicket="true" />
       </div>
-      <div class="active-metro__block">
-        <MetroNotification :isSuburbanTrain="true" v-if="showMetro" />
-      </div>
-      <div class="metro-direction">
-        <Metro v-if="showMetro" />
-      </div>
       <div class="ticket-list__item">
         <div class="ticket-list__inner">
           <div class="ticket-list__group">
@@ -88,8 +82,6 @@
 
 <script>
   import { mapGetters } from "vuex";
-  import MetroNotification from "../../components/MetroNotification";
-  import Metro from "../../components/Metro";
   import SuburbanTrainResult from "../../components/suburbanTrain/SuburbanTrainResult";
   import { email,required } from "vuelidate/lib/validators";
   
@@ -101,8 +93,6 @@
       }
     },
     components: {
-      MetroNotification,
-      Metro,
       SuburbanTrainResult
     },
     validations: {

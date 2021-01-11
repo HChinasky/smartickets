@@ -21,7 +21,14 @@ const getDefaultState = () => {
         birthDay: "",
         birthMonth: "",
         birthYear: "",
-        country: "",
+        country: {
+          alpha3: "UKR",
+          code: "UA",
+          codeNumber: "804",
+          label: "УКРАЇНА",
+          nameEng: "Ukraine",
+          nameLong: "УКРАЇНА"
+        },
         passportCode: "",
         passportDay: "",
         passportMonth: "",
@@ -30,8 +37,8 @@ const getDefaultState = () => {
     ],
     personEmail: "",
     personPhone: "",
-    promoCode: "GL-GC2Q2ZT"
-    // promoCode: "GL-SMART"
+    // promoCode: "GL-GC2Q2ZT"
+    promoCode: "GL-SMART"
   }
 }
 
@@ -157,7 +164,14 @@ const mutations = {
       birthDay: "",
       birthMonth: "",
       birthYear: "",
-      country: "",
+      country: {
+        alpha3: "UKR",
+        code: "UA",
+        codeNumber: "804",
+        label: "УКРАЇНА",
+        nameEng: "Ukraine",
+        nameLong: "УКРАЇНА"
+      },
       passportCode: "",
       passportDay: "",
       passportMonth: "",

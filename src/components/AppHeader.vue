@@ -155,14 +155,6 @@
       AuthorizationBtn,
       SignInForm
     },
-    data() {
-      return {
-        time: {
-          hours: 12,
-          minutes: 30
-        },
-      }
-    },
     computed: {
       ...mapGetters([
         "getResultId",
@@ -170,6 +162,16 @@
         "getIsMetroActive",
         "getTicketsFromCart"
       ]),
+      getRoutingName() {
+        if(this.$router.currentRoute.name ==="GeneralCart") {
+          if(this.getCart.length !== 0) {
+            return "cart"
+          }
+        } else if (this.$router.currentRoute.name === "cart" || this.$router.currentRoute.name === "CartAircraft") {
+          return "Home"
+        }
+        return false
+      }
     },
     methods: {
       ...mapMutations(["removeTicketRow"]),
@@ -178,8 +180,14 @@
         if(type == "SkyUp") {
           this.clearResultId()
           this.resetStateCartAircraft()
+          this.$router.push({
+            name: this.getRoutingName
+          }).catch(() => {});
         } else {
           this.clearCart()
+          this.$router.push({
+            name: this.getRoutingName
+          }).catch(() => {});
         }
         this.removeTicketRow(type)
       }

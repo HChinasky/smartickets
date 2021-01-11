@@ -74,7 +74,7 @@
     data() {
       return {
         validationHandler: "",
-        promo: "GL-GC2Q2ZT",
+        promo: "GL-SMART",
         fullPrice: "",
       }
     },
@@ -143,24 +143,30 @@
         
         this.$nextTick(() => {
           let domRect = document.querySelector('.input--error');
-          this.$scrollTo(domRect, 1800, {easing: "ease-in-out"});
+          if(domRect)
+            this.$scrollTo(domRect, 1800, {easing: "ease-in-out"});
         });
         
-        this.$refs.cartItems.forEach(function(item) {
-          item.$v.$touch();
-          if (item.$v.$invalid) {
-            isValidTrain = false;
-          } else {
-            isValidTrain = true;
-          }
-        });
-
+        if(this.$refs.cartItems) {
+          this.$refs.cartItems.forEach(function(item) {
+            item.$v.$touch();
+            if (item.$v.$invalid) {
+              isValidTrain = false;
+            } else {
+              isValidTrain = true;
+            }
+          });
+        } else {
+          isValidTrain = true;
+        }
+        // eslint
         this.$v.$touch();
         if (this.$v.$invalid) {
           isValidAdditional = false;
         } else {
           isValidAdditional = true;
         }
+
         if (isValid && isValidTrain || isValidAdditional) {
           let nextLink = {};
           this.getTicketsFromCart.filter((ticket) => {

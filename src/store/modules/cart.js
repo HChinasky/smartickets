@@ -393,9 +393,6 @@ const actions = {
   clearCart({ commit }) {
     commit("UNSET_CART", []);
   },
-  resetStateCart({ commit }) {
-    commit('resetState')
-  },
 };
 
 const mutations = {
@@ -485,9 +482,6 @@ const mutations = {
     state.cart = [];
     state.reusePaymentSID = false;
   },
-  resetState(state) {
-    Object.assign(state, getDefaultState())
-  }
   /*
   REMOVE_VALIDATION_ERROR(state, { index, field }) {
     state.cart[index].validationErrors = without(
