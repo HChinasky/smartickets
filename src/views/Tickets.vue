@@ -65,9 +65,8 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { encode, decode } from "js-base64";
-import api from "../api/api";
 import Loading from "vue-loading-overlay";
 
 export default {
@@ -77,15 +76,33 @@ export default {
   },
   data() {
     return {
-      tickets: null,
       isLoading: false,
       fullPage: true,
       loader: "spinner",
       color: "#1b73cd",
     };
   },
+  computed: {
+    ...mapGetters(["getTickets"]),
+    tickets() {
+      let infoArr = {},
+        htmlData = [];
+      for (const key in this.getTickets) {
+        htmlData.push(this.getTickets[key][0].html_data);
+        infoArr = [{
+          fio: this.getTickets[key][0].fio,
+          pay_time: this.getTickets[key][0].pay_time,
+          pack_num: this.getTickets[key][0].pack_num,
+          payment_no: this.getTickets[key][0].payment_no,
+          html_data: htmlData,
+          ticketLength: Object.keys(this.getTickets).length
+        }];
+      }
+      return infoArr;
+    },
+  },
   methods: {
-    ...mapActions(["downloadTicket", "sendTicketToEmail", "fetchUserTickets"]),
+    ...mapActions(["downloadTicket", "sendTicketToEmail"]),
 
     addFirstZero(str, max) {
       let result = "";
@@ -105,20 +122,96 @@ export default {
           ",height=800,top=50,left=" +
           width
       );
-      win.document.body.innerHTML = item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html))) : item.html_data.map((html) => decode(html));
+      win.document.body.innerHTML = item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html, item.ticketLength))) : item.html_data.map((html) => decode(this.removeSecondHeader(html)));
     },
 
-    removeSecondHeader(html) {
+
+    removeSecondHeader(html, countTickets) {
       var fragment = document
           .createRange()
           .createContextualFragment(decode(html)),
         lastHeader = fragment.querySelector(".ticket-container:last-child [class=ticket__header]"),
-        lastSmartTicketInfo = fragment.querySelector(".ticket-container:last-child [class=ticket-description__block]");
+        lastSmartTicketInfo = fragment.querySelector(".ticket-container:last-child [class=ticket-description__block]"),
+
+        text_info = fragment.getElementById("text_info");
+      if(text_info) {
+        fragment.getElementById("text_info").innerHTML = text_info
+          .innerHTML.trim()
+          .slice(1, -1);
+
+        var textInfoHTML = text_info.innerHTML;
+        var linesCount = textInfoHTML.match(/br/g).length + 1;
+      }
+      var margin = 0;
+      switch (linesCount) {
+        case 2:
+          margin = 0;
+          break;
+        case 3:
+          margin = 0;
+          break;
+        case 4:
+          margin = 20;
+          break;
+        default:
+          break;
+      }
+
+      var elem = fragment.querySelector("#ticketTableFooter"),
+        get_wagon_num = fragment.getElementById("get_wagon_num"),
+        get_place = fragment.getElementById("get_place");
+      if(elem) {
+        elem.style.marginBottom = `${margin}px`;
+      }
+      if(text_info) {
+        text_info.innerHTML = text_info.innerText;
+      }
+      if(get_wagon_num) {
+        get_wagon_num.innerHTML = this.addFirstZero(
+          get_wagon_num.innerText,
+          2
+        );
+      }
+      if(get_place) {
+        get_place.innerHTML = this.addFirstZero(
+          get_place.innerText,
+          3
+        );
+      }
+
+      if(fragment.getElementById("get_uuid")) {
+        let uuid = fragment.getElementById("get_uuid").innerHTML;
+        let first_uuid = uuid.substring(0, uuid.length - 14),
+          second_uuid = uuid.substring(uuid.length - 14, uuid.length);
+        fragment.getElementById("get_uuid").innerHTML =
+          first_uuid + "<p style='font-size:14px;font-weight: 600'>" + second_uuid + "</p>";
+      }
 
 
-      if(lastHeader && lastSmartTicketInfo) {
+      if(fragment.getElementById("get_special_num")) {
+        let special_num = fragment.getElementById("get_special_num").innerText;
+        let first_special_num = special_num.substring(0, special_num.length - 14),
+          second_special_num = special_num.substring(
+            special_num.length - 14,
+            special_num.length
+          );
+        fragment.getElementById("get_special_num").innerHTML =
+          first_special_num +
+          "<b style='font-size:14px;'>" +
+          second_special_num +
+          "</b>";
+      }
+
+
+      if (fragment.getElementById("wagon_class") && fragment.getElementById("wagon_class").value != "")
+        fragment.getElementById("get_wagon_class").innerHTML =
+          "/" + fragment.getElementById("wagon_class").value + " КЛ";
+
+      if(lastHeader && lastSmartTicketInfo && countTickets > 1) {
         lastHeader.innerHTML = "";
         lastSmartTicketInfo.innerHTML = "";
+        lastHeader.classList.add("mt-20")
+        lastHeader.classList.add("mt-20")
       }
       return encode(
         [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
@@ -127,7 +220,7 @@ export default {
     
     async dwnTicket(pack_num, trn_date, item) {
       var htmlArr = [], html = "";
-      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => this.removeSecondHeader(htmlArr)) : item.html_data.map((htmlArr) => htmlArr))
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr, item.ticketLength))) : item.html_data.map((htmlArr) => decode(this.removeSecondHeader(htmlArr))))
       html = encode(htmlArr.join());
       const response = await this.downloadTicket({ pack_num, trn_date, html });
       const source = "data:application/pdf;base64," + response.pdf;
@@ -139,7 +232,7 @@ export default {
     async sendToEmail(pack_num, trn_date, item) {
       this.isLoading = true;
       var htmlArr = [], html = "";
-      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => this.removeSecondHeader(htmlArr)) : item.html_data.map((htmlArr) => htmlArr))
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr, item.ticketLength))) : item.html_data.map((htmlArr) => decode(this.removeSecondHeader(htmlArr))))
       html = encode(htmlArr.join());
       const response = await this.sendTicketToEmail({
         pack_num,
@@ -157,35 +250,6 @@ export default {
         });
       }
     },
-  },
-  async created() {
-    await api.fetchUserTicket(
-      this.$route.query.pack_num,
-      this.$route.query.trn_date
-    ).then((response) => {
-      if (response.data.code != 0) {
-        throw new Error(response.data.msg);
-      } else {
-        let infoArr = {},
-          htmlData = [];
-        for (const key in response.data.tickets) {
-          htmlData.push(response.data.tickets[key][0].html_data);
-          infoArr = [{
-            fio: response.data.tickets[key][0].fio,
-            pay_time: response.data.tickets[key][0].pay_time,
-            pack_num: response.data.tickets[key][0].pack_num,
-            payment_no: response.data.tickets[key][0].payment_no,
-            html_data: htmlData,
-            ticketLength: Object.keys(response.data.tickets).length
-          }];
-        }
-        this.tickets = infoArr;
-      }
-    }).catch((error) => {
-      this.$toasted.global.my_app_error({
-        message: error,
-      });
-    })
   },
 };
 </script>

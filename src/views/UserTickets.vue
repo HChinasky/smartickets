@@ -38,7 +38,6 @@
                 {{ $t("sendTicketToEmail") }}
               </button>
             </div>
-            {{removeSecondHead}}
             <div class="client-tickets__link">
               <a
                 :href="
@@ -82,7 +81,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["downloadTicket", "sendTicketToEmail", "fetchUserTickets"]),
+    ...mapActions(["downloadTicket", "sendTicketToEmail", "fetchUserTicket"]),
     addFirstZero(str, max) {
       let result = "";
       var i;
@@ -101,20 +100,91 @@ export default {
           ",height=800,top=50,left=" +
           width
       );
-      win.document.body.innerHTML = item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html))) : item.html_data.map((html) => decode(html));
+      win.document.body.innerHTML = item.html_data.slice(0).reverse().map((html) => decode(this.removeSecondHeader(html, item.ticketLength)));
     },
     
-    removeSecondHeader(html) {
+    removeSecondHeader(html, countTickets) {
       var fragment = document
         .createRange()
         .createContextualFragment(decode(html)),
       lastHeader = fragment.querySelector(".ticket-container:last-child [class=ticket__header]"),
       lastSmartTicketInfo = fragment.querySelector(".ticket-container:last-child [class=ticket-description__block]"),
-      body = fragment;
-      console.log(body);
       
+      text_info = fragment.getElementById("text_info");
+      if(text_info) {
+        fragment.getElementById("text_info").innerHTML = text_info
+          .innerHTML.trim()
+          .slice(1, -1);
 
-      if(lastHeader && lastSmartTicketInfo) {
+        var textInfoHTML = text_info.innerHTML;
+        var linesCount = textInfoHTML.match(/br/g).length + 1;
+      }
+      var margin = 0;
+      switch (linesCount) {
+        case 2:
+          margin = 0;
+          break;
+        case 3:
+          margin = 0;
+          break;
+        case 4:
+          margin = 55;
+          break;
+        default:
+          break;
+      }
+
+      var elem = fragment.querySelector("#ticketTableFooter"),
+          get_wagon_num = fragment.getElementById("get_wagon_num"),
+          get_place = fragment.getElementById("get_place");
+      if(elem) {
+        elem.style.marginBottom = `${margin}px`;
+      }
+      if(text_info) {
+        text_info.innerHTML = text_info.innerText;
+      }
+      if(get_wagon_num) {
+        get_wagon_num.innerHTML = this.addFirstZero(
+          get_wagon_num.innerText,
+          2
+        );
+      }
+      if(get_place) {
+        get_place.innerHTML = this.addFirstZero(
+          get_place.innerText,
+          3
+        );
+      }
+ 
+      if(fragment.getElementById("get_uuid")) {
+        let uuid = fragment.getElementById("get_uuid").innerHTML;
+        let first_uuid = uuid.substring(0, uuid.length - 14),
+          second_uuid = uuid.substring(uuid.length - 14, uuid.length);
+        fragment.getElementById("get_uuid").innerHTML =
+          first_uuid + "<p style='font-size:14px;font-weight: 600'>" + second_uuid + "</p>";
+      }
+
+
+      if(fragment.getElementById("get_special_num")) {
+        let special_num = fragment.getElementById("get_special_num").innerText;
+        let first_special_num = special_num.substring(0, special_num.length - 14),
+          second_special_num = special_num.substring(
+            special_num.length - 14,
+            special_num.length
+          );
+        fragment.getElementById("get_special_num").innerHTML =
+          first_special_num +
+          "<b style='font-size:14px;'>" +
+          second_special_num +
+          "</b>";
+      }
+
+
+      if (fragment.getElementById("wagon_class") && fragment.getElementById("wagon_class").value != "")
+        fragment.getElementById("get_wagon_class").innerHTML =
+          "/" + fragment.getElementById("wagon_class").value + " КЛ";
+
+      if(lastHeader && lastSmartTicketInfo && countTickets > 1) {
         lastHeader.innerHTML = "";
         lastSmartTicketInfo.innerHTML = "";
         lastHeader.classList.add("mt-20")
@@ -125,22 +195,10 @@ export default {
       );
     },
     
-    removeSecondHead(html) {
-      var fragment = document
-        .createRange()
-        .createContextualFragment(decode(html)),
-         body = fragment.match(/<body[^>]*>[\s\S]*<\/body>/gi);
-      console.log(body)
-      
-      return encode(
-        [].map.call(fragment.children, (e) => e.outerHTML).join("\n")
-      );
-    },
-    
     async dwnTicket(pack_num, trn_date, item) {
       var htmlArr = [],
           html = "";
-      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr))) : item.html_data.map((htmlArr) => decode(htmlArr)))
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr, item.ticketLength))) : item.html_data.map((htmlArr) => decode(htmlArr)))
       html = encode(htmlArr.join());
       const response = await this.downloadTicket({
         pack_num,
@@ -156,7 +214,7 @@ export default {
     async sendToEmail(pack_num, trn_date, item) {
       this.isLoading = true;
       var htmlArr = [], html = "";
-      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr))) : item.html_data.map((htmlArr) => decode(htmlArr)))
+      htmlArr.push(item.ticketLength > 1 ? item.html_data.slice(0).reverse().map((htmlArr) => decode(this.removeSecondHeader(htmlArr, item.ticketLength))) : item.html_data.map((htmlArr) => decode(htmlArr)))
       html = encode(htmlArr.join());
       const response = await this.sendTicketToEmail({
         pack_num,

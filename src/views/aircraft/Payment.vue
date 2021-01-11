@@ -443,7 +443,6 @@
         "updateDevPassword",
         "updateDevLogin",
         "updateEmail",
-        "resetStateCart",
         "resetCartStateAircraft",
         "resetStateAllCart",
         "resetStateCartAircraft",
@@ -660,7 +659,6 @@
             this.$refs.inputRef.value = payment_no;
             this.$refs.formRef.action = form.action;
             this.$refs.formRef.submit();
-            this.resetStateCart()
             this.resetCartStateAircraft()
             this.resetStateAllCart()
             this.resetStateCartAircraft()
