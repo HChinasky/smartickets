@@ -74,7 +74,7 @@
     data() {
       return {
         validationHandler: "",
-        promo: "GL-GC2Q2ZT",
+        promo: "GL-SMART",
         fullPrice: "",
       }
     },

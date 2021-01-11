@@ -67,7 +67,7 @@
       return {
         validationHandler: "",
         links: "",
-        promo: "GL-GC2Q2ZT",
+        promo: "GL-SMART",
         fullPrice: "",
       }
     },
