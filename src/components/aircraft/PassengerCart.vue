@@ -339,6 +339,7 @@
       },
       months() {
         var xs = [];
+        // let currentMonth  = year === new Date().getFullYear() ? new Date().getMonth() + 1 : 1;
         for (var i = 1; i <= 12; i++) {
           xs.push(("0" + i).slice(-2));
         }
