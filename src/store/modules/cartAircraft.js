@@ -21,7 +21,14 @@ const getDefaultState = () => {
         birthDay: "",
         birthMonth: "",
         birthYear: "",
-        country: "",
+        country: {
+          alpha3: "UKR",
+          code: "UA",
+          codeNumber: "804",
+          label: "УКРАЇНА",
+          nameEng: "Ukraine",
+          nameLong: "УКРАЇНА"
+        },
         passportCode: "",
         passportDay: "",
         passportMonth: "",
@@ -157,7 +164,14 @@ const mutations = {
       birthDay: "",
       birthMonth: "",
       birthYear: "",
-      country: "",
+      country: {
+        alpha3: "UKR",
+        code: "UA",
+        codeNumber: "804",
+        label: "УКРАЇНА",
+        nameEng: "Ukraine",
+        nameLong: "УКРАЇНА"
+      },
       passportCode: "",
       passportDay: "",
       passportMonth: "",
