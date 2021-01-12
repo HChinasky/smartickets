@@ -1,42 +1,73 @@
 <template>
-  <div class="full-container">
-    <div class="container">
-      <h1>{{ $t('searchTicketsOnline') }}</h1>
-      <h4>{{ $t('chooseTypeTicket')}}</h4>
-      <div class="type-trips__cards">
-        <div class="card" v-for="tripItem in tripTypes" :key="tripItem.id">
-          <div class="type-trips__label">
-            <template v-if="tripItem.name != 'svg'">
-              <p>{{ tripItem.name }}</p>
-            </template>
-            <template v-else>
-              <svg viewBox="0 0 158 30">
+  <div>
+    <swiper
+        :options="swiperOption"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange"
+    >
+      <swiper-slide>
+        <div class="main-slide">
+          <img class="w-100" src="../assets/img/banner.png" alt="smart ticket slide">
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="main-slide">
+          <img class="w-100" src="../assets/img/banner.png" alt="smart ticket slide">
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="main-slide">
+          <img class="w-100" src="../assets/img/banner.png" alt="smart ticket slide">
+        </div>
+      </swiper-slide>
+    </swiper>
+    <div class="navigation-wrapper">
+      <div class="swiper-button-prev" slot="button-prev">
+        <icon-base icon-name="prev" :height="30" :width="29"><arrow-left /></icon-base>
+      </div>
+      <div class="swiper-button-next" slot="button-next">
+        <icon-base icon-name="next" :height="30" :width="20"><arrow-right /></icon-base>
+      </div>
+    </div>
+    <div class="full-container">
+      <div class="container">
+        <h1>{{ $t('searchTicketsOnline') }}</h1>
+        <h4>{{ $t('chooseTypeTicket')}}</h4>
+        <div class="type-trips__cards">
+          <div class="card" v-for="tripItem in tripTypes" :key="tripItem.id">
+            <div class="type-trips__label">
+              <template v-if="tripItem.name != 'svg'">
+                <p>{{ tripItem.name }}</p>
+              </template>
+              <template v-else>
+                <svg viewBox="0 0 158 30">
+                  <use
+                      :xlink:href="
+                              require('@/assets/img/sprite.svg') +
+                                '#icon-sky-up'
+                            "
+                  />
+                </svg>
+              </template>
+            </div>
+            <div class="type-trips__icon train-trip">
+              <svg :width="tripItem.icon.width" :height="tripItem.icon.height" :viewBox="'0 0 ' + tripItem.icon.width + ' ' + tripItem.icon.height">
                 <use
                     :xlink:href="
-                            require('@/assets/img/sprite.svg') +
-                              '#icon-sky-up'
-                          "
+                              require('@/assets/img/sprite.svg') +
+                                '#' + tripItem.icon.id
+                            "
                 />
               </svg>
-            </template>
-          </div>
-          <div class="type-trips__icon train-trip">
-            <svg :width="tripItem.icon.width" :height="tripItem.icon.height" :viewBox="'0 0 ' + tripItem.icon.width + ' ' + tripItem.icon.height">
-              <use
-                  :xlink:href="
-                            require('@/assets/img/sprite.svg') +
-                              '#' + tripItem.icon.id
-                          "
-              />
-            </svg>
-          </div>
-          <div class="type-trips__btn">
-            <button :class="{active : getTicketsFromCart.find(e => e.type == tripItem.ticketType.type)}" @click="chooseTrips(tripItem.ticketType.ticketId, tripItem.ticketType.type, tripItem.ticketType.name)" class="type-trips__link">{{ $t('select') }}</button>
+            </div>
+            <div class="type-trips__btn">
+              <button :class="{active : getTicketsFromCart.find(e => e.type == tripItem.ticketType.type)}" @click="chooseTrips(tripItem.ticketType.ticketId, tripItem.ticketType.type, tripItem.ticketType.name)" class="type-trips__link">{{ $t('select') }}</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="btn-next__block">
-        <router-link :class="{disabled : !returnLink}" :to="{ name: returnLink }" class="search-ticket__link btn--black">{{ $t('next') }}</router-link>
+        <div class="btn-next__block">
+          <router-link :class="{disabled : !returnLink}" :to="{ name: returnLink }" class="search-ticket__link btn--black">{{ $t('next') }}</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -44,10 +75,29 @@
 
 <script>
   import { mapActions, mapMutations, mapGetters } from "vuex";
+  import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+  import IconBase from "./icons/IconBase";
+  import ArrowLeft from "./icons/iconsItem/IconArrowLeft";
+  import ArrowRight from "./icons/iconsItem/IconArrowRight";
   export default {
     name: "TypeTicket",
+    components: {
+      Swiper,
+      SwiperSlide,
+      IconBase,
+      ArrowLeft,
+      ArrowRight
+    },
     data() {
       return {
+        swiperOption: {
+          slidesPerView: 1,
+          spaceBetween: 15,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+        },
         tripTypes: {
           0: {
             name: 'Поїзд',
@@ -99,6 +149,12 @@
         "updateClientInfo",
         "setTicketsList"
       ]),
+      onSwiper(swiper) {
+        console.log(swiper)
+      },
+      onSlideChange() {
+        console.log('slide change')
+      },
       chooseTrips(id, type, nameComponent) {
         let index = this.getTicketsFromCart.map(function(item) { return item.type; }).indexOf(type);
         if(index === -1) {
@@ -126,6 +182,28 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/variables";
   @import "@/assets/scss/mixins";
+  @import "@/assets/scss/grid-classes";
+  
+  .main-slide {
+    img {
+      height: 600px;
+    }
+  }
+  
+  .navigation-wrapper {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    .button-next, .button-prev {
+      background-color: $DARK_BLUE;
+      svg {
+        path {
+          fill:#fff;
+        }
+      }
+    }
+  }
   
   .full-container {
     background-color: #FCFCFC;

@@ -218,6 +218,8 @@
     "reSend": "Відправити ще раз",
     "notCabinet": "Не маєте кабінету?",
     "shortLanguageSwitcher": "En",
+    "shortLanguageSwitcherUA": "ua",
+    "shortLanguageSwitcherEN": "en",
     "searchTicketsOnline": "Пошук квитків онлайн",
     "chooseTypeTicket": "Оберіть вид поїздки",
     "trainLabel": "Потяг",
