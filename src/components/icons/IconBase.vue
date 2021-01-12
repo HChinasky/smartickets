@@ -34,11 +34,3 @@
     }
   }
 </script>
-
-<style scoped>
-  svg {
-    display: inline-block;
-    vertical-align: baseline;
-    margin-bottom: -2px;
-  }
-</style>
