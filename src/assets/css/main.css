@@ -5221,7 +5221,6 @@ table {
 .cta-contacts__email a:focus,
 .link:visited,
 .top-nav__link:visited,
-.header-nav__link:visited,
 .cta-contacts__email a:visited {
   color: #000;
 }
@@ -5295,9 +5294,8 @@ body {
   margin: 0;
   font-size: 1.6rem;
   color: #2a2a2a;
-  background-color: #f6f6f6;
-  font-family: "Ukraine", sans-serif;
-  font-family: 400;
+  background-color: #fff;
+  font-family: "Manrope", sans-serif;
 }
 body.nav-open {
   overflow: hidden;
@@ -5461,20 +5459,6 @@ body.nav-open {
     display: none;
   }
 }
-.header {
-  background-color: #66b2ff;
-}
-.header__top {
-  padding-top: 30px;
-  margin-bottom: 84px;
-}
-.header__bot {
-  margin-bottom: 36px;
-  padding-bottom: 20px;
-}
-.header__lang-switch {
-  /*margin-bottom: 20px;*/
-}
 .header__lang-link {
   -webkit-box-pack: start;
   -webkit-justify-content: flex-start;
@@ -5489,18 +5473,6 @@ body.nav-open {
 .header__lang-link:focus,
 .header__lang-link:visited {
   color: #000;
-}
-.header__lang-link svg {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-  display: block;
-}
-.header__lang-link:hover {
-  color: #fff;
-}
-.header__lang-link:hover svg {
-  fill: #fff;
 }
 @media only screen and (max-width: 1300px) {
   .header__top {
@@ -5632,7 +5604,8 @@ body.nav-open {
   margin-right: 34px;
 }
 .header-nav__link {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  font-weight: normal;
   color: #000;
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;

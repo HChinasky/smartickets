@@ -214,6 +214,8 @@
     "reSend": "Send again",
     "notCabinet": "You do not have an client area?",
     "shortLanguageSwitcher": "Укр",
+    "shortLanguageSwitcherUA": "ua",
+    "shortLanguageSwitcherEN": "en",
     "searchTicketsOnline": "Search for tickets online",
     "chooseTypeTicket": "Choose the type of trip",
     "trainLabel": "Train",
